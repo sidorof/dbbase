@@ -1,0 +1,6 @@
+*.pyc
+*.pyo
+*.kate-swp
+dist
+build
+*.egg*
