@@ -1,2 +1,3 @@
 sqlalchemy
+psycopg2_binary # assumes postgres would be used
 
