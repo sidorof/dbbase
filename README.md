@@ -10,9 +10,9 @@ When using Flask and Flask-SQLAlchemy, the design pattern returned to the sessio
 
 SQLAlchemy models outside of Flask can be shoehorned into the app, but we are left with the uneasy tension of interacting with the models in a different way.
 
-One way to get around this would be to not use Flask-SQLAlchemy at all and roll-your-own within the context of Flask. Another way could be to use Flask-SQLAlchemy in programs that have nothing to do with Flask and accept carrying the baggage of Flask in applications that are isolated with the server.
+One way to get around this would be to not use Flask-SQLAlchemy at all and roll-your-own within the context of Flask. Another way could be to use Flask-SQLAlchemy in programs that have nothing to do with Flask and accept carrying the baggage of Flask in applications that are isolated from the server.
 
-The approach with this repository entails a light-weight integration of a prototypical model class with the session object and using a db object similarly to Flask-SQLAlchemy. The result of this tack is that the same interactions with the database can be applied whether the program is within the Flask environment or not.
+This package implements a light-weight integration of a prototypical Model class with the session object and using a db object similarly to Flask-SQLAlchemy. The result of this tack is that the same interactions with the database can be applied whether the program is within the Flask environment or not.
 
 ## Goals
 
@@ -20,10 +20,78 @@ The approach with this repository entails a light-weight integration of a protot
 
 * Integration of session with table objects
 
+Just as with Flask-SQLAlchemy, the `db` object carries a lot of the SQLAlchemy functionality. In this case, the `db` object also has session as well as the other standard SQLAlchemy features.
 
 ### Model Behavior
+* Model Creation
 
+Below is typical example of a table class.
+```
+    class Job(db.Model):
+        __tablename__ = 'table1'
+
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String, nullable=False)
+        another_id = db.Column(db.SmallInteger)
+        start_date = db.Column(db.Date, default=date.today)
+        update_time = db.Column(db.DateTime, default=datetime.now)
+        end_date = db.Column(db.Date)
+```
+* Record Creation
+
+Record creation uses the standard methods.
+```
+    job = Job(
+        name='model build process',
+        another_id=4
+        # letting defaults for start_date and update_time through
+    )
+
+    db.session.add(job)
+    db.session.commit()
+
+```
 * Queries
+
+The model class also holds the query class.
+
+Using SQLAlchemy, you would have a session object and do something along the
+lines of:
+```
+session.query(Job).filter(Job.startdate > '2020-04-01').all()
+```
+With Flask-SQLAlchemy and dbbase you would do:
+```
+Job.query.filter(Job.startdate > '2020-04-01').all()
+
+```
 * JSON -- dicts
-* Save
-* Delete
+
+To accommodate differing formatting standards between JavaScript and Python when outputting JSON formatted data, the following conversion is available.
+
+Start with a record:
+```
+    job = Job(
+        id=123303,
+        name='model build process,
+        another_id=4,
+        start_date='2020-04-15',
+        update_time=datetime.datetime(2020, 4, 20, 3, 2, 1)
+        end_date = datetime.date(2020, 4, 30)
+)
+job.serialize()
+
+{
+    "id": 123303,
+    "name": "model build process",
+    "anotherId": 4,
+    "startDate": "2020-04-15",
+    "updateTime": "2020-04-20 03:02:01"
+    "endDate" = "2020-4-30"
+}
+
+```
+Or, `job.serialize(js_xlate=False)` would output it without any conversion.
+
+* Save  -- will have a function
+* Delete -- will have a function
