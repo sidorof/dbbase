@@ -93,5 +93,23 @@ job.serialize()
 ```
 Or, `job.serialize(js_xlate=False)` would output it without any conversion.
 
+Incoming data could also be formatted as serialized above, and deserialied
+via
+```
+Job.deserialize(data, js_xlate=True)
+```
+Note that this does not update the record directly (the job in this example). Rather, the output is in the form of a dict. This gives an opportunity evaluate the data prior to updating the record and database.
+
+For example, suppose you also use `parser = reqparse.RequestParser()` from
+flask_restful on the flask side of things:
+```
+data = Job.deserialize(
+    JobResource.parser.parse_args())
+job = Job(id, **data)
+```
+Finally, the serialize / deserialize functions can always be subclassed for special requirements of that particular model.
+
+
 * Save  -- will have a function
 * Delete -- will have a function
+```
