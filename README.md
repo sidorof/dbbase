@@ -28,7 +28,7 @@ Just as with Flask-SQLAlchemy, the `db` object carries a lot of the SQLAlchemy f
 Below is typical example of a table class.
 ```
     class Job(db.Model):
-        __tablename__ = 'table1'
+        __tablename__ = 'jobs'
 
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String, nullable=False)
