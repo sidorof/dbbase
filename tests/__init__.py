@@ -1,48 +1,45 @@
 # tests/__init__.py
+"""
+This module runs the tests for dbbase. To account for multiple
+configurations a list of configs is loaded from the parent directory with
+some standard names. That file should be altered to accommodate the
+expected usage on your systems.
 
+For each configuration, the set of test cases are run to ensure that
+everything works as expected.
+"""
+import json
 import unittest
 
-from . test_dbbase.test_db_utils import TestUtilities
-from . test_dbbase.test_dbinfo import TestDBInfo
-#from . test_dbbase.test_model import TestModelClass
+from . test_dbbase.db_utils import TestUtilities
+from . test_dbbase.dbinfo import TestDBInfoClass
+from . test_dbbase.model import TestModelClass
 
+CONFIG_FILE = 'sample_configs.json'
+with open(CONFIG_FILE) as fobj:
+    configs = json.loads(fobj.read())
 
-
-#suite = TestSuite()
-
-#suite.addTest(TestUtilities())
-
-configs = [
-    {
-        "testdb_uri": ":memory:",
-        "testdb_vars": {}
-    },
-    {
-        "testdb_uri": "sqlite:///{dbname}.db",
-        "testdb_vars": {"dbname": "testdb"}
-    },
-    {
-        "testdb_uri": 'postgresql://{user}@{host}:{port}/{basedb}',
-        "testdb_vars": {
-            "dbname": "testdb",
-            "user": "suser",
-            "host": "localhost",
-            "port": "5432",
-            "base_db": "postgres"
-        }
-    }
+test_cases = [
+    TestDBInfoClass,
+    TestModelClass
 ]
-
 
 for config in configs:
     loader = unittest.TestLoader()
-    suite  = unittest.TestSuite()
+    suite = unittest.TestSuite()
+
+    suite.addTests(loader.loadTestsFromTestCase(TestUtilities))
 
     # set database variables for the type of database to be tested
-    TestDBInfo.TESTDB_URI = config["testdb_uri"]
-    TestDBInfo.TESTDB_VARS = config["testdb_vars"]
-    suite.addTests(loader.loadTestsFromModule(TestDBInfo()))
+    for test_case in test_cases:
+        test_case.TESTDB_URI = config["testdb_uri"]
+        test_case.TESTDB_VARS = config["testdb_vars"]
+
+    print('config', config)
+    suite.addTests(loader.loadTestsFromTestCase(TestDBInfoClass))
+    suite.addTests(loader.loadTestsFromTestCase(TestModelClass))
 
     runner = unittest.TextTestRunner(verbosity=3)
     result = runner.run(suite)
+
     print('result', result)

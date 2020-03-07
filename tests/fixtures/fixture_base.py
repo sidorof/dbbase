@@ -26,14 +26,8 @@ Example 2: postgresql
 To test then for sqlite, one URI can be used
 
 """
-import os
-import sys
-import json
 import unittest
-import subprocess
-import sqlalchemy
-from sqlalchemy.exc import SAWarning, IntegrityError
-import warnings
+from sqlalchemy.exc import IntegrityError
 
 import dbbase
 
@@ -57,22 +51,39 @@ class DBBaseTestCase(BaseTestCase):
         """
         This doesn't check defaults.'
         """
+        config = dbbase.db_utils.db_config(
+            cls.TESTDB_URI,
+            cls.TESTDB_VARS
+        )
+
+        # for basedb, such as postgres to drop test db
+        # uses a cheap trick
+        if 'basedb' in cls.TESTDB_VARS:
+            config_base = dbbase.db_utils.db_config(
+                cls.TESTDB_URI.replace('{dbname}', '{basedb}'),
+                cls.TESTDB_VARS
+            )
+        else:
+            config_base = config
+
         dbname = cls.TESTDB_VARS.get('dbname')
-        dbbase.dbinfo.drop_database(cls.TESTDB_URI, dbname)
+        dbbase.dbinfo.drop_database(config_base, dbname)
         dbbase.dbinfo.create_database(
             dbname=dbname,
-            config=dbbase.db_utils.db_config(
-                cls.TESTDB_URI, cls.TESTDB_VARS),
-            superuser=cls.TESTDB_VARS.get('suser')
+            config=config_base,
+            superuser=cls.TESTDB_VARS.get('user')
         )
 
     def setUp(self):
         """Standard configuration."""
+        self.db = None
         self.db = self.dbbase.DB(
             self.dbbase.db_utils.db_config(
                 self.TESTDB_URI, self.TESTDB_VARS
-            ) # model_class default as Model
+            )  # model_class default as Model
         )
+        self.db.drop_all(echo=False)
+        self.db.Model.metadata.clear()
 
     def verify_requireds(self, obj, req_dict):
         """
@@ -97,12 +108,25 @@ class DBBaseTestCase(BaseTestCase):
 
     def tearDown(self):
         self.db.session.close()
+        self.db.drop_all(echo=False)
+        self.db.Model.metadata.clear()
+        self.db = None
+        del self.db
 
     @classmethod
     def tearDownClass(cls):
+        config = dbbase.db_utils.db_config(
+            cls.TESTDB_URI,
+            cls.TESTDB_VARS
+        )
+
+        if 'basedb' in cls.TESTDB_VARS:
+            config_base = dbbase.db_utils.db_config(
+                cls.TESTDB_URI.replace('{dbname}', '{basedb}'),
+                cls.TESTDB_VARS
+            )
+        else:
+            config_base = config
+
         dbname = cls.TESTDB_VARS.get('dbname')
-        dbbase.dbinfo.drop_database(cls.TESTDB_URI, dbname)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        dbbase.dbinfo.drop_database(config_base, dbname)

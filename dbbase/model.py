@@ -47,9 +47,9 @@ class Model():
 
     def to_dict(self, js_xlate=True):
         """
-        Returns columns in a dict. The point of this is to make a useful default
-
-        This can't be expected to cover every possibility.
+        Returns columns in a dict. The point of this is to make a useful
+        default. However, this can't be expected to cover every possibility,
+        so of course it can be overwritten in any particular model.
 
         Conversion defaults:
             date -> %F

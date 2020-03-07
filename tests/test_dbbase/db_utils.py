@@ -1,6 +1,7 @@
-# test_dbbase/test_utils.py
+# tests/test_dbbase/db_utils.py
 from . import BaseTestCase
 import json
+
 
 class TestUtilities(BaseTestCase):
 
@@ -55,7 +56,6 @@ class TestUtilities(BaseTestCase):
             base,
             config_vars)
 
-
     def test_is_sqlite(self):
         """Test whether the config is for sqlite."""
         config = 'sqlite:///{test_db}.db'
@@ -98,4 +98,3 @@ class TestUtilities(BaseTestCase):
 
         key = 'startDate'
         self.assertEqual(_xlate_from_js(key), 'start_date')
-

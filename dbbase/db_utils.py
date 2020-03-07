@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__file__)
 
+
 def db_config(base, config_vars=None):
     """
     This function combines config variables with a base string.
@@ -37,8 +38,10 @@ def db_config(base, config_vars=None):
     if isinstance(config_vars, str):
         # try to convert from json
         config_vars = json.loads(config_vars)
+
     if isinstance(config_vars, dict):
         return base.format(**config_vars)
+    return base
 
 
 def is_sqlite(config):
@@ -51,8 +54,12 @@ def is_sqlite(config):
         is_sqlite(config)
 
     """
-    if config.find('sqlite') > -1: return True
-    if config.find(':memory:') > -1: return True
+    if config.find('sqlite') > -1:
+        return True
+
+    if config.find(':memory:') > -1:
+        return True
+    return False
 
 
 def xlate(key, to_js=True):
@@ -86,9 +93,9 @@ def _xlate_to_js(key):
 def _xlate_from_js(key):
     """Convert example: startDate -> start_date """
     new_key = ''
-    for i in range(len(key)):
-        if key[i] in string.ascii_uppercase:
-            new_key += '_' + key[i].lower()
+    for char in key:
+        if char in string.ascii_uppercase:
+            new_key += '_' + char.lower()
         else:
-            new_key += key[i]
+            new_key += char
     return new_key

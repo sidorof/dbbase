@@ -17,8 +17,6 @@ import sys
 import os
 import logging
 
-from inspect import getmembers
-
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -72,8 +70,8 @@ class DB(object):
         else:
             self.config = 'sqlite://'
 
-        for key, value in dict(getmembers(sqlalchemy)).items():
-            self.__setattr__(key, value)
+        for key in sqlalchemy.__all__:
+            self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
 
         self.Model = Model if model_class is None else model_class
 
@@ -130,7 +128,7 @@ class DB(object):
         Leaves the database empty, bereft, alone, a pale shadow of its
         former self.
         """
-        engine = create_engine(echo=echo)
+        engine = create_engine(self.config, echo=echo)
         self.Model().metadata.drop_all(engine)
 
 
@@ -156,7 +154,7 @@ def create_database(config, dbname, superuser=None):
     engine = create_engine(config)
 
     conn = engine.connect()
-    print(f"CREATE DATABASE {dbname};")
+    conn.execute("COMMIT;")
     conn.execute(f"CREATE DATABASE {dbname};")
 
     conn.execute(
@@ -180,6 +178,6 @@ def drop_database(config, dbname):
 
         conn = engine.connect()
         conn.execute("COMMIT")
-        result = conn.execute(f"drop database {dbname}")
+        result = conn.execute(f"DROP DATABASE IF EXISTS {dbname}")
         result.close()  # NOTE: both?
         conn.close()
