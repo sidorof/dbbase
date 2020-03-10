@@ -58,11 +58,11 @@ The model class also holds the query class.
 Using SQLAlchemy, you would have a session object and do something along the
 lines of:
 ```
-session.query(Job).filter(Job.startdate > '2020-04-01').all()
+session.query(Job).filter(Job.start_date > '2020-04-01').all()
 ```
 With Flask-SQLAlchemy and dbbase you would do:
 ```
-Job.query.filter(Job.startdate > '2020-04-01').all()
+Job.query.filter(Job.start_date > '2020-04-01').all()
 
 ```
 * JSON -- dicts
@@ -113,3 +113,10 @@ Finally, the serialize / deserialize functions can always be subclassed for spec
 * Save  -- will have a function
 * Delete -- will have a function
 ```
+
+## Installation
+
+## Sample Scenarios
+
+## Testing
+
