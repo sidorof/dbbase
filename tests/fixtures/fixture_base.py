@@ -27,9 +27,26 @@ To test then for sqlite, one URI can be used
 
 """
 import unittest
+import json
+import warnings
 from sqlalchemy.exc import IntegrityError
 
 import dbbase
+
+warnings.filterwarnings("ignore")
+
+CONFIG_FILE = 'config.json'
+TESTDB_URI = 'testdb_uri'
+TESTDB_VARS = 'testdb_vars'
+BASEDB = 'basedb'
+DBNAME = 'dbname'
+USER = 'user'   # superuser at this point
+
+
+def get_config_vars():
+    """json file with parameters"""
+    with open(CONFIG_FILE) as fobj:
+       return json.loads(fobj.read())
 
 
 class BaseTestCase(unittest.TestCase):
@@ -51,36 +68,42 @@ class DBBaseTestCase(BaseTestCase):
         """
         This doesn't check defaults.'
         """
+        config_vars = get_config_vars()
         config = dbbase.db_utils.db_config(
-            cls.TESTDB_URI,
-            cls.TESTDB_VARS
+            config_vars[TESTDB_URI],
+            config_vars[TESTDB_VARS]
         )
 
         # for basedb, such as postgres to drop test db
         # uses a cheap trick
-        if 'basedb' in cls.TESTDB_VARS:
+        if BASEDB in config_vars[TESTDB_VARS]:
             config_base = dbbase.db_utils.db_config(
-                cls.TESTDB_URI.replace('{dbname}', '{basedb}'),
-                cls.TESTDB_VARS
+                config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
+                config_vars[TESTDB_VARS]
             )
         else:
             config_base = config
 
-        dbname = cls.TESTDB_VARS.get('dbname')
+        dbname = config_vars[TESTDB_VARS].get(DBNAME)
         dbbase.dbinfo.drop_database(config_base, dbname)
         dbbase.dbinfo.create_database(
             dbname=dbname,
             config=config_base,
-            superuser=cls.TESTDB_VARS.get('user')
+            superuser=config_vars[TESTDB_VARS].get(USER)
         )
 
     def setUp(self):
         """Standard configuration."""
-        self.db = None
+        config_vars = get_config_vars()
+        config = dbbase.db_utils.db_config(
+            config_vars[TESTDB_URI],
+            config_vars[TESTDB_VARS]
+        )
         self.db = self.dbbase.DB(
-            self.dbbase.db_utils.db_config(
-                self.TESTDB_URI, self.TESTDB_VARS
-            )  # model_class default as Model
+            dbbase.db_utils.db_config(
+                config_vars[TESTDB_URI],
+                config_vars[TESTDB_VARS]
+            )
         )
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
@@ -107,7 +130,8 @@ class DBBaseTestCase(BaseTestCase):
                 return obj
 
     def tearDown(self):
-        self.db.session.close()
+        self.db.session.commit()
+        self.db.orm.session.close_all_sessions()
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
         self.db = None
@@ -115,18 +139,20 @@ class DBBaseTestCase(BaseTestCase):
 
     @classmethod
     def tearDownClass(cls):
+        config_vars = get_config_vars()
         config = dbbase.db_utils.db_config(
-            cls.TESTDB_URI,
-            cls.TESTDB_VARS
+            config_vars[TESTDB_URI],
+            config_vars[TESTDB_VARS]
         )
 
-        if 'basedb' in cls.TESTDB_VARS:
+        if BASEDB in config_vars[TESTDB_VARS]:
             config_base = dbbase.db_utils.db_config(
-                cls.TESTDB_URI.replace('{dbname}', '{basedb}'),
-                cls.TESTDB_VARS
+                config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
+                config_vars[TESTDB_VARS]
             )
         else:
             config_base = config
 
-        dbname = cls.TESTDB_VARS.get('dbname')
+        dbname = config_vars[TESTDB_VARS].get(DBNAME)
         dbbase.dbinfo.drop_database(config_base, dbname)
+        dbname = None

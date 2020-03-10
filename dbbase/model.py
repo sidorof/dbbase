@@ -70,6 +70,12 @@ class Model():
                     result[key] = value.strftime(date_fmt)
                 elif isinstance(value, Decimal):
                     result[key] = str(value)
+                elif isinstance(value, list):
+                    newList = []
+                    for item in value:
+                        if isinstance(item, Model):
+                            newList.append(item.to_dict(js_xlate))
+                    result[key] = newList
                 else:
                     result[key] = value
 

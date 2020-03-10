@@ -1,0 +1,1 @@
+{"name": "postgresql", "testdb_uri": "postgresql://{user}:{password}@{host}:{port}/{basedb}", "testdb_vars": {"dbname": "testdb", "user": "suser", "password": "mypassword", "host": "localhost", "port": "5432", "basedb": "postgres"}}

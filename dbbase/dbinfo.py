@@ -16,32 +16,33 @@ To that end there is also a config function for flexibility.
 import sys
 import os
 import logging
+import importlib
 
 import sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, orm
+from sqlalchemy.pool import NullPool
 
-from .model import Model
+from . import model
 from .db_utils import is_sqlite
 
 logger = logging.getLogger(__file__)
 
 
-if 'SQLALCHEMY_DATABASE_URI' in os.environ:
-    SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
-else:
-    MSG = ''.join([
-        'SQLALCHEMY_DATABASE_URI must be found in the environment.',
-        "The URI will look something like 'sqlite:///{db_file}.db'",
-        "or 'postgresql://{db_username}:{db_password}@{db_host}: ",
-        "{db_port}/{dbname}'",
-        "or mysql+pymysql://{username}:{password}@",
-        "{endpoint}:{port}/{database}?charset=utf8"
-    ])
-    logger.error(
-        'SQLALCHEMY_DATABASE_URI must be found in the environment.')
-    logger.error(MSG)
-    sys.exit(1)
+# if 'SQLALCHEMY_DATABASE_URI' in os.environ:
+#     SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
+# else:
+#     MSG = ''.join([
+#         'SQLALCHEMY_DATABASE_URI must be found in the environment.',
+#         "The URI will look something like 'sqlite:///{db_file}.db'",
+#         "or 'postgresql://{db_username}:{db_password}@{db_host}: ",
+#         "{db_port}/{dbname}'",
+#         "or mysql+pymysql://{username}:{password}@",
+#         "{endpoint}:{port}/{database}?charset=utf8"
+#     ])
+#     logger.error(
+#         'SQLALCHEMY_DATABASE_URI must be found in the environment.')
+#     logger.error(MSG)
+#     sys.exit(1)
 
 
 class DB(object):
@@ -73,11 +74,26 @@ class DB(object):
         for key in sqlalchemy.__all__:
             self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
 
-        self.Model = Model if model_class is None else model_class
+        # just starting with relationship
+        orm_functions = ['relationship']
+        for key in orm_functions:
+            self.__setattr__(key, orm.__dict__.__getitem__(key))
 
-        self.Model = Model
+        # all of the orm is put here
+        self.orm = orm
+
+        self.Model = self.load_model_class(model_class)
+
+        self.Model = model.Model
         self.Model.db = self
         self.session = self.create_session(checkfirst=checkfirst, echo=echo)
+
+    @staticmethod
+    def load_model_class(model_class=None):
+        """Creates a fresh copy of the declarative base."""
+        importlib.reload(model)
+        if model_class is None:
+            return model.Model
 
     def create_engine(self, echo=False):
         """Create engine
@@ -114,7 +130,7 @@ class DB(object):
         engine = create_engine(self.config, echo=echo)
         engine.connect()
 
-        session = sessionmaker(bind=engine)()
+        session = orm.sessionmaker(bind=engine)()
 
         self.Model().metadata.create_all(engine, checkfirst=checkfirst)
 
@@ -128,6 +144,8 @@ class DB(object):
         Leaves the database empty, bereft, alone, a pale shadow of its
         former self.
         """
+        # see how this session is not the 'session' object
+        self.orm.session.close_all_sessions()
         engine = create_engine(self.config, echo=echo)
         self.Model().metadata.drop_all(engine)
 
@@ -150,7 +168,6 @@ def create_database(config, dbname, superuser=None):
     if is_sqlite(config):
         # sqlite does not use CREATE DATABASE
         return
-
     engine = create_engine(config)
 
     conn = engine.connect()
@@ -162,6 +179,7 @@ def create_database(config, dbname, superuser=None):
     conn.execute(f"ALTER ROLE {superuser} SUPERUSER;")
 
     conn.close()
+    engine.dispose()
 
 
 def drop_database(config, dbname):
@@ -174,10 +192,11 @@ def drop_database(config, dbname):
             if os.path.exists(filename):
                 os.remove(filename)
     else:
-        engine = create_engine(config)
+        engine = create_engine(config, poolclass=NullPool)
 
         conn = engine.connect()
         conn.execute("COMMIT")
         result = conn.execute(f"DROP DATABASE IF EXISTS {dbname}")
-        result.close()  # NOTE: both?
+        result.close()
         conn.close()
+        engine.dispose()

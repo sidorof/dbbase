@@ -18,3 +18,6 @@ class TestDBInfoClass(DBBaseTestCase):
 
     def test_drop_all(self):
         pass
+
+    def test_reload_model(self):
+        pass
