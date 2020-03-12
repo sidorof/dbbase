@@ -9,12 +9,13 @@ from decimal import Decimal
 
 from sqlalchemy.ext.declarative import (
     as_declarative, declared_attr)
+from sqlalchemy.util import clsname_as_plain_name
 
 from . db_utils import xlate
-
+from . serializers import _eval_value, STOP_VALUE
 
 @as_declarative()
-class Model():
+class Model(object):
     """
     This class attempts to replicate some of the features available when
     using flask_sqlalchemy.
@@ -45,7 +46,19 @@ class Model():
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    def to_dict(self, js_xlate=True):
+    def _class(self):
+        """
+        Returns the class name. For example:
+
+            user.__class__
+            is __main__.User
+
+        This function returns User
+        """
+        return clsname_as_plain_name(self.__class__)
+        # return str(self.__class__).split('.')[1]
+
+    def to_dict(self, to_camel_case=True, level_limits=None):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
@@ -55,46 +68,91 @@ class Model():
             date -> %F
             datetime -> %Y-%m-%d %H:%M:%S
             Decimal => str
+
+
+
         """
-        date_fmt = '%F'
-        time_fmt = '%Y-%m-%d %H:%M:%S'
+        self.db.session.flush()
+        SA_INDICATOR = '_sa_instance_state'
+        class_name = self._class()
+        if level_limits is None:
+            level_limits = set()
 
         result = {}
         for key, value in self.__dict__.items():
-            if key != '_sa_instance_state':
-                if js_xlate:
-                    key = xlate(key, to_js=True)
-                if isinstance(value, datetime):
-                    result[key] = value.strftime(time_fmt)
-                elif isinstance(value, date):
-                    result[key] = value.strftime(date_fmt)
-                elif isinstance(value, Decimal):
-                    result[key] = str(value)
-                elif isinstance(value, list):
-                    newList = []
-                    for item in value:
-                        if isinstance(item, Model):
-                            newList.append(item.to_dict(js_xlate))
-                    result[key] = newList
-                else:
-                    result[key] = value
-
+            if key != SA_INDICATOR:
+                if to_camel_case:
+                    key = xlate(key, camel_case=True)
+                res = _eval_value(
+                    value, self._class(), to_camel_case, level_limits)
+                if res != STOP_VALUE:
+                    result[key] = res
         return result
 
-    def serialize(self, js_xlate=True):
+    def serialize(self, to_camel_case=True, level_limits=None):
         """serialize
 
         Output JSON formatted model.
 
-        Usage: serialize(self, js_xlate=True)
+        Usage: serialize(self, to_camel_case=True, level_limits=None)
 
-        See help for to_dict for information on js_xlate
+        See help for to_dict for information on to_camel_case
+
+        level_limits:
+            an example is most helpful.
+            Suppose you have two tables: user and addresses
+
+            class User(db.Model):
+                __tablename__ = 'users'
+                id = db.Column(db.Integer, primary_key=True)
+                name = db.Column(db.String(30), nullable=False)
+
+            class Address(db.Model):
+                __tablename__ = 'addresses'
+                id = db.Column(db.Integer, primary_key=True)
+                email_address = db.Column(db.String, nullable=False)
+                user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+                user = db.relationship("User", back_populates="addresses")
+
+            User.addresses = db.relationship(
+                "Address", back_populates="user")
+
+            the relationship provides a look at the user in the address
+            the relationship provides a look at the addresses in user
+
+            If you want to serialize a user and include the addresses
+            it might look like:
+                user
+                    id
+                    name
+                    addresses
+                        address1
+                            id
+                            user_id
+                            email_address
+
+            But here we have a problem. The Address class has the user
+            relationship. A recursive process that walks address would then
+            include user, which would start the whole loop over again.
+
+            user => address => user => address ... etc
+
+
+            but if
+
+
+            user.serialize()
+
 
         """
-        return json.dumps(self.to_dict(js_xlate=js_xlate))
+        return json.dumps(
+            self.to_dict(to_camel_case=to_camel_case, level_limits=level_limits),
+            indent=2    # NOTE: change default?
+        )
 
     @staticmethod
-    def deserialize(data, js_xlate=True):
+    def deserialize(data, to_camel_case=True):
         """deserialize
 
         Convert back to column names that are more pythonic.
@@ -103,12 +161,12 @@ class Model():
         left to another function that can validate the data prior to
         posting.
         """
-        if not js_xlate:
+        if not to_camel_case:
             return data
 
         result = {}
         for key, value in data:
-            key = js_xlate(key, to_js=False)
+            key = to_camel_case(key, camel_case=False)
             result[key] = value
 
         return result

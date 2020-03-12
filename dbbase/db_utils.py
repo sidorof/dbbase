@@ -62,27 +62,27 @@ def is_sqlite(config):
     return False
 
 
-def xlate(key, to_js=True):
+def xlate(key, camel_case=True):
     """
     This function translates a name to a format used in JavaScript.
 
     With competing formating standards i
-    examples, to_js is True:
+    examples, camel_case is True:
         start_date would become startDate
         startdate would remain startdate
 
-    examples, to_js is False:
+    examples, camel_case is False:
         startDate would become start_date
         startdate would remain startdate
 
     """
-    if to_js:
-        return _xlate_to_js(key)
+    if camel_case:
+        return _xlate_camel_case(key)
 
     return _xlate_from_js(key)
 
 
-def _xlate_to_js(key):
+def _xlate_camel_case(key):
     """Convert example: start_date -> startDate """
     if key.find('_') > -1:
         key = string.capwords(key.replace('_', ' ')).replace(' ', '')

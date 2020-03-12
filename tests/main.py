@@ -14,9 +14,10 @@ import json
 import importlib
 import unittest
 
-from . test_dbbase.db_utils import TestUtilities
-from . test_dbbase.dbinfo import TestDBInfoClass
-from . test_dbbase.model import TestModelClass
+#from . test_dbbase.db_utils import TestUtilities
+#from . test_dbbase.dbinfo import TestDBInfoClass
+#from . test_dbbase.model import TestModelClass
+from . test_dbbase.serializers import TestSerializers
 
 # list of sample configs to test
 SAMPLE_CONFIGS = 'sample_configs.json'
@@ -34,20 +35,27 @@ for config in configs:
         json.dump(config, fobj)
     suite = unittest.TestSuite()
 
-    suite.addTests(unittest.makeSuite(TestUtilities))
-    suite.addTests(unittest.makeSuite(TestModelClass))
-    suite.addTests(unittest.makeSuite(TestDBInfoClass))
+    suite.addTests(unittest.makeSuite(TestSerializers))
+    #suite.addTests(unittest.makeSuite(TestUtilities))
+    #suite.addTests(unittest.makeSuite(TestModelClass))
+    #suite.addTests(unittest.makeSuite(TestDBInfoClass))
 
-    #test_result = unittest.TestResult()
     test_result = unittest.TextTestRunner()
     test_result = unittest.TextTestRunner(
         failfast=True,
         verbosity=1).run(suite)
-    #suite.run(test_result)
 
     print('result', test_result)
-    print('errors', test_result.errors)
-    print('failures', test_result.failures)
+    print()
+    for line in test_result.errors:
+        print('location: {}'.format(line[0]))
+        print('traceback: {}'.format(line[1]))
+
+    for line in test_result.failures:
+        print('location: {}'.format(line[0]))
+        print('traceback: {}'.format(line[1]))
+
+    print()
     print('success', test_result.wasSuccessful())
 
     print('completed testing with config: {}'.format(config['name']))

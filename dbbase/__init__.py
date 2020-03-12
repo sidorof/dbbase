@@ -7,3 +7,4 @@ __author__ = 'Don Smiley'
 from . model import Model
 from . dbinfo import DB, create_database, drop_database
 from . db_utils import db_config, is_sqlite, xlate
+from . serializers import _eval_value

@@ -48,6 +48,7 @@ class TestModelClass(DBBaseTestCase):
             __tablename__ = 'users'
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
+            address = db.relationship("Address", backref="users", lazy='immediate')
 
 
         class Address(db.Model):
@@ -56,17 +57,13 @@ class TestModelClass(DBBaseTestCase):
             email_address = db.Column(db.String, nullable=False)
             user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-            user = db.relationship("User", back_populates="addresses")
+            #user = db.relationship("User", back_populates="addresses")
 
         User.addresses = db.relationship(
-            "Address", back_populates="user")
+            "Address", back_populates="user", lazy='immediate')
             #"Address", order_by='Address.id', back_populates="user")
 
         User.metadata.create_all(db.session.bind)
-        #Address.__table__.create(db.session.bind)
-
-
-        #db.Model().metadata.create_all(engine, checkfirst=checkfirst)
 
         user = User(name='Bob')
         db.session.add(user)
@@ -85,15 +82,33 @@ class TestModelClass(DBBaseTestCase):
         db.session.add(address2)
         db.session.commit()
 
-        print('user.addresses', user.addresses)
-        print('there are ', len(user.addresses), 'addresses')
-        print('--------------------------')
-        print('address1.serialize()', address1.serialize())
-        print('address2.serialize()', address2.serialize())
-        print()
-        print('user.serialize()', user.serialize())
-
-        print('db.config', db.config)
+        self.assertDictEqual(
+            {
+                "userId": 1,
+                "emailAddress": "email1@example.com",
+                "id": 1
+            },
+            address1.to_dict()
+        )
+        self.assertDictEqual(
+            {
+                "id": 1,
+                "name": "Bob",
+                "addresses": [
+                    {
+                    "userId": 1,
+                    "emailAddress": "email1@example.com",
+                    "id": 1
+                    },
+                    {
+                    "userId": 1,
+                    "emailAddress": "email2@example.com",
+                    "id": 2
+                    }
+                ]
+            },
+            user.to_dict()
+        )
 
 
 
