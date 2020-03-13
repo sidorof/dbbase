@@ -1,7 +1,7 @@
 [
     {
         "name": "postgresql",
-        "testdb_uri": "postgresql://{user}:{password}@{host}:{port}/{basedb}",
+        "testdb_uri": "postgresql://{user}:{password}@{host}:{port}/{dbname}",
         "testdb_vars": {
             "dbname": "testdb",
             "user": "suser",

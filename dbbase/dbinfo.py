@@ -62,20 +62,20 @@ class DB(object):
         echo:
             log actions in database engine
     """
-    def __init__(
-            self, config, model_class=None, checkfirst=True, echo=False):
+
+    def __init__(self, config, model_class=None, checkfirst=True, echo=False):
 
         # not a fan of this
-        if config != ':memory:':
+        if config != ":memory:":
             self.config = config
         else:
-            self.config = 'sqlite://'
+            self.config = "sqlite://"
 
         for key in sqlalchemy.__all__:
             self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
 
-        # just starting with relationship
-        orm_functions = ['relationship']
+        # these are being added on an as-needed basis
+        orm_functions = ["relationship", "aliased", "lazyload"]
         for key in orm_functions:
             self.__setattr__(key, orm.__dict__.__getitem__(key))
 
@@ -174,8 +174,7 @@ def create_database(config, dbname, superuser=None):
     conn.execute("COMMIT;")
     conn.execute(f"CREATE DATABASE {dbname};")
 
-    conn.execute(
-        f"GRANT ALL PRIVILEGES ON DATABASE {dbname} TO {superuser};")
+    conn.execute(f"GRANT ALL PRIVILEGES ON DATABASE {dbname} TO {superuser};")
     conn.execute(f"ALTER ROLE {superuser} SUPERUSER;")
 
     conn.close()
@@ -187,8 +186,8 @@ def drop_database(config, dbname):
 
     if is_sqlite(config):
         # sqlite does not use drop database
-        if config.find('memory') == -1:
-            filename = config[config.find('///') + 3:]
+        if config.find("memory") == -1:
+            filename = config[config.find("///") + 3 :]
             if os.path.exists(filename):
                 os.remove(filename)
     else:
@@ -196,6 +195,17 @@ def drop_database(config, dbname):
 
         conn = engine.connect()
         conn.execute("COMMIT")
+
+        # close any existing connections
+        # NOTE: break this out later
+        if config.find('postgres') > -1:
+            stmt = ' '.join([
+                "SELECT pg_terminate_backend(pid)",
+                "FROM pg_stat_activity WHERE datname = '{}'"
+            ]).format(dbname)
+
+            conn.execute(stmt)
+
         result = conn.execute(f"DROP DATABASE IF EXISTS {dbname}")
         result.close()
         conn.close()
