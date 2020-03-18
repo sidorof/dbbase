@@ -1,4 +1,4 @@
-# dbbase/db_utils.py
+# dbbase/utils.py
 """
 This module implements some utilities.
 """

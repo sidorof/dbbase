@@ -1,10 +1,8 @@
 """
 This package implements base routines for interacting with the database.
 """
-__version__ = "0.1.3"
-__author__ = "Don Smiley"
-
+from ._version import __version__
 from .model import Model
-from .dbinfo import DB, create_database, drop_database
-from .db_utils import db_config, is_sqlite, xlate
 from .serializers import _eval_value
+from .utils import db_config, is_sqlite, xlate
+from .base import DB, create_database, drop_database

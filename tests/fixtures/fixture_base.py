@@ -69,7 +69,7 @@ class DBBaseTestCase(BaseTestCase):
         This doesn't check defaults.'
         """
         config_vars = get_config_vars()
-        config = dbbase.db_utils.db_config(
+        config = dbbase.utils.db_config(
             config_vars[TESTDB_URI],
             config_vars[TESTDB_VARS]
         )
@@ -77,15 +77,15 @@ class DBBaseTestCase(BaseTestCase):
         # for basedb, such as postgres to drop test db
         # uses a cheap trick
         if BASEDB in config_vars[TESTDB_VARS]:
-            config_base = dbbase.db_utils.db_config(
+            config_base = dbbase.utils.db_config(
                 config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
                 config_vars[TESTDB_VARS]
             )
         else:
             config_base = config
         dbname = config_vars[TESTDB_VARS].get(DBNAME)
-        dbbase.dbinfo.drop_database(config_base, dbname)
-        dbbase.dbinfo.create_database(
+        dbbase.base.drop_database(config_base, dbname)
+        dbbase.base.create_database(
             dbname=dbname,
             config=config_base,
             superuser=config_vars[TESTDB_VARS].get(USER)
@@ -94,12 +94,12 @@ class DBBaseTestCase(BaseTestCase):
     def setUp(self):
         """Standard configuration."""
         config_vars = get_config_vars()
-        config = dbbase.db_utils.db_config(
+        config = dbbase.utils.db_config(
             config_vars[TESTDB_URI],
             config_vars[TESTDB_VARS]
         )
         self.db = self.dbbase.DB(
-            dbbase.db_utils.db_config(
+            dbbase.utils.db_config(
                 config_vars[TESTDB_URI],
                 config_vars[TESTDB_VARS]
             )
@@ -140,13 +140,13 @@ class DBBaseTestCase(BaseTestCase):
     @classmethod
     def tearDownClass(cls):
         config_vars = get_config_vars()
-        config = dbbase.db_utils.db_config(
+        config = dbbase.utils.db_config(
             config_vars[TESTDB_URI],
             config_vars[TESTDB_VARS]
         )
 
         if BASEDB in config_vars[TESTDB_VARS]:
-            config_base = dbbase.db_utils.db_config(
+            config_base = dbbase.utils.db_config(
                 config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
                 config_vars[TESTDB_VARS]
             )
@@ -154,5 +154,5 @@ class DBBaseTestCase(BaseTestCase):
             config_base = config
 
         dbname = config_vars[TESTDB_VARS].get(DBNAME)
-        dbbase.dbinfo.drop_database(config_base, dbname)
+        dbbase.base.drop_database(config_base, dbname)
         dbname = None

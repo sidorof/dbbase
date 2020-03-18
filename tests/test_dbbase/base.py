@@ -1,8 +1,8 @@
-# test/test_dbbase/dbinfo.py
+# test/test_dbbase/base.py
 from . import DBBaseTestCase
 
 
-class TestDBInfoClass(DBBaseTestCase):
+class TestDBBaseClass(DBBaseTestCase):
     """
     This class tests DB class functions
     """

@@ -1,4 +1,4 @@
-# dbbase/db.py
+# base/db.py
 """
 This module maintains database info common to all the modules.
 
@@ -23,7 +23,7 @@ from sqlalchemy import create_engine, orm
 from sqlalchemy.pool import NullPool
 
 from . import model
-from .db_utils import is_sqlite
+from .utils import is_sqlite
 
 logger = logging.getLogger(__file__)
 

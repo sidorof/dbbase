@@ -14,9 +14,9 @@ import json
 import importlib
 import unittest
 
-#from . test_dbbase.db_utils import TestUtilities
-#from . test_dbbase.dbinfo import TestDBInfoClass
-#from . test_dbbase.model import TestModelClass
+from . test_dbbase.utils import TestUtilities
+from . test_dbbase.base import TestDBBaseClass
+from . test_dbbase.model import TestModelClass
 from . test_dbbase.serializers import TestSerializers
 
 # list of sample configs to test
@@ -36,9 +36,9 @@ for config in configs[:1]:
     suite = unittest.TestSuite()
 
     suite.addTests(unittest.makeSuite(TestSerializers))
-    #suite.addTests(unittest.makeSuite(TestUtilities))
-    #suite.addTests(unittest.makeSuite(TestModelClass))
-    #suite.addTests(unittest.makeSuite(TestDBInfoClass))
+    suite.addTests(unittest.makeSuite(TestUtilities))
+    suite.addTests(unittest.makeSuite(TestModelClass))
+    suite.addTests(unittest.makeSuite(TestDBBaseClass))
 
     test_result = unittest.TextTestRunner()
     test_result = unittest.TextTestRunner(

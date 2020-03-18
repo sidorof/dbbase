@@ -76,10 +76,6 @@ Serializations:
     }
 
     So serialization walks the object __dict__
-
-
-
-
 """
 from datetime import date, datetime
 from decimal import Decimal
@@ -132,10 +128,6 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
     returns
         values that have been converted as needed
     """
-    print()
-    print('_eval_value')
-    print(
-        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
     if isinstance(value, datetime):
         result = value.strftime(TIME_FMT)
     elif isinstance(value, date):
@@ -148,7 +140,7 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
                 value, to_camel_case, level_limits, source_class)
         else:
             result = []
-    elif isinstance(value, model.Model):
+    elif hasattr(value, 'to_dict'):
         result, level_limits =  _eval_value_model(
             value, to_camel_case, level_limits, source_class
         )
@@ -164,21 +156,12 @@ def _eval_value_model(value, to_camel_case, level_limits, source_class):
     if any class within level_limits i self-referential it gets
     passed on.
     """
-    print()
-    print('_eval_value_model')
-    print(
-        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
     result = STOP_VALUE
     status = True
-    print('_eval_value_model: model', value._class)
-    print('_eval_value_model: level_limits', level_limits)
-    level_limits.add(source_class)
+    if source_class is not None:
+        level_limits.add(source_class)
     result = value.to_dict(to_camel_case, level_limits=level_limits)
     level_limits.add(value._class)
-    print()
-    print('_eval_value_model: after proc level_limits', level_limits)
-    print('result', result)
-    input('continue from _eval_value_model')
     return result, level_limits
 
 
@@ -199,10 +182,6 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
     for the next line. Only at the end should level_limits be updated.
 
     """
-    print()
-    print('_eval_value_list')
-    print(
-        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
     tmp_list = []
     length = len(value)
 
@@ -210,14 +189,14 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
     tmp_limits = None
     for item in value:
         tmp_limits = level_limits.copy()
-        if isinstance(item, model.Model):
+        if hasattr(item, 'to_dict'):
             status = True
             result = STOP_VALUE
             if item._class in level_limits:
                 if not item._has_self_ref():
                     status = False
             if status:
-                result = _eval_value_model(
+                result, tmp_limits = _eval_value_model(
                     item, to_camel_case, tmp_limits, source_class)
         else:
             result = _eval_value(

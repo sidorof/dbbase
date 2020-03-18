@@ -10,7 +10,7 @@ from decimal import Decimal
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.util import clsname_as_plain_name
 
-from .db_utils import xlate
+from .utils import xlate
 from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
 
 
@@ -55,7 +55,9 @@ class Model(object):
     @property
     def _class(self):
         """
-        Returns the class name. For example:
+        Returns the class name.
+
+        For example:
 
             user.__class__
             is __main__.User
@@ -113,6 +115,10 @@ class Model(object):
         if relation is not None:
             return {
                 'self-referential': relation.target.name == self.__tablename__,
+                # these are not currently used.
+                # intuitively, it seems like a good idea, but I am not sure why.
+                # Accordingly, these may be removed without warning, since
+                # program structure and testing does not seem to require them.
                 'uselist': relation.uselist,
                 'join_depth': relation.join_depth
             }
@@ -208,7 +214,6 @@ class Model(object):
         result = {}
         for key in self.get_serial_field_list():
             # special treatment for relationships
-            print(f'key: {key}')
             rel_info = self._relations_info(key)
             if rel_info is not None:
                 if not rel_info['self-referential'] and self._class in level_limits:
@@ -220,11 +225,6 @@ class Model(object):
             if type(value) == 'method':
                 value = value()
 
-            if isinstance(value, list):
-                print('in model')
-                print([item.id for item in value])
-                print('level_limits', level_limits)
-                input('ready this will be sent to _eval_value')
             res = _eval_value(
                 value, to_camel_case, level_limits, source_class=self._class
             )
