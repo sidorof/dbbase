@@ -1,0 +1,166 @@
+# examples.txt
+
+    class User(db.Model):
+        __tablename__ = 'users'
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String(30), nullable=False)
+        addresses = db.relationship("Address", backref="users", lazy='immediate')
+
+    class Address(db.Model):
+        __tablename__ = 'addresses'
+        id = db.Column(db.Integer, primary_key=True)
+        street1 = db.Column(db.String, nullable=False)
+        street2 = db.Column(db.String, nullable=False)
+        city = db.Column(db.String, nullable=False)
+        state = db.Column(db.String, nullable=False)
+        country = db.Column(db.String, nullable=False)
+        postal_code = db.Column(db.String, nullable=False)
+        user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+        user = db.relationship("User", back_populates="addresses")
+
+   User.addresses = db.relationship(
+        "Address", back_populates="user", lazy='immediate')
+
+    user = User(
+        id=randint(1, 1000000),
+        name='Bob')
+
+    db.session.add(user)
+    db.session.commit()
+
+    address1 = Address(
+        street='123 F Street',
+        city='San Francisco',
+        state='CA',
+        postal_code='94122',
+        country='US',
+        user_id=user.id
+    )
+    address2 = Address(
+        street='123 G Street',
+        city='Oakland',
+        state='CA',
+        postal_code='94607',
+        country='US',
+        user_id=user.id
+    )
+
+    default for user
+
+    user.to_dict()
+
+    {
+        "id": 1232,
+        "name": "Bob",
+        "addresses": [
+            {
+                "id": 1,
+                "street": "123 F Street",
+                "city": "San Francisco",
+                "state": "CA",
+                "postalCode": "94122",
+                "country": "US",
+                "user_id": 1232
+            },
+            {
+                "id": 2,
+                "street": "123 G Street",
+                "city": "Oakland",
+                "state": "CA",
+                "postalCode": "94607",
+                "country": "US",
+                "user_id": 1232
+            }
+        ]
+    }
+
+    Suppose you want to avoid redundant information such as the user_id in
+    the address portion
+
+    Address.SERIAL_STOPLIST = ['user_id']
+
+    {
+        "id": 1232,
+        "name": "Bob",
+        "addresses": [
+            {
+                "id": 1,
+                "street": "123 F Street",
+                "city": "San Francisco",
+                "state": "CA",
+                "postalCode": "94122",
+                "country": "US"
+            },
+            {
+                "id": 2,
+                "street": "123 G Street",
+                "city": "Oakland",
+                "state": "CA",
+                "postalCode": "94607",
+                "country": "US"
+            }
+        ]
+    }
+
+    Suppose you do not want the addresses to be included at all.
+
+    User.SERIAL_STOPLIST = ['addresses']
+
+    {
+        "id": 1232,
+        "name": "Bob",
+    }
+
+    Suppose you want one line for the street address, substituting the fields, street address, city, state, etc for the function `address`.
+
+    in the class Address add
+        def address(self):
+            if self.street2 is None:
+                street = self.street1
+            else:
+                street = '{}, {}'.format(
+                    self.street, self.street2)
+            return '{}, {}, {}, {} {}'.format(
+                street,
+                self.city,
+                self.state,
+                self.country,
+                self.postal_code)
+
+    Now you have the option of excluding the fields you do not want, or, you can explicitly specify the fields to include.
+
+    Method 1: exclusion
+
+    Address.SERIAL_STOPLIST = [
+        'user_id', 'street1', 'street2', 'city', 'state', 'country',
+        'postal_code']
+
+    Method 2: specify which fields to include
+
+    Address.SERIAL_LIST = ['address]
+
+    {
+        "id": 1232,
+        "name": "Bob",
+        "addresses": [
+            {
+                "id": 1,
+                "address": "123 F Street, San Francisco, CA 94122 US"
+            },
+            {
+                "id": 2,
+                "address": "123 G Street, Oakland, CA 94607 US"
+            }
+        ]
+    }
+
+    Both methods yield the same result. I would choose the one that involves
+    the least typing. Remember that if SERIAL_LIST is used, any items in
+    SERIAL_STOPLIST are completely ignored.
+
+    To determine what fields would be included or not you can use the
+    function self.get_serial_field_list() to provide with the list.
+
+    Finally, if none of these methods do what you want, simply override
+    the function self.to_dict() with something more palatable to your needs.

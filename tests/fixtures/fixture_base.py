@@ -83,7 +83,6 @@ class DBBaseTestCase(BaseTestCase):
             )
         else:
             config_base = config
-
         dbname = config_vars[TESTDB_VARS].get(DBNAME)
         dbbase.dbinfo.drop_database(config_base, dbname)
         dbbase.dbinfo.create_database(
@@ -134,6 +133,7 @@ class DBBaseTestCase(BaseTestCase):
         self.db.orm.session.close_all_sessions()
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
+        # self.db.Model = self.db.load_model_class() # should be overkill
         self.db = None
         del self.db
 

@@ -1,6 +1,10 @@
 # dbbase/serializers.py
 """
-This module implements serializations. It is
+This module implements serializations. Here are a couple scenarios:
+
+Scenario 1:
+
+Preparing the table and data
 
     class User(db.Model):
         __tablename__ = 'users'
@@ -18,7 +22,6 @@ This module implements serializations. It is
 
     User.addresses = db.relationship(
         "Address", back_populates="user", lazy='immediate')
-        #"Address", order_by='Address.id', back_populates="user")
 
     User.metadata.create_all(db.session.bind)
 
@@ -35,7 +38,10 @@ This module implements serializations. It is
         user_id=user.id
     )
 
-    JSON should look like:
+
+Serializations:
+
+    JSON in camel case should look like this:
     {
         "id": 1,
         "name": "Bob",
@@ -53,6 +59,24 @@ This module implements serializations. It is
         ]
     }
 
+    or this:
+    {
+        "id": 1,
+        "name": "Bob",
+        "addresses": [
+            {
+            "emailAddress": "email1@example.com",
+            "id": 1
+            },
+            {
+            "emailAddress": "email2@example.com",
+            "id": 2
+            }
+        ]
+    }
+
+    So serialization walks the object __dict__
+
 
 
 
@@ -63,40 +87,147 @@ from decimal import Decimal
 from . import model
 
 
-SA_INDICATOR = '_sa_instance_state'
-DATE_FMT = '%F'
-TIME_FMT = '%Y-%m-%d %H:%M:%S'
-STOP_VALUE = '%%done%%'  # seems awkward
+SA_INDICATOR = "_sa_instance_state"
+DATE_FMT = "%F"
+TIME_FMT = "%Y-%m-%d %H:%M:%S"
+STOP_VALUE = "%%done%%"  # seems awkward
+
+# fields automatically excluded
+SERIAL_STOPLIST = [
+    '_class',
+    '_decl_class_registry',
+    '_sa_class_manager',
+    '_sa_instance_state',
+    'db',
+    'deserialize',
+    'get_serial_field_list',
+    'metadata',
+    'query',
+    'serialize',
+    'to_dict',
+    'SERIAL_STOPLIST',
+    'SERIAL_LIST'
+]
 
 
-def _eval_value(value, class_name, to_camel_case, level_limits):
+def _eval_value(value, to_camel_case, level_limits, source_class):
+    """ _eval_value
 
+    This function converts some of the standard values as needed based
+    upon type. The more complex values are farmed out, such as for lists
+    and models.
+
+    parameters:
+        value
+            what is to be evaluated and perhaps converted
+
+        to_camel_case
+            Boolean for converting keys to camel case
+
+        level_limits
+            set of classes that have been visited already
+            it is to prevent infinite recursion situations
+        source_class
+
+    returns
+        values that have been converted as needed
+    """
+    print()
+    print('_eval_value')
+    print(
+        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
     if isinstance(value, datetime):
-        return value.strftime(TIME_FMT)
+        result = value.strftime(TIME_FMT)
     elif isinstance(value, date):
-        return value.strftime(DATE_FMT)
+        result =  value.strftime(DATE_FMT)
     elif isinstance(value, Decimal):
-        return str(value)
+        result =  str(value)
     elif isinstance(value, list):
-        tmp_list = []
-        tmp_limits = level_limits.copy()
-        length = len(value)
-        for idx, item in enumerate(value):
-            result = _eval_value(
-                item, class_name, to_camel_case, tmp_limits)
-            tmp_list.append(result)
-
-            if idx < length - 1:
-                tmp_limits = level_limits.copy()
-            else:
-                level_limits = tmp_limits
-        return tmp_list
-
+        if len(value) > 0:
+            result, level_limits = _eval_value_list(
+                value, to_camel_case, level_limits, source_class)
+        else:
+            result = []
     elif isinstance(value, model.Model):
-        res = STOP_VALUE
-        if value._class() != class_name:
-            res = value.to_dict(to_camel_case, level_limits=level_limits)
-        return res
-
+        result, level_limits =  _eval_value_model(
+            value, to_camel_case, level_limits, source_class
+        )
     else:
-        return value
+        result =  value
+
+    return result
+
+
+def _eval_value_model(value, to_camel_case, level_limits, source_class):
+    """_eval_value_model
+
+    if any class within level_limits i self-referential it gets
+    passed on.
+    """
+    print()
+    print('_eval_value_model')
+    print(
+        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
+    result = STOP_VALUE
+    status = True
+    print('_eval_value_model: model', value._class)
+    print('_eval_value_model: level_limits', level_limits)
+    level_limits.add(source_class)
+    result = value.to_dict(to_camel_case, level_limits=level_limits)
+    level_limits.add(value._class)
+    print()
+    print('_eval_value_model: after proc level_limits', level_limits)
+    print('result', result)
+    input('continue from _eval_value_model')
+    return result, level_limits
+
+
+def _eval_value_list(value, to_camel_case, level_limits, source_class):
+    """_eval_value_list
+
+    This function handles values that are lists. While a list that is not
+    a model is pretty straight-forward, a list of models is a little
+    trickier.
+
+    If a model is self-referential, such as a node, the model should be
+    passed on to be evaluated. However, if it is not, such as
+        user > addresses > user,
+    then if the model has not already been evaluated, it should be.
+    But, it should be for each line in the list, so you can't mark it as
+    done until all the lines have been processed. The approach taken here is
+    to make a temporary level_limits set, pass it in, but start it fresh
+    for the next line. Only at the end should level_limits be updated.
+
+    """
+    print()
+    print('_eval_value_list')
+    print(
+        f'value: {value}  level_limits: {level_limits}  source_class: {source_class}')
+    tmp_list = []
+    length = len(value)
+
+    is_model = False
+    tmp_limits = None
+    for item in value:
+        tmp_limits = level_limits.copy()
+        if isinstance(item, model.Model):
+            status = True
+            result = STOP_VALUE
+            if item._class in level_limits:
+                if not item._has_self_ref():
+                    status = False
+            if status:
+                result = _eval_value_model(
+                    item, to_camel_case, tmp_limits, source_class)
+        else:
+            result = _eval_value(
+                item, to_camel_case, tmp_limits, source_class)
+
+        tmp_list.append(result)
+
+    if all(list(map(lambda i: i == STOP_VALUE, tmp_list))):
+        tmp_list = STOP_VALUE
+    if tmp_limits is not None:
+        level_limits = tmp_limits.copy()
+
+    return tmp_list, level_limits

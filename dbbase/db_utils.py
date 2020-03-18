@@ -54,10 +54,10 @@ def is_sqlite(config):
         is_sqlite(config)
 
     """
-    if config.find('sqlite') > -1:
+    if config.find("sqlite") > -1:
         return True
 
-    if config.find(':memory:') > -1:
+    if config.find(":memory:") > -1:
         return True
     return False
 
@@ -84,18 +84,18 @@ def xlate(key, camel_case=True):
 
 def _xlate_camel_case(key):
     """Convert example: start_date -> startDate """
-    if key.find('_') > -1:
-        key = string.capwords(key.replace('_', ' ')).replace(' ', '')
+    if key.find("_") > -1:
+        key = string.capwords(key.replace("_", " ")).replace(" ", "")
         key = key[0].lower() + key[1:]
     return key
 
 
 def _xlate_from_js(key):
     """Convert example: startDate -> start_date """
-    new_key = ''
+    new_key = ""
     for char in key:
         if char in string.ascii_uppercase:
-            new_key += '_' + char.lower()
+            new_key += "_" + char.lower()
         else:
             new_key += char
     return new_key
