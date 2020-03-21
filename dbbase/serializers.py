@@ -90,20 +90,20 @@ STOP_VALUE = "%%done%%"  # seems awkward
 
 # fields automatically excluded
 SERIAL_STOPLIST = [
-    '_class',
-    '_decl_class_registry',
-    '_sa_class_manager',
-    '_sa_instance_state',
-    'db',
-    'deserialize',
-    'get_serial_field_list',
-    'metadata',
-    'query',
-    'save',
-    'serialize',
-    'to_dict',
-    'SERIAL_STOPLIST',
-    'SERIAL_LIST'
+    "_class",
+    "_decl_class_registry",
+    "_sa_class_manager",
+    "_sa_instance_state",
+    "db",
+    "deserialize",
+    "get_serial_field_list",
+    "metadata",
+    "query",
+    "save",
+    "serialize",
+    "to_dict",
+    "SERIAL_STOPLIST",
+    "SERIAL_LIST",
 ]
 
 
@@ -132,21 +132,22 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
     if isinstance(value, datetime):
         result = value.strftime(TIME_FMT)
     elif isinstance(value, date):
-        result =  value.strftime(DATE_FMT)
+        result = value.strftime(DATE_FMT)
     elif isinstance(value, Decimal):
-        result =  str(value)
+        result = str(value)
     elif isinstance(value, list):
         if len(value) > 0:
             result, level_limits = _eval_value_list(
-                value, to_camel_case, level_limits, source_class)
+                value, to_camel_case, level_limits, source_class
+            )
         else:
             result = []
-    elif hasattr(value, 'to_dict'):
-        result, level_limits =  _eval_value_model(
+    elif hasattr(value, "to_dict"):
+        result, level_limits = _eval_value_model(
             value, to_camel_case, level_limits, source_class
         )
     else:
-        result =  value
+        result = value
 
     return result
 
@@ -190,7 +191,7 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
     tmp_limits = None
     for item in value:
         tmp_limits = level_limits.copy()
-        if hasattr(item, 'to_dict'):
+        if hasattr(item, "to_dict"):
             status = True
             result = STOP_VALUE
             if item._class() in level_limits:
@@ -198,10 +199,10 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
                     status = False
             if status:
                 result, tmp_limits = _eval_value_model(
-                    item, to_camel_case, tmp_limits, source_class)
+                    item, to_camel_case, tmp_limits, source_class
+                )
         else:
-            result = _eval_value(
-                item, to_camel_case, tmp_limits, source_class)
+            result = _eval_value(item, to_camel_case, tmp_limits, source_class)
 
         tmp_list.append(result)
 

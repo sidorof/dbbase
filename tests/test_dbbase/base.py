@@ -6,6 +6,7 @@ class TestDBBaseClass(DBBaseTestCase):
     """
     This class tests DB class functions
     """
+
     def test__DB__init__(self):
         pass
 

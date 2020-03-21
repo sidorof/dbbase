@@ -85,7 +85,7 @@ class DB(object):
         self.Model = self.load_model_class(model_class)
         self.Model.db = self
         self.session = self.create_session(checkfirst=checkfirst, echo=echo)
-        #self.Model.query = orm.Query(self.Model).with_session(self.session)
+        # self.Model.query = orm.Query(self.Model).with_session(self.session)
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -159,7 +159,7 @@ class DB(object):
         self.Model.metadata.create_all(bind, checkfirst=checkfirst)
         self._apply_query()
         for cls in self.Model._decl_class_registry.values():
-            if hasattr(cls, '__tablename__'):
+            if hasattr(cls, "__tablename__"):
                 cls.query = self.session.query(cls)
 
     def _apply_query(self):
@@ -168,7 +168,7 @@ class DB(object):
         This function walks the Model classes and inserts the query object.
         """
         for cls in self.Model._decl_class_registry.values():
-            if hasattr(cls, '__tablename__'):
+            if hasattr(cls, "__tablename__"):
                 cls.query = self.session.query(cls)
 
 
@@ -220,11 +220,13 @@ def drop_database(config, dbname):
 
         # close any existing connections
         # NOTE: break this out later
-        if config.find('postgres') > -1:
-            stmt = ' '.join([
-                "SELECT pg_terminate_backend(pid)",
-                "FROM pg_stat_activity WHERE datname = '{}'"
-            ]).format(dbname)
+        if config.find("postgres") > -1:
+            stmt = " ".join(
+                [
+                    "SELECT pg_terminate_backend(pid)",
+                    "FROM pg_stat_activity WHERE datname = '{}'",
+                ]
+            ).format(dbname)
 
             conn.execute(stmt)
 

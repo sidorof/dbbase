@@ -35,24 +35,25 @@ import dbbase
 
 warnings.filterwarnings("ignore")
 
-CONFIG_FILE = 'config.json'
-TESTDB_URI = 'testdb_uri'
-TESTDB_VARS = 'testdb_vars'
-BASEDB = 'basedb'
-DBNAME = 'dbname'
-USER = 'user'   # superuser at this point
+CONFIG_FILE = "config.json"
+TESTDB_URI = "testdb_uri"
+TESTDB_VARS = "testdb_vars"
+BASEDB = "basedb"
+DBNAME = "dbname"
+USER = "user"  # superuser at this point
 
 
 def get_config_vars():
     """json file with parameters"""
     with open(CONFIG_FILE) as fobj:
-       return json.loads(fobj.read())
+        return json.loads(fobj.read())
 
 
 class BaseTestCase(unittest.TestCase):
     """
     Base class used for testing non-database utility functions.
     """
+
     dbbase = dbbase
 
 
@@ -61,6 +62,7 @@ class DBBaseTestCase(BaseTestCase):
     All test cases inherit from this class.
 
     """
+
     dbbase = dbbase
 
     @classmethod
@@ -70,16 +72,15 @@ class DBBaseTestCase(BaseTestCase):
         """
         config_vars = get_config_vars()
         config = dbbase.utils.db_config(
-            config_vars[TESTDB_URI],
-            config_vars[TESTDB_VARS]
+            config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
         )
 
         # for basedb, such as postgres to drop test db
         # uses a cheap trick
         if BASEDB in config_vars[TESTDB_VARS]:
             config_base = dbbase.utils.db_config(
-                config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
-                config_vars[TESTDB_VARS]
+                config_vars[TESTDB_URI].replace("{dbname}", "{basedb}"),
+                config_vars[TESTDB_VARS],
             )
         else:
             config_base = config
@@ -88,20 +89,18 @@ class DBBaseTestCase(BaseTestCase):
         dbbase.base.create_database(
             dbname=dbname,
             config=config_base,
-            superuser=config_vars[TESTDB_VARS].get(USER)
+            superuser=config_vars[TESTDB_VARS].get(USER),
         )
 
     def setUp(self):
         """Standard configuration."""
         config_vars = get_config_vars()
         config = dbbase.utils.db_config(
-            config_vars[TESTDB_URI],
-            config_vars[TESTDB_VARS]
+            config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
         )
         self.db = self.dbbase.DB(
             dbbase.utils.db_config(
-                config_vars[TESTDB_URI],
-                config_vars[TESTDB_VARS]
+                config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
             )
         )
         self.db.drop_all(echo=False)
@@ -119,9 +118,7 @@ class DBBaseTestCase(BaseTestCase):
             key, value = rlist[i]
             obj.__setattr__(key, value)
             if i < length - 1:
-                self.assertRaises(
-                    IntegrityError,
-                    self.db.session.add(obj))
+                self.assertRaises(IntegrityError, self.db.session.add(obj))
                 self.db.session.rollback()
             else:
                 self.db.session.add(obj)
@@ -141,14 +138,13 @@ class DBBaseTestCase(BaseTestCase):
     def tearDownClass(cls):
         config_vars = get_config_vars()
         config = dbbase.utils.db_config(
-            config_vars[TESTDB_URI],
-            config_vars[TESTDB_VARS]
+            config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
         )
 
         if BASEDB in config_vars[TESTDB_VARS]:
             config_base = dbbase.utils.db_config(
-                config_vars[TESTDB_URI].replace('{dbname}', '{basedb}'),
-                config_vars[TESTDB_VARS]
+                config_vars[TESTDB_URI].replace("{dbname}", "{basedb}"),
+                config_vars[TESTDB_VARS],
             )
         else:
             config_base = config

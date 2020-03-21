@@ -17,6 +17,7 @@ def init_variables(obj):
 
 class TestSerializers(DBBaseTestCase):
     """Test class for serializers """
+
     def test_eval_value_basic(self):
         """Test _eval_value
 
@@ -29,45 +30,44 @@ class TestSerializers(DBBaseTestCase):
         value = 1
         self.assertEqual(
             value,
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
-        value = 'this is text'
+        value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
-        value = 'this is text'
+        value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
         value = datetime(2020, 7, 24, 12, 31, 5)
         self.assertEqual(
-            '2020-07-24 12:31:05',
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            "2020-07-24 12:31:05",
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
         value = date(2020, 7, 24)
         self.assertEqual(
-            '2020-07-24',
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            "2020-07-24",
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
         value = 123.456
         self.assertAlmostEqual(
             123.456,
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
-        value = Decimal('123.456')
+        value = Decimal("123.456")
         self.assertEqual(
-            '123.456',
-            _eval_value(
-                value, self.to_camel_case, self.level_limits, None))
-
+            "123.456",
+            _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
 
     def test_eval_value_model(self):
         """Test _eval_value
@@ -89,7 +89,8 @@ class TestSerializers(DBBaseTestCase):
 
         class User(db.Model):
             """simple table"""
-            __tablename__ = 'users'
+
+            __tablename__ = "users"
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
             start_date = db.Column(db.Date, nullable=False)
@@ -98,9 +99,10 @@ class TestSerializers(DBBaseTestCase):
 
         user_id = 10032
         user = User(
-            id=user_id,   # some arbitrary number
-            name='Bob',
-            start_date=date(2020, 3, 29))
+            id=user_id,  # some arbitrary number
+            name="Bob",
+            start_date=date(2020, 3, 29),
+        )
 
         db.session.add(user)
         db.session.commit()
@@ -108,32 +110,24 @@ class TestSerializers(DBBaseTestCase):
 
         value = user
         self.assertDictEqual(
-            {
-                'id': 10032,
-                'name': 'Bob',
-                'startDate': '2020-03-29'
-            },
+            {"id": 10032, "name": "Bob", "startDate": "2020-03-29"},
             _eval_value(
                 value,
                 to_camel_case=True,
                 level_limits=set(),
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         # not camel case
         self.assertDictEqual(
-            {
-                'id': 10032,
-                'name': 'Bob',
-                'start_date': '2020-03-29'
-            },
+            {"id": 10032, "name": "Bob", "start_date": "2020-03-29"},
             _eval_value(
                 value,
                 to_camel_case=False,
                 level_limits=set(),
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         # model has been already processed, so level_limits has class
@@ -145,10 +139,9 @@ class TestSerializers(DBBaseTestCase):
                 value,
                 to_camel_case=False,
                 level_limits=level_limits,
-                source_class=value._class
-            )
+                source_class=value._class,
+            ),
         )
-
 
     def test_eval_value_model_relationships(self):
         """Test test_eval_value_model_relationships
@@ -161,41 +154,37 @@ class TestSerializers(DBBaseTestCase):
 
         class User(db.Model):
             """base table"""
-            __tablename__ = 'users'
+
+            __tablename__ = "users"
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
-            addresses = db.relationship("Address", backref="users", lazy='immediate')
-
+            addresses = db.relationship(
+                "Address", backref="users", lazy="immediate"
+            )
 
         class Address(db.Model):
             """related table"""
-            __tablename__ = 'addresses'
+
+            __tablename__ = "addresses"
             id = db.Column(db.Integer, primary_key=True)
             email_address = db.Column(db.String, nullable=False)
-            user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+            user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
             user = db.relationship("User", back_populates="addresses")
 
         User.addresses = db.relationship(
-            "Address", back_populates="user", lazy='immediate')
+            "Address", back_populates="user", lazy="immediate"
+        )
 
         db.create_all()
 
-        user = User(
-            id=randint(1, 1000000),
-            name='Bob')
+        user = User(id=randint(1, 1000000), name="Bob")
 
         db.session.add(user)
         db.session.commit()
 
-        address1 = Address(
-            email_address='email1@example.com',
-            user_id=user.id
-        )
-        address2 = Address(
-            email_address='email2@example.com',
-            user_id=user.id
-        )
+        address1 = Address(email_address="email1@example.com", user_id=user.id)
+        address2 = Address(email_address="email2@example.com", user_id=user.id)
 
         db.session.add(address1)
         db.session.add(address2)
@@ -210,17 +199,17 @@ class TestSerializers(DBBaseTestCase):
         # starts from no source_class, so does address => user, then stops
         self.assertDictEqual(
             {
-                'id': 1,
-                'emailAddress': 'email1@example.com',
-                'userId': user.id,
-                'user': {'id': user.id, 'name': 'Bob'},
+                "id": 1,
+                "emailAddress": "email1@example.com",
+                "userId": user.id,
+                "user": {"id": user.id, "name": "Bob"},
             },
             _eval_value(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         value = user
@@ -228,27 +217,27 @@ class TestSerializers(DBBaseTestCase):
 
         self.assertDictEqual(
             {
-                'id': user.id,
-                'name': 'Bob',
-                'addresses': [
+                "id": user.id,
+                "name": "Bob",
+                "addresses": [
                     {
-                        'id': 1,
-                        'emailAddress': 'email1@example.com',
-                        'userId': user.id
+                        "id": 1,
+                        "emailAddress": "email1@example.com",
+                        "userId": user.id,
                     },
                     {
-                        'id': 2,
-                        'emailAddress': 'email2@example.com',
-                        'userId': user.id
-                    }
-                ]
+                        "id": 2,
+                        "emailAddress": "email2@example.com",
+                        "userId": user.id,
+                    },
+                ],
             },
             _eval_value(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
     def test_eval_value_list(self):
@@ -261,19 +250,16 @@ class TestSerializers(DBBaseTestCase):
 
         class User(db.Model):
             """simple table"""
-            __tablename__ = 'users'
+
+            __tablename__ = "users"
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
 
         db.create_all()
 
-        user1 = User(
-            id=randint(1, 1000000),
-            name='Bob')
+        user1 = User(id=randint(1, 1000000), name="Bob")
 
-        user2 = User(
-            id=randint(1, 1000000),
-            name='JimBob')
+        user2 = User(id=randint(1, 1000000), name="JimBob")
 
         db.session.add(user1)
         db.session.add(user2)
@@ -282,21 +268,16 @@ class TestSerializers(DBBaseTestCase):
         db.session.refresh(user1)
         db.session.refresh(user2)
 
-
-
-        value = ['something', 'trivial']
+        value = ["something", "trivial"]
         level_limits = set()
         self.assertTupleEqual(
-            (
-                ['something', 'trivial'],
-                level_limits
-            ),
+            (["something", "trivial"], level_limits),
             _eval_value_list(
                 value,
                 to_camel_case=True,
                 level_limits=set(),
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         value = [user1, user2]
@@ -305,19 +286,18 @@ class TestSerializers(DBBaseTestCase):
         self.assertTupleEqual(
             (
                 [
-                    {'id': user1.id, 'name': 'Bob'},
-                    {'id': user2.id, 'name': 'JimBob'}
+                    {"id": user1.id, "name": "Bob"},
+                    {"id": user2.id, "name": "JimBob"},
                 ],
-                set([user1._class()])
+                set([user1._class()]),
             ),
             _eval_value_list(
                 value,
                 to_camel_case=True,
                 level_limits=set(),
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
-
 
     def test_eval_value_model(self):
         """Test test_eval_value_model
@@ -334,36 +314,31 @@ class TestSerializers(DBBaseTestCase):
 
         class User(db.Model):
             """simple table"""
-            __tablename__ = 'users'
+
+            __tablename__ = "users"
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
             addresses = db.relationship(
-                "Address", backref="user", lazy='immediate')
+                "Address", backref="user", lazy="immediate"
+            )
 
         class Address(db.Model):
             """related table"""
-            __tablename__ = 'addresses'
+
+            __tablename__ = "addresses"
             id = db.Column(db.Integer, primary_key=True)
             email_address = db.Column(db.String, nullable=False)
-            user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+            user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
         db.create_all()
 
-        user = User(
-            id=randint(1, 1000000),
-            name='Bob')
+        user = User(id=randint(1, 1000000), name="Bob")
 
         db.session.add(user)
         db.session.commit()
 
-        address1 = Address(
-            email_address='email1@example.com',
-            user_id=user.id
-        )
-        address2 = Address(
-            email_address='email2@example.com',
-            user_id=user.id
-        )
+        address1 = Address(email_address="email1@example.com", user_id=user.id)
+        address2 = Address(email_address="email2@example.com", user_id=user.id)
 
         db.session.add(address1)
         db.session.add(address2)
@@ -379,29 +354,29 @@ class TestSerializers(DBBaseTestCase):
         self.assertTupleEqual(
             (
                 {
-                    'id': user.id,
-                    'name': 'Bob',
-                    'addresses': [
-
+                    "id": user.id,
+                    "name": "Bob",
+                    "addresses": [
                         {
-                            'id': 1,
-                            'emailAddress': 'email1@example.com',
-                            'userId': user.id,
+                            "id": 1,
+                            "emailAddress": "email1@example.com",
+                            "userId": user.id,
                         },
                         {
-                            'id': 2,
-                            'emailAddress': 'email2@example.com',
-                            'userId': user.id,
-                        }
-                    ]
-                }, set([user._class()])
+                            "id": 2,
+                            "emailAddress": "email2@example.com",
+                            "userId": user.id,
+                        },
+                    ],
+                },
+                set([user._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         # should find and include the user data as well
@@ -410,48 +385,41 @@ class TestSerializers(DBBaseTestCase):
         self.assertTupleEqual(
             (
                 {
-                    'id': 1,
-                    'emailAddress': 'email1@example.com',
-                    'userId': user.id,
-                    'user': {'id': user.id, 'name': 'Bob'}
+                    "id": 1,
+                    "emailAddress": "email1@example.com",
+                    "userId": user.id,
+                    "user": {"id": user.id, "name": "Bob"},
                 },
-                set([address1._class(), user._class()])
+                set([address1._class(), user._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
         # test modifications via serial stop lists
         # do it wrong first
-        Address.SERIAL_STOPLIST = 'user_id'
-        self.assertRaises(
-            ValueError,
-            address1._get_serial_stop_list
-        )
+        Address.SERIAL_STOPLIST = "user_id"
+        self.assertRaises(ValueError, address1._get_serial_stop_list)
 
         # now remove user_id from via the stop list
-        Address.SERIAL_STOPLIST = ['user_id']
+        Address.SERIAL_STOPLIST = ["user_id"]
         self.assertSetEqual(
-            set(['id', 'email_address', 'user']),
-            set(address1.get_serial_field_list())
+            set(["id", "email_address", "user"]),
+            set(address1.get_serial_field_list()),
         )
 
         # now add email_address to the include list
         # do it wrong first
-        Address.SERIAL_LIST = 'email_address'
-        self.assertRaises(
-            ValueError,
-            address1.get_serial_field_list
-        )
+        Address.SERIAL_LIST = "email_address"
+        self.assertRaises(ValueError, address1.get_serial_field_list)
 
         # now add email_address to the include list
-        Address.SERIAL_LIST = ['email_address']
+        Address.SERIAL_LIST = ["email_address"]
         self.assertSetEqual(
-            set(['email_address']),
-            set(address1.get_serial_field_list())
+            set(["email_address"]), set(address1.get_serial_field_list())
         )
 
         # prove it works with _eval_value_model
@@ -459,17 +427,15 @@ class TestSerializers(DBBaseTestCase):
         level_limits = set()
         self.assertTupleEqual(
             (
-                {
-                    'emailAddress': 'email1@example.com',
-                },
-                set([address1._class()])
+                {"emailAddress": "email1@example.com",},
+                set([address1._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         # Combine user and addresses
@@ -479,30 +445,25 @@ class TestSerializers(DBBaseTestCase):
         self.assertTupleEqual(
             (
                 {
-                    'id': user.id,
-                    'name': 'Bob',
-                    'addresses': [
-
-                        {
-                            'emailAddress': 'email1@example.com'
-                        },
-                        {
-                            'emailAddress': 'email2@example.com'
-                        }
-                    ]
+                    "id": user.id,
+                    "name": "Bob",
+                    "addresses": [
+                        {"emailAddress": "email1@example.com"},
+                        {"emailAddress": "email2@example.com"},
+                    ],
                 },
                 # set([user._class(), address1._class()])
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class()])
+                set([user._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
 
         # Combine user and addresses
@@ -516,36 +477,34 @@ class TestSerializers(DBBaseTestCase):
         self.assertTupleEqual(
             (
                 {
-                    'id': user.id,
-                    'name': 'Bob',
-                    'addresses': [
-
+                    "id": user.id,
+                    "name": "Bob",
+                    "addresses": [
                         {
-                            'id': 1,
-                            'emailAddress': 'email1@example.com',
-                            'userId': user.id
+                            "id": 1,
+                            "emailAddress": "email1@example.com",
+                            "userId": user.id,
                         },
                         {
-                            'id': 2,
-                            'emailAddress': 'email2@example.com',
-                            'userId': user.id
-                        }
-                    ]
+                            "id": 2,
+                            "emailAddress": "email2@example.com",
+                            "userId": user.id,
+                        },
+                    ],
                 },
                 # same note as above
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class()])
+                set([user._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=level_limits,
-                source_class=None
-            )
+                source_class=None,
+            ),
         )
-
 
     def test_eval_value_model_self_referential(self):
         """Test test_eval_value_model_self_referential
@@ -568,24 +527,23 @@ class TestSerializers(DBBaseTestCase):
 
         class Node(db.Model):
             """self-referential table"""
-            __tablename__ = 'nodes'
+
+            __tablename__ = "nodes"
             id = db.Column(db.Integer, primary_key=True)
-            parent_id = db.Column(db.Integer, db.ForeignKey('nodes.id'))
+            parent_id = db.Column(db.Integer, db.ForeignKey("nodes.id"))
             data = db.Column(db.String(50))
             children = db.relationship(
-                "Node",
-                lazy="joined",
-                order_by="Node.id",
-                join_depth=10)
+                "Node", lazy="joined", order_by="Node.id", join_depth=10
+            )
 
         db.create_all()
 
-        node1 = Node(id=1, data='this is node1')
-        node2 = Node(id=2, data='this is node2')
-        node3 = Node(id=3, data='this is node3')
-        node4 = Node(id=4, data='this is node4')
-        node5 = Node(id=5, data='this is node5')
-        node6 = Node(id=6, data='this is node6')
+        node1 = Node(id=1, data="this is node1")
+        node2 = Node(id=2, data="this is node2")
+        node3 = Node(id=3, data="this is node3")
+        node4 = Node(id=4, data="this is node4")
+        node5 = Node(id=5, data="this is node5")
+        node6 = Node(id=6, data="this is node6")
 
         db.session.add(node1)
         db.session.commit()
@@ -611,18 +569,18 @@ class TestSerializers(DBBaseTestCase):
                                     "children": [],
                                     "id": 3,
                                     "data": "this is node3",
-                                    "parentId": 2
+                                    "parentId": 2,
                                 },
                                 {
                                     "children": [],
                                     "id": 4,
                                     "data": "this is node4",
-                                    "parentId": 2
-                                }
+                                    "parentId": 2,
+                                },
                             ],
                             "id": 2,
                             "data": "this is node2",
-                            "parentId": 1
+                            "parentId": 1,
                         },
                         {
                             "children": [
@@ -630,24 +588,24 @@ class TestSerializers(DBBaseTestCase):
                                     "children": [],
                                     "id": 6,
                                     "data": "this is node6",
-                                    "parentId": 5
+                                    "parentId": 5,
                                 }
                             ],
                             "id": 5,
                             "data": "this is node5",
-                            "parentId": 1
-                        }
+                            "parentId": 1,
+                        },
                     ],
                     "id": 1,
                     "data": "this is node1",
-                    "parentId": None
+                    "parentId": None,
                 },
-                set([node1._class()])
+                set([node1._class()]),
             ),
             _eval_value_model(
                 value,
                 to_camel_case=True,
                 level_limits=set(),
-                source_class=None
-            )
+                source_class=None,
+            ),
         )

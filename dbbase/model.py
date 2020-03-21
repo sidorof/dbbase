@@ -43,9 +43,6 @@ class Model(object):
     SERIAL_LIST = None
 
     query = None
-    #@classmethod
-    #def _query(cls):
-        #return  db.orm.Query(cls).with_session(cls.db.session)
 
     @classmethod
     def _class(cls):
@@ -73,11 +70,7 @@ class Model(object):
                 "SERIAL_STOPLIST must be a list of one or more fields that"
                 "would not be included in a serialization."
             )
-        return (
-            cls._DEFAULT_SERIAL_STOPLIST +
-            SERIAL_STOPLIST +
-            serial_stoplist
-        )
+        return cls._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
 
     def _get_relationship(self, field):
         """_get_relationship
@@ -110,13 +103,13 @@ class Model(object):
         relation = self._get_relationship(field)
         if relation is not None:
             return {
-                'self-referential': relation.target.name == self.__tablename__,
+                "self-referential": relation.target.name == self.__tablename__,
                 # these are not currently used.
                 # intuitively, it seems like a good idea, but I am not sure why.
                 # Accordingly, these may be removed without warning, since
                 # program structure and testing does not seem to require them.
-                'uselist': relation.uselist,
-                'join_depth': relation.join_depth
+                "uselist": relation.uselist,
+                "join_depth": relation.join_depth,
             }
         return None
 
@@ -129,7 +122,7 @@ class Model(object):
         for field in self.get_serial_field_list():
             rel_info = self._relations_info(field)
             if rel_info is not None:
-                if rel_info['self-referential']:
+                if rel_info["self-referential"]:
                     return True
 
         return False
@@ -173,11 +166,13 @@ class Model(object):
         if self.SERIAL_LIST is not None:
             if not isinstance(self.SERIAL_LIST, list):
                 raise ValueError(
-                    'SERIAL_LIST must be in the form of a list: {}'.format(
-                        self.SERIAL_LIST))
+                    "SERIAL_LIST must be in the form of a list: {}".format(
+                        self.SERIAL_LIST
+                    )
+                )
             return self.SERIAL_LIST
 
-        fields = [field for field in dir(self) if not field.startswith('_')]
+        fields = [field for field in dir(self) if not field.startswith("_")]
 
         return list(set(fields) - set(self._get_serial_stop_list()))
 
@@ -215,7 +210,10 @@ class Model(object):
             # special treatment for relationships
             rel_info = self._relations_info(key)
             if rel_info is not None:
-                if not rel_info['self-referential'] and self._class() in level_limits:
+                if (
+                    not rel_info["self-referential"]
+                    and self._class() in level_limits
+                ):
                     # stop it right there
                     res = STOP_VALUE
                     break
@@ -240,8 +238,8 @@ class Model(object):
         return result
 
     def serialize(
-            self, to_camel_case=True, level_limits=None, sort=False,
-            indent=None):
+        self, to_camel_case=True, level_limits=None, sort=False, indent=None
+    ):
         """serialize
 
         Output JSON formatted model.
@@ -263,9 +261,9 @@ class Model(object):
             self.to_dict(
                 to_camel_case=to_camel_case,
                 level_limits=level_limits,
-                sort=sort
+                sort=sort,
             ),
-            indent=indent
+            indent=indent,
         )
 
     @staticmethod
