@@ -6,44 +6,11 @@ from setuptools import setup, find_packages
 
 PACKAGE_NAME = 'dbbase'
 DESCRIPTION = (
-    "A base implementation of SQLAlchemy models that can be used with Flask and without using a common code base."
-    )
-LONG_DESCRIPTION = """
-**dbbase is a base implementation for creating SQLAlchemy models for use with Flask and programs outside of Flask.
-
-Using Flask-SQLAlchemy, there is a common motif for designing tables. A database connection is made, `db` and models are designed from there using a format such as:
-
-.. code-block:: python
-    class User(db.Model):
-        __tablename__ = 'users'
-        id = db.Column(db.Integer, primary_key=True)
-        name = db.Column(db.String(30), nullable=False)
-        addresses = db.relationship(
-            "Address", backref="user", lazy='immediate')
-
-whereas outside of Flask a typical format is:
-
-.. code-block:: python
-
-    Base = declarative_base()
-
-    class User(Model):
-        __tablename__ = 'users'
-        id = Column(Integer, primary_key=True)
-        name = Column(String(30), nullable=False)
-        addresses = relationship(
-            "Address", backref="user", lazy='immediate')
-
-In the situation where a common definition for tables is needed, regardless
-of whether it is used in a Flask environment or a job at the end of a
-pipeline **dbbase** can help,
-
-In addition, default support for serialization of data and conversion to
-camel case for JavaScript applications is supported.
-
-**dbbase** is compatible with Python >=3.5 and is distributed under the
-MIT license.
-"""
+    "A base implementation of SQLAlchemy models that can be"
+    "used with Flask and without using a common code base."
+)
+with open('README.rst') as fobj:
+    LONG_DESCRIPTION = fobj.read()
 PROJECT_URL = "https://github.com/sidorof/dbbase"
 LICENSE = "MIT"
 AUTHOR = "Donald Smiley"
@@ -54,7 +21,7 @@ EXTRAS_REQUIRE = {
     "dev": "unittest"
 }
 CLASSIFIERS = [
-"Development Status :: 3 - Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Topic :: Software Development",
@@ -62,7 +29,8 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",]
+    "Programming Language :: Python :: 3.7",
+]
 
 exec(open("dbbase/_version.py", encoding="utf-8").read())
 

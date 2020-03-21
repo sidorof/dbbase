@@ -1,15 +1,10 @@
-#   dbbase/model.py
+# dbbase/model.py
 """
 This module implements a base model to be used for table creation.
 
 """
 import json
-from datetime import date, datetime
-from decimal import Decimal
-
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
-from sqlalchemy.util import clsname_as_plain_name
-from sqlalchemy.orm import scoped_session
+from sqlalchemy.ext.declarative import as_declarative
 
 from .utils import xlate
 from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
@@ -93,25 +88,26 @@ class Model(object):
 
     def _relations_info(self, field):
         """
-        This function provides info to help determine how far down the path to go
-        on serialization of a relationship field.
+        This function provides info to help determine how far down
+        the path to go on serialization of a relationship field.
 
         Is it self-referential
         One to many
         join_depth
         """
         relation = self._get_relationship(field)
-        if relation is not None:
-            return {
-                "self-referential": relation.target.name == self.__tablename__,
-                # these are not currently used.
-                # intuitively, it seems like a good idea, but I am not sure why.
-                # Accordingly, these may be removed without warning, since
-                # program structure and testing does not seem to require them.
-                "uselist": relation.uselist,
-                "join_depth": relation.join_depth,
-            }
-        return None
+        if relation is None:
+            return None
+
+        return {
+            "self-referential": relation.target.name == self.__tablename__,
+            # these are not currently used.
+            # intuitively, it seems like a good idea, but I am not sure why.
+            # Accordingly, these may be removed without warning, since
+            # program structure and testing does not seem to require them.
+            "uselist": relation.uselist,
+            "join_depth": relation.join_depth,
+        }
 
     def _has_self_ref(self):
         """_has_self_ref
@@ -151,8 +147,8 @@ class Model(object):
             additional fields to exclude.
 
             For example, do you want to use firstname, lastname or fullname()?
-            self.SERIAL_STOPLIST = ['firstname', 'lastname'] would exclude those
-            fields, but all the other default fields would be included.
+            self.SERIAL_STOPLIST = ['firstname', 'lastname'] would exclude
+            those fields, but all the other default fields would be included.
 
         Option 3: simply define the fields that you want to include by putting
             them into the class SERIAL_LIST. Only those fields will be

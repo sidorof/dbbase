@@ -80,8 +80,6 @@ Serializations:
 from datetime import date, datetime
 from decimal import Decimal
 
-from . import model
-
 
 SA_INDICATOR = "_sa_instance_state"
 DATE_FMT = "%F"
@@ -159,7 +157,6 @@ def _eval_value_model(value, to_camel_case, level_limits, source_class):
     passed on.
     """
     result = STOP_VALUE
-    status = True
     if source_class is not None:
         level_limits.add(source_class)
     result = value.to_dict(to_camel_case, level_limits=level_limits)
@@ -185,9 +182,7 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
 
     """
     tmp_list = []
-    length = len(value)
 
-    is_model = False
     tmp_limits = None
     for item in value:
         tmp_limits = level_limits.copy()

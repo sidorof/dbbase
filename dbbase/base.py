@@ -13,7 +13,6 @@ needed actions, and a base database such as with PostgreSQL.
 To that end there is also a config function for flexibility.
 
 """
-import sys
 import os
 import logging
 import importlib
@@ -192,7 +191,7 @@ def drop_database(config, dbname):
     if is_sqlite(config):
         # sqlite does not use drop database
         if config.find("memory") == -1:
-            filename = config[config.find("///") + 3 :]
+            filename = config[config.find("///") + 3:]
             if os.path.exists(filename):
                 os.remove(filename)
     else:
