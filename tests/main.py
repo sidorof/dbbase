@@ -29,7 +29,7 @@ CONFIG_FILE = 'config.json'
 with open(SAMPLE_CONFIGS) as fobj:
     configs = json.loads(fobj.read())
 
-for config in configs[:1]:
+for config in configs:
     print('testing config: {}'.format(config['name']))
     with open(CONFIG_FILE, 'w') as fobj:
         json.dump(config, fobj)

@@ -9,6 +9,7 @@ from decimal import Decimal
 
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.util import clsname_as_plain_name
+from sqlalchemy.orm import scoped_session
 
 from .utils import xlate
 from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
@@ -38,22 +39,16 @@ class Model(object):
 
     # constants
     _DEFAULT_SERIAL_STOPLIST = SERIAL_STOPLIST
-    SERIAL_STOPLIST = []
+    SERIAL_STOPLIST = None
     SERIAL_LIST = None
 
-    @property
-    @classmethod
-    def query(cls):
-        """Return query object with class"""
-        return cls.db.session.query(cls)
+    query = None
+    #@classmethod
+    #def _query(cls):
+        #return  db.orm.Query(cls).with_session(cls.db.session)
 
-    @declared_attr
     @classmethod
-    def __tablename__(cls):
-        return cls.__name__.lower()
-
-    @property
-    def _class(self):
+    def _class(cls):
         """
         Returns the class name.
 
@@ -64,10 +59,11 @@ class Model(object):
 
             then this function returns 'user'
         """
-        return clsname_as_plain_name(self.__class__)
+        return cls.__table__.name.lower()
 
     @classmethod
     def _get_serial_stop_list(cls):
+        """Return default stop list, class stop list."""
         if cls.SERIAL_STOPLIST is None:
             serial_stoplist = []
         else:
@@ -185,7 +181,7 @@ class Model(object):
 
         return list(set(fields) - set(self._get_serial_stop_list()))
 
-    def to_dict(self, to_camel_case=True, level_limits=None):
+    def to_dict(self, to_camel_case=True, level_limits=None, sort=False):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
@@ -196,10 +192,9 @@ class Model(object):
             datetime -> %Y-%m-%d %H:%M:%S
             Decimal => str
 
-        contents of typical level_limits {
-            'self-referential': relation.strategy.key == self._class,
-            'uselist': relation.strategy.uselist,
-            'join_depth': relation.join_depth
+        paramaters:
+            to_camel_case (boolean)
+
         }
 
         """
@@ -207,26 +202,30 @@ class Model(object):
         if level_limits is None:
             level_limits = set()
 
-        if self._class in level_limits:
+        if self._class() in level_limits:
             # it has already been done
             if not self._has_self_ref():
                 return STOP_VALUE
         result = {}
-        for key in self.get_serial_field_list():
+        field_list = self.get_serial_field_list()
+        if sort:
+            field_list = sorted(self.get_serial_field_list())
+
+        for key in field_list:
             # special treatment for relationships
             rel_info = self._relations_info(key)
             if rel_info is not None:
-                if not rel_info['self-referential'] and self._class in level_limits:
+                if not rel_info['self-referential'] and self._class() in level_limits:
                     # stop it right there
                     res = STOP_VALUE
                     break
             value = self.__getattribute__(key)
 
-            if type(value) == 'method':
+            if callable(value):
                 value = value()
 
             res = _eval_value(
-                value, to_camel_case, level_limits, source_class=self._class
+                value, to_camel_case, level_limits, source_class=self._class()
             )
 
             if to_camel_case:
@@ -235,77 +234,42 @@ class Model(object):
             if res != STOP_VALUE:
                 result[key] = res
 
-        if self._class not in level_limits:
-            level_limits.add(self._class)
+        if self._class() not in level_limits:
+            level_limits.add(self._class())
 
         return result
 
-    def serialize(self, to_camel_case=True, level_limits=None):
+    def serialize(
+            self, to_camel_case=True, level_limits=None, sort=False,
+            indent=None):
         """serialize
 
         Output JSON formatted model.
 
-        Usage: serialize(self, to_camel_case=True, level_limits=None)
+        Usage:
+            serialize(to_camel_case=True, level_limits=None)
 
-        See help for to_dict for information on to_camel_case
+        parameters:
+            to_camel_case (boolean) True converts to camel case.
+            level_limits (set()) set of lower case class models
+                to exclude
+            sort (boolean) True will sort the keys alphabetically
+            indent (integer) The number of spaces to indent
 
-        level_limits:
-            an example is most helpful.
-            Suppose you have two tables: user and addresses
-
-            class User(db.Model):
-                __tablename__ = 'users'
-                id = db.Column(db.Integer, primary_key=True)
-                name = db.Column(db.String(30), nullable=False)
-
-            class Address(db.Model):
-                __tablename__ = 'addresses'
-                id = db.Column(db.Integer, primary_key=True)
-                email_address = db.Column(db.String, nullable=False)
-                user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-                user = db.relationship("User", back_populates="addresses")
-
-            User.addresses = db.relationship(
-                "Address", back_populates="user")
-
-            the relationship provides a look at the user in the address
-            the relationship provides a look at the addresses in user
-
-            If you want to serialize a user and include the addresses
-            it might look like:
-                user
-                    id
-                    name
-                    addresses
-                        address1
-                            id
-                            user_id
-                            email_address
-
-            But here we have a problem. The Address class has the user
-            relationship. A recursive process that walks address would then
-            include user, which would start the whole loop over again.
-
-            user => address => user => address ... etc
-
-
-            but if
-
-
-            user.serialize()
-
-
+        return
+            JSON formatted string of the data.
         """
         return json.dumps(
             self.to_dict(
-                to_camel_case=to_camel_case, level_limits=level_limits
+                to_camel_case=to_camel_case,
+                level_limits=level_limits,
+                sort=sort
             ),
-            indent=2,  # NOTE: change default?
+            indent=indent
         )
 
     @staticmethod
-    def deserialize(data, to_camel_case=True):
+    def deserialize(data, from_camel_case=True):
         """deserialize
 
         Convert back to column names that are more pythonic.
@@ -314,12 +278,40 @@ class Model(object):
         left to another function that can validate the data prior to
         posting.
         """
-        if not to_camel_case:
+        if isinstance(data, str):
+            # assume json
+            data = json.loads(data)
+
+        if not from_camel_case:
             return data
 
-        result = {}
-        for key, value in data:
-            key = to_camel_case(key, camel_case=False)
-            result[key] = value
+        if isinstance(data, dict):
+            result = {}
+            for key, value in data.items():
+                key = xlate(key, camel_case=False)
+                result[key] = value
+
+        else:
+            # it must be a list
+            result = []
+            for line in data:
+                res = {}
+                for key, value in line.items():
+                    key = xlate(key, camel_case=False)
+                    res[key] = value
+                result.append(res)
 
         return result
+
+    def save(self):
+        """save
+
+        This function saves adds and commits the object via session.
+
+        Since this can of course be overwritten in your class to
+        provide validation checks prior to saving.
+
+        """
+        self.db.session.add(self)
+        self.db.session.commit()
+        return self

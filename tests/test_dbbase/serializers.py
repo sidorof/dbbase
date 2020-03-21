@@ -94,7 +94,7 @@ class TestSerializers(DBBaseTestCase):
             name = db.Column(db.String(30), nullable=False)
             start_date = db.Column(db.Date, nullable=False)
 
-        User.metadata.create_all(db.session.bind)
+        db.create_all()
 
         user_id = 10032
         user = User(
@@ -179,7 +179,7 @@ class TestSerializers(DBBaseTestCase):
         User.addresses = db.relationship(
             "Address", back_populates="user", lazy='immediate')
 
-        User.metadata.create_all(db.session.bind)
+        db.create_all()
 
         user = User(
             id=randint(1, 1000000),
@@ -265,7 +265,7 @@ class TestSerializers(DBBaseTestCase):
             id = db.Column(db.Integer, primary_key=True)
             name = db.Column(db.String(30), nullable=False)
 
-        User.metadata.create_all(db.session.bind)
+        db.create_all()
 
         user1 = User(
             id=randint(1, 1000000),
@@ -308,7 +308,7 @@ class TestSerializers(DBBaseTestCase):
                     {'id': user1.id, 'name': 'Bob'},
                     {'id': user2.id, 'name': 'JimBob'}
                 ],
-                set([user1._class])
+                set([user1._class()])
             ),
             _eval_value_list(
                 value,
@@ -347,7 +347,7 @@ class TestSerializers(DBBaseTestCase):
             email_address = db.Column(db.String, nullable=False)
             user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-        User.metadata.create_all(db.session.bind)
+        db.create_all()
 
         user = User(
             id=randint(1, 1000000),
@@ -394,7 +394,7 @@ class TestSerializers(DBBaseTestCase):
                             'userId': user.id,
                         }
                     ]
-                }, set([user._class])
+                }, set([user._class()])
             ),
             _eval_value_model(
                 value,
@@ -415,7 +415,7 @@ class TestSerializers(DBBaseTestCase):
                     'userId': user.id,
                     'user': {'id': user.id, 'name': 'Bob'}
                 },
-                set([address1._class, user._class])
+                set([address1._class(), user._class()])
             ),
             _eval_value_model(
                 value,
@@ -462,7 +462,7 @@ class TestSerializers(DBBaseTestCase):
                 {
                     'emailAddress': 'email1@example.com',
                 },
-                set([address1._class])
+                set([address1._class()])
             ),
             _eval_value_model(
                 value,
@@ -491,11 +491,11 @@ class TestSerializers(DBBaseTestCase):
                         }
                     ]
                 },
-                # set([user._class, address1._class])
+                # set([user._class(), address1._class()])
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class])
+                set([user._class()])
             ),
             _eval_value_model(
                 value,
@@ -536,7 +536,7 @@ class TestSerializers(DBBaseTestCase):
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class])
+                set([user._class()])
             ),
             _eval_value_model(
                 value,
@@ -578,7 +578,7 @@ class TestSerializers(DBBaseTestCase):
                 order_by="Node.id",
                 join_depth=10)
 
-        Node.metadata.create_all(db.session.bind)
+        db.create_all()
 
         node1 = Node(id=1, data='this is node1')
         node2 = Node(id=2, data='this is node2')
@@ -642,7 +642,7 @@ class TestSerializers(DBBaseTestCase):
                     "data": "this is node1",
                     "parentId": None
                 },
-                set([node1._class])
+                set([node1._class()])
             ),
             _eval_value_model(
                 value,

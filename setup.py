@@ -36,7 +36,7 @@ whereas outside of Flask a typical format is:
 
 In the situation where a common definition for tables is needed, regardless
 of whether it is used in a Flask environment or a job at the end of a
-pipeline *dbbase* can help,
+pipeline **dbbase** can help,
 
 In addition, default support for serialization of data and conversion to
 camel case for JavaScript applications is supported.
@@ -50,7 +50,9 @@ AUTHOR = "Donald Smiley"
 AUTHOR_EMAIL = "dsmiley@sidorof.com"
 PYTHON_REQUIRES = ">=3.5"
 INSTALL_REQUIRES = ["sqlalchemy"]
-
+EXTRAS_REQUIRE = {
+    "dev": "unittest"
+}
 CLASSIFIERS = [
 "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -62,35 +64,22 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",]
 
-def get_version():
-    """Grab version number from init file."""
-    with open(path.join('dbbase', '__init__.py')) as fobj:
-        tmp = fobj.read()
-        a = tmp.find('__version__')
-        b = tmp.find('\n', a)
-        return tmp[a:b].split('=')[1].strip()[1: -1]
+exec(open("dbbase/_version.py", encoding="utf-8").read())
 
 setup(
-    name='dbbase',
-
-    version=get_version(),
-
-    description='base connects to the database via sqlalchemy.',
-    long_description=long_description,
-
-    author='Don Smiley',
-    author_email='ds@sidorof.com',
-
-    # Choose your license
-    license='MIT',
-
-    packages=find_packages(),
-
-    install_requires=['sqlalchemy'],
-
-    extras_require={
-        'dev': ['check-manifest'],
-        'test': ['unittest'],
-    },
-
+    name=PACKAGE_NAME,
+    version=__version__,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/x-rst",
+    url=PROJECT_URL,
+    license=LICENSE,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    python_requires=PYTHON_REQUIRES,
+    install_requires=INSTALL_REQUIRES,
+    extras_require=EXTRAS_REQUIRE,
+    include_package_data=True,
+    classifiers=CLASSIFIERS,
+    packages=find_packages(exclude=["tests"]),
 )

@@ -99,6 +99,7 @@ SERIAL_STOPLIST = [
     'get_serial_field_list',
     'metadata',
     'query',
+    'save',
     'serialize',
     'to_dict',
     'SERIAL_STOPLIST',
@@ -161,7 +162,7 @@ def _eval_value_model(value, to_camel_case, level_limits, source_class):
     if source_class is not None:
         level_limits.add(source_class)
     result = value.to_dict(to_camel_case, level_limits=level_limits)
-    level_limits.add(value._class)
+    level_limits.add(value._class())
     return result, level_limits
 
 
@@ -192,7 +193,7 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
         if hasattr(item, 'to_dict'):
             status = True
             result = STOP_VALUE
-            if item._class in level_limits:
+            if item._class() in level_limits:
                 if not item._has_self_ref():
                     status = False
             if status:

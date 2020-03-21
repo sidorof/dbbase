@@ -79,14 +79,13 @@ class DB(object):
         for key in orm_functions:
             self.__setattr__(key, orm.__dict__.__getitem__(key))
 
-        # all of the orm is put here
+        # all of the orm is available here
         self.orm = orm
 
         self.Model = self.load_model_class(model_class)
-
-        self.Model = model.Model
         self.Model.db = self
         self.session = self.create_session(checkfirst=checkfirst, echo=echo)
+        #self.Model.query = orm.Query(self.Model).with_session(self.session)
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -133,6 +132,7 @@ class DB(object):
         session = orm.sessionmaker(bind=engine)()
 
         self.Model().metadata.create_all(engine, checkfirst=checkfirst)
+        self._apply_query()
 
         self.session = session
         return session
@@ -148,6 +148,28 @@ class DB(object):
         self.orm.session.close_all_sessions()
         engine = create_engine(self.config, echo=echo)
         self.Model().metadata.drop_all(engine)
+
+    def create_all(self, bind=None, checkfirst=True):
+        """create_all
+
+        This function creates all available tables.
+        """
+        if bind is None:
+            bind = self.session.bind
+        self.Model.metadata.create_all(bind, checkfirst=checkfirst)
+        self._apply_query()
+        for cls in self.Model._decl_class_registry.values():
+            if hasattr(cls, '__tablename__'):
+                cls.query = self.session.query(cls)
+
+    def _apply_query(self):
+        """ _apply_query
+
+        This function walks the Model classes and inserts the query object.
+        """
+        for cls in self.Model._decl_class_registry.values():
+            if hasattr(cls, '__tablename__'):
+                cls.query = self.session.query(cls)
 
 
 def create_database(config, dbname, superuser=None):
