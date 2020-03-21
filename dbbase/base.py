@@ -28,23 +28,6 @@ from .utils import is_sqlite
 logger = logging.getLogger(__file__)
 
 
-# if 'SQLALCHEMY_DATABASE_URI' in os.environ:
-#     SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
-# else:
-#     MSG = ''.join([
-#         'SQLALCHEMY_DATABASE_URI must be found in the environment.',
-#         "The URI will look something like 'sqlite:///{db_file}.db'",
-#         "or 'postgresql://{db_username}:{db_password}@{db_host}: ",
-#         "{db_port}/{dbname}'",
-#         "or mysql+pymysql://{username}:{password}@",
-#         "{endpoint}:{port}/{database}?charset=utf8"
-#     ])
-#     logger.error(
-#         'SQLALCHEMY_DATABASE_URI must be found in the environment.')
-#     logger.error(MSG)
-#     sys.exit(1)
-
-
 class DB(object):
     """
     Class that holds sqlalchemy items, not intended to be as
