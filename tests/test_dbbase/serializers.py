@@ -69,7 +69,7 @@ class TestSerializers(DBBaseTestCase):
             _eval_value(value, self.to_camel_case, self.level_limits, None),
         )
 
-    def test_eval_value_model(self):
+    def test_eval_value(self):
         """Test _eval_value
 
         model values
@@ -132,14 +132,14 @@ class TestSerializers(DBBaseTestCase):
 
         # model has been already processed, so level_limits has class
         level_limits = set()
-        level_limits.add(user._class)
+        level_limits.add(user._class())
         self.assertEqual(
             self.dbbase.serializers.STOP_VALUE,
             _eval_value(
                 value,
                 to_camel_case=False,
                 level_limits=level_limits,
-                source_class=value._class,
+                source_class=value._class(),
             ),
         )
 
@@ -427,7 +427,7 @@ class TestSerializers(DBBaseTestCase):
         level_limits = set()
         self.assertTupleEqual(
             (
-                {"emailAddress": "email1@example.com",},
+                {"emailAddress": "email1@example.com"},
                 set([address1._class()]),
             ),
             _eval_value_model(
