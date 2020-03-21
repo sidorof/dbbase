@@ -1,4 +1,4 @@
-# base/db.py
+# dbbase/base.py
 """
 This module maintains database info common to all the modules.
 
