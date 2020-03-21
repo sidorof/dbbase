@@ -95,9 +95,6 @@ class DBBaseTestCase(BaseTestCase):
     def setUp(self):
         """Standard configuration."""
         config_vars = get_config_vars()
-        config = dbbase.utils.db_config(
-            config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
-        )
         self.db = self.dbbase.DB(
             dbbase.utils.db_config(
                 config_vars[TESTDB_URI], config_vars[TESTDB_VARS]

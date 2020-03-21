@@ -8,10 +8,8 @@ expected usage on your systems.
 For each configuration, the set of test cases are run to ensure that
 everything works as expected.
 """
-import sys
 import os
 import json
-import importlib
 import unittest
 
 from .test_dbbase.utils import TestUtilities
