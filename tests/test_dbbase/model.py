@@ -198,9 +198,6 @@ class TestModelClass(DBBaseTestCase):
         node1 = Node(id=1, data="this is node1")
         node2 = Node(id=2, data="this is node2")
         node3 = Node(id=3, data="this is node3")
-        node4 = Node(id=4, data="this is node4")
-        node5 = Node(id=5, data="this is node5")
-        node6 = Node(id=6, data="this is node6")
 
         db.session.add(node1)
         db.session.commit()
@@ -240,7 +237,7 @@ class TestModelClass(DBBaseTestCase):
 
         table1 = Table1(name="test").save()
 
-        self.assertEqual(1, Table1.query.get(1).id)
+        self.assertEqual(table1.id, Table1.query.get(1).id)
 
     def test__class(self):
         db = self.db
@@ -330,7 +327,6 @@ class TestModelClass(DBBaseTestCase):
         db.create_all()
 
         user = User(name="Bob").save()
-        address1 = Address(email_address="email1@example.com", user_id=1)
 
         self.assertIsInstance(
             user._get_relationship("addresses"), RelationshipProperty
@@ -361,7 +357,6 @@ class TestModelClass(DBBaseTestCase):
         db.create_all()
 
         user = User(name="Bob").save()
-        address1 = Address(email_address="email1@example.com", user_id=1)
 
         # really only care if 'self-referential' True or False
         self.assertDictEqual(
