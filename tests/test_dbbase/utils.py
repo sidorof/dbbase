@@ -55,16 +55,16 @@ class TestUtilities(BaseTestCase):
             config_vars,
         )
 
-    def test_is_sqlite(self):
+    def test__is_sqlite(self):
         """Test whether the config is for sqlite."""
         config = "sqlite:///{test_db}.db"
-        self.assertTrue(self.dbbase.utils.is_sqlite(config))
+        self.assertTrue(self.dbbase.utils._is_sqlite(config))
 
         config = ":memory:"
-        self.assertTrue(self.dbbase.utils.is_sqlite(config))
+        self.assertTrue(self.dbbase.utils._is_sqlite(config))
 
         config = "postgresql://blah, blah"
-        self.assertFalse(self.dbbase.utils.is_sqlite(config))
+        self.assertFalse(self.dbbase.utils._is_sqlite(config))
 
     def test_xlate(self):
         """Test conversion of format for key names."""

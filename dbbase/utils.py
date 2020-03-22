@@ -13,10 +13,17 @@ def db_config(base, config_vars=None):
     """
     This function combines config variables with a base string.
 
-    Usage:
-        base: string such as
-            postgresql://{user}:{pass}@{host}:{port}/{dbname}"
-        config_vars: dict such as
+    It is a convenience function for combining data elements
+    to make a string that represents a database URI.
+
+    Default:
+        db_config(base, config_vars=None)
+
+    Args:
+        base: (str) : a string that is the db template, such as
+            `"postgresql://{user}:{pass}@{host}:{port}/{dbname}"`
+        config_vars: (dict) : variables that will be combined with the base.
+        For example:
             {
                 'user': 'auser',
                 'pass': '123',
@@ -31,7 +38,8 @@ def db_config(base, config_vars=None):
     This enables a config to be as simplistic or complex as the situation
     warrants.
 
-    Returns a completed URI
+    Returns:
+        completed_URI (str) : the database URI
     """
     if config_vars is None:
         config_vars = {}
@@ -44,15 +52,13 @@ def db_config(base, config_vars=None):
     return base
 
 
-def is_sqlite(config):
-    """is_sqlite
+def _is_sqlite(config):
+    """_is_sqlite
 
+    Default:
+        _is_sqlite(config)
     returns True if config contains the string sqlite
     returns True if config contains :memory:
-
-    Usage:
-        is_sqlite(config)
-
     """
     if config.find("sqlite") > -1:
         return True
@@ -74,7 +80,6 @@ def xlate(key, camel_case=True):
     examples, camel_case is False:
         startDate would become start_date
         startdate would remain startdate
-
     """
     if camel_case:
         return _xlate_camel_case(key)

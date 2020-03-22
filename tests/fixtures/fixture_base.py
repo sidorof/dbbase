@@ -127,7 +127,6 @@ class DBBaseTestCase(BaseTestCase):
         self.db.orm.session.close_all_sessions()
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
-        # self.db.Model = self.db.load_model_class() # should be overkill
         self.db = None
         del self.db
 

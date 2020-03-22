@@ -13,8 +13,9 @@ from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
 @as_declarative()
 class Model(object):
     """
-    This class attempts to replicate some of the features available when
-    using flask_sqlalchemy.
+    This class attempts to replicate some of the design features available
+    when using flask_sqlalchemy. The primary interest is the embedding of
+    references to the database via session and the query object.
 
     selected elements are:
         db.session
@@ -26,9 +27,28 @@ class Model(object):
                 session.query(MyTable).filter(MyTable.id == 331)
 
     To replicate the process, it needs to pull in db as an import to
-    each model module
-    """
+    each model module.
 
+    Serialization:
+
+    There are class variables that can be set for models to control
+    what shows for serialization. For more information look at the
+    User Guide, but the following are the class variables used for
+    this purpose.
+
+    When the following are set at default, `serialize()` will return
+    the database columns plus any methods that have been created. To
+    automatically exclude a method, name it with a starting _.
+
+    SERIAL_STOPLIST = None
+    SERIAL_LIST = None
+
+    If SERIAL_STOPLIST is a list of column names, those names will be
+    excluded from serialization.
+
+    If SERIAL_LIST is a list, serialization will return ONLY those
+    names in the list and in that order.
+    """
     # catchall for sqlalchemy classes and functions
     db = None
 
@@ -126,38 +146,17 @@ class Model(object):
     def get_serial_field_list(self):
         """get_serial_field_list
 
-        get_serial_field_list(self, serial_field_list=None)
-
         This function returns a list of table properties that will be used in
         serialization. To accommodate several entirely reasonable scenarios,
         here are the options to select the right option for any particular
         table. Modifications are either by restricting fields or by creating a
         specific list of fields to include, whichever is most convenient.
 
-        Option 1: the default method
+        Default:
+            get_serial_field_list()
 
-        Return self.get_serial_list() will use
-            dir(table_object)
-                and then remove housekeeping fields and functions
-                such as query, serialize, etc, and any items that start
-                with _.
-
-        Option 2: add additional fields to exclude
-            the approach as used above, but use self.SERIAL_STOPLIST for
-            additional fields to exclude.
-
-            For example, do you want to use firstname, lastname or fullname()?
-            self.SERIAL_STOPLIST = ['firstname', 'lastname'] would exclude
-            those fields, but all the other default fields would be included.
-
-        Option 3: simply define the fields that you want to include by putting
-            them into the class SERIAL_LIST. Only those fields will be
-            included in serialization.
-
-        Option 4: use a specific list for a particular situation.
-            You have a function that needs only certain fields for a specific
-            situation, but normally one of the other options are used. In this
-            case
+        Returns:
+            serial_fields (list) : current list of fields
         """
         if self.SERIAL_LIST is not None:
             if not isinstance(self.SERIAL_LIST, list):
@@ -183,11 +182,17 @@ class Model(object):
             datetime -> %Y-%m-%d %H:%M:%S
             Decimal => str
 
+        Default:
+            to_dict(to_camel_case=True, level_limits=None, sort=False)
+
         paramaters:
-            to_camel_case (boolean)
-
-        }
-
+            to_camel_case (boolean) : dict keys will be converted to camel
+                case.
+            level_limits: (set : None) : This is more of a technical parameter
+                that is used to limit recursion, but if a class name is
+                listed in the set, `to_dict` will not process that class.
+            sort: (bool) : This flag determines whether the keys will be
+                sorted.
         """
         self.db.session.flush()
         if level_limits is None:
@@ -240,15 +245,18 @@ class Model(object):
 
         Output JSON formatted model.
 
-        Usage:
-            serialize(to_camel_case=True, level_limits=None)
+        Default:
+            serialize(to_camel_case=True, level_limits=None, sort=False, indent=None)
 
-        parameters:
+        Args:
             to_camel_case (boolean) True converts to camel case.
-            level_limits (set()) set of lower case class models
-                to exclude
-            sort (boolean) True will sort the keys alphabetically
-            indent (integer) The number of spaces to indent
+            level_limits: (set : None) : This is more of a technical parameter
+                that is used to limit recursion, but if a class name is
+                listed in the set, `to_dict` will not process that class.
+            sort: (bool) : This flag determines whether the keys will be
+                sorted.
+            indent: (integer : None) The number of spaces to indent to improve
+                readability.
 
         return
             JSON formatted string of the data.
@@ -271,6 +279,18 @@ class Model(object):
         Note that this function does not update the model object. That is
         left to another function that can validate the data prior to
         posting.
+
+        Default:
+            deserialize(data, from_camel_case=True)
+
+        Args:
+            data: (str : dict) : JSON string that is to be converted back to
+                a dict. `data` can also be a dict or list that simply needs to
+                have the keys converted to snake_case.
+            from_camel_case: (bool) : True will cause the keys to be converted
+                back to snake_case.
+        Returns:
+            data (obj) : the converted data
         """
         if isinstance(data, str):
             # assume json
@@ -304,6 +324,13 @@ class Model(object):
 
         Since this can of course be overwritten in your class to
         provide validation checks prior to saving.
+
+        Default:
+            save()
+
+        Return
+            saved_obj (obj) : the object that has been saved with
+                hopefully an updated identity.
 
         """
         self.db.session.add(self)

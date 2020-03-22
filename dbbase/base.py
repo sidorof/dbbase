@@ -22,7 +22,7 @@ from sqlalchemy import create_engine, orm
 from sqlalchemy.pool import NullPool
 
 from . import model
-from .utils import is_sqlite
+from .utils import _is_sqlite
 
 logger = logging.getLogger(__file__)
 
@@ -186,7 +186,7 @@ class DB(object):
                 cls.query = self.session.query(cls)
 
 
-def create_database(config, dbname):
+def create_database(config, dbname, superuser=None):
     """
     Creates a new database.
 
@@ -200,9 +200,11 @@ def create_database(config, dbname):
         config: (str) : Configuration string for the database
             SQLALCHEMY_DATABASE_URI
         dbname: (str) : The name of the database.
+        superuser: (str : None) : name to grant privileges to
+            if the database supports it.
     """
 
-    if is_sqlite(config):
+    if _is_sqlite(config):
         # sqlite does not use CREATE DATABASE
         return
     engine = create_engine(config)
@@ -235,7 +237,7 @@ def drop_database(config, dbname):
         dbname: (str) : The name of the database.
     """
 
-    if is_sqlite(config):
+    if _is_sqlite(config):
         # sqlite does not use drop database
         if config.find("memory") == -1:
             filename = config[config.find("///") + 3:]
