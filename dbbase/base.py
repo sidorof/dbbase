@@ -29,20 +29,21 @@ logger = logging.getLogger(__file__)
 
 class DB(object):
     """
+    This class defines a central location for accepting database configuration information, creating connections and sessions. In addi
     Class that holds sqlalchemy items, not intended to be as
     comprehensive as flask_sqlalchemy.
 
-    Usage:
-        config, model_class=None, checkfirst=True, echo=False)
+    Default:
+        DB(config, model_class=None, checkfirst=True, echo=False)
 
-        config:
+    Args:
+        config: (str) : Configuration string for the database
             SQLALCHEMY_DATABASE_URI
-        model_class:
-            Model class or equivalent
-        checkfirst:
-            create tables only if the table does not exist
-        echo:
-            log actions in database engine
+        model_class: (obj) : An alternate Model class can be inserted.
+            Otherwise it defaults to Model in this package.
+        checkfirst: (bool) : create tables only if the table
+            does not exist
+        echo: (bool) : log actions in database engine
     """
 
     def __init__(self, config, model_class=None, checkfirst=True, echo=False):
@@ -71,23 +72,41 @@ class DB(object):
 
     @staticmethod
     def load_model_class(model_class=None):
-        """Creates a fresh copy of the declarative base."""
+        """ load_model_class
+
+        This function creates a fresh copy of the declarative base.
+        This causes a reset of the metaclass.
+
+        Default:
+            load_model_class(model_class=None)
+
+        Args:
+            model_class: (obj) : An alternate Model class can be
+                inserted. Otherwise it defaults to Model in this
+                package.
+
+        Returns:
+            model_class (obj)
+        """
         importlib.reload(model)
         if model_class is None:
             return model.Model
 
     def create_engine(self, echo=False):
-        """Create engine
+        """ create_engine
 
         Basically a pass through to sqlalchemy.
 
-        Usage:
-            sef.create_engine(echo=False)
+        Default:
+            create_engine(echo=False)
 
-        config: SQLALCHEMY_DATABASE_URI
-        echo: shows output
+        Args:
+            config: (str) : Configuration string for the database
+                SQLALCHEMY_DATABASE_URI
+            echo: (bool) : log actions in database engine
 
-        return: engine
+        Returns:
+            engine (obj) : newly created engine
         """
         return create_engine(self.config, echo=echo)
 
@@ -97,16 +116,14 @@ class DB(object):
         This function instantiates an engine, and connects to the database.
         A session is initiated. Finally, any new tables are created.
 
-        Usage:
-            self.create_session(checkfirst=True, echo=False)
+        Default:
+            create_session(checkfirst=True, echo=False)
 
-            checkfirst:
-                does not create a table if it already exists
-                defaults to True
-            echo:
-                logs interactions with engine to INFO
-                defaults to False
-                echo can also be "debug" for more detail
+        Args:
+            checkfirst: (bool) : If True, will not recreat a table
+                that already exists.
+            echo: (bool : str) : logs interactions with engine
+                to INFO. defaults to False. echo can also be "debug" for more detail.
         """
         engine = create_engine(self.config, echo=echo)
         engine.connect()
@@ -120,11 +137,18 @@ class DB(object):
         return session
 
     def drop_all(self, echo=False):
-        """
+        """ drop_all
         Drop all tables and sequences.
 
         Leaves the database empty, bereft, alone, a pale shadow of its
         former self.
+
+        Default:
+            drop_all(echo=False)
+
+        Args:
+            echo: (bool : str) : logs interactions with engine
+                to INFO. defaults to False. echo can also be "debug" for more detail.
         """
         # see how this session is not the 'session' object
         self.orm.session.close_all_sessions()
@@ -135,6 +159,14 @@ class DB(object):
         """create_all
 
         This function creates all available tables.
+
+        Default:
+            create_all(bind=None, checkfirst=True)
+
+        Args:
+            bind: (obj) : sqlalchemy.engine.base.Engine
+            checkfirst: (bool) : If True, will not recreate a table
+                that already exists.
         """
         if bind is None:
             bind = self.session.bind
@@ -154,21 +186,22 @@ class DB(object):
                 cls.query = self.session.query(cls)
 
 
-def create_database(config, dbname, superuser=None):
+def create_database(config, dbname):
     """
     Creates a new database.
 
-    Usage:
-
-        create_database(
-            config,
-            dbname,
-            superuser=None
-        )
+    Default:
+        create_database(config, dbname)
 
     Note that if a superuser is included in the config, that user must have
     permissions to create a database.
+
+    Args:
+        config: (str) : Configuration string for the database
+            SQLALCHEMY_DATABASE_URI
+        dbname: (str) : The name of the database.
     """
+
     if is_sqlite(config):
         # sqlite does not use CREATE DATABASE
         return
@@ -186,7 +219,21 @@ def create_database(config, dbname, superuser=None):
 
 
 def drop_database(config, dbname):
-    """Drops a database """
+    """drop_database
+
+    Drops a database
+
+    Default:
+        drop_database(config, dbname, superuser=None)
+
+    Note that if a superuser is included in the config, that user must have
+    permissions to drop a database.
+
+    Args:
+        config: (str) : Configuration string for the database
+            SQLALCHEMY_DATABASE_URI
+        dbname: (str) : The name of the database.
+    """
 
     if is_sqlite(config):
         # sqlite does not use drop database
