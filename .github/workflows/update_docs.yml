@@ -24,4 +24,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: generate docs
-      run: update_github_docs.sh
+      run: docsrc/update_github_docs.sh
