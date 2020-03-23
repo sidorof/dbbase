@@ -24,6 +24,5 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: generate docs
-      run: |
-        cd docsrc
-        make github
+      uses: docsrc
+      run: make github
