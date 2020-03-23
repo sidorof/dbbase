@@ -1,0 +1,3 @@
+cd docsrc
+make github
+
