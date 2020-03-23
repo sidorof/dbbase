@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>dbbase.base &#8212; dbbase 0.1.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  
+   
+  
+  <script src="../../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../../"versions.json"",
+        target_loc = "../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#_modules/dbbase/base" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../index.html" title="dbbase 0.1.4 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">dbbase 0.1.4</span>
+          <span class="md-header-nav__topic"> dbbase.base </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dbbase
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.4 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../index.html" title="dbbase 0.1.4 documentation" class="md-nav__button md-logo">
+      
+        <img src="../../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../../index.html"
+       title="dbbase 0.1.4 documentation">dbbase 0.1.4</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dbbase
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  
+    <p class="caption"><span class="caption-text">Contents:</span></p>
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+      <a href="../../installation.html" class="md-nav__link">Installation</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="../../user_guide.html" class="md-nav__link">User Guide</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="../../examples.html" class="md-nav__link">Examples</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="../../api.html" class="md-nav__link">API Reference</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="../../testing.html" class="md-nav__link">Running Unit Tests</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="../../license.html" class="md-nav__link">License</a>
+      
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <h1 id="modules-dbbase-base--page-root">Source code for dbbase.base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># dbbase/base.py</span>
+<span class="sd">"""</span>
+<span class="sd">This module maintains database info common to all the modules.</span>
+
+<span class="sd">This implements database creation and dropping. In addition, a</span>
+<span class="sd">database class takes in a config for the URI of the database.</span>
+
+<span class="sd">Because this module implements database creation and dropping,</span>
+<span class="sd">the config variables must not only have a URI as a string. There</span>
+<span class="sd">must be also knowledge of a superuser with the rights to perform the</span>
+<span class="sd">needed actions, and a base database such as with PostgreSQL.</span>
+
+<span class="sd">To that end there is also a config function for flexibility.</span>
+
+<span class="sd">"""</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">orm</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">NullPool</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_is_sqlite</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DB"><a class="viewcode-back" href="../../_generated/dbbase.DB.html#dbbase.DB">[docs]</a><span class="k">class</span> <span class="nc">DB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    This class defines a central location for accepting database configuration information, creating connections and sessions.</span>
+
+<span class="sd">    Default:</span>
+<span class="sd">        DB(config, model_class=None, checkfirst=True, echo=False)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: (str) : Configuration string for the database,</span>
+<span class="sd">            the equivalent of SQLALCHEMY_DATABASE_URI.</span>
+<span class="sd">        model_class: (obj) : An alternate Model class can be inserted.</span>
+<span class="sd">            Otherwise it defaults to Model in this package.</span>
+<span class="sd">        checkfirst: (bool) : create tables only if the table</span>
+<span class="sd">            does not exist</span>
+<span class="sd">        echo: (bool) : log actions in database engine</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="c1"># not a fan of this</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="o">!=</span> <span class="s2">":memory:"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="s2">"sqlite://"</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">__all__</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+        <span class="c1"># these are being added on an as-needed basis</span>
+        <span class="n">orm_functions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"relationship"</span><span class="p">,</span> <span class="s2">"aliased"</span><span class="p">,</span> <span class="s2">"lazyload"</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">orm_functions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">orm</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+        <span class="c1"># all of the orm is available here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orm</span> <span class="o">=</span> <span class="n">orm</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_model_class</span><span class="p">(</span><span class="n">model_class</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_session</span><span class="p">(</span><span class="n">checkfirst</span><span class="o">=</span><span class="n">checkfirst</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DB.load_model_class"><a class="viewcode-back" href="../../_generated/dbbase.DB.load_model_class.html#dbbase.DB.load_model_class">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_model_class</span><span class="p">(</span><span class="n">model_class</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">""" load_model_class</span>
+
+<span class="sd">        This function creates a fresh copy of the declarative base.</span>
+<span class="sd">        This causes a reset of the metaclass.</span>
+
+<span class="sd">        Default:</span>
+<span class="sd">            load_model_class(model_class=None)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_class: (obj) : An alternate Model class can be</span>
+<span class="sd">                inserted. Otherwise it defaults to Model in this</span>
+<span class="sd">                package.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            model_class (obj)</span>
+<span class="sd">        """</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span></div>
+
+<div class="viewcode-block" id="DB.create_engine"><a class="viewcode-back" href="../../_generated/dbbase.DB.create_engine.html#dbbase.DB.create_engine">[docs]</a>    <span class="k">def</span> <span class="nf">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">""" create_engine</span>
+
+<span class="sd">        Basically a pass through to sqlalchemy.</span>
+
+<span class="sd">        Default:</span>
+<span class="sd">            create_engine(echo=False)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config: (str) : Configuration string for the database</span>
+<span class="sd">            echo: (bool) : log actions in database engine</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            engine (obj) : newly created engine</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DB.create_session"><a class="viewcode-back" href="../../_generated/dbbase.DB.create_session.html#dbbase.DB.create_session">[docs]</a>    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">"""create_session</span>
+
+<span class="sd">        This function instantiates an engine, and connects to the database.</span>
+<span class="sd">        A session is initiated. Finally, any new tables are created.</span>
+
+<span class="sd">        Default:</span>
+<span class="sd">            create_session(checkfirst=True, echo=False)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            checkfirst: (bool) : If True, will not recreate a table</span>
+<span class="sd">                that already exists.</span>
+<span class="sd">            echo: (bool : str) : logs interactions with engine</span>
+<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more detail.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            session (obj)</span>
+<span class="sd">        """</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+        <span class="n">session</span> <span class="o">=</span> <span class="n">orm</span><span class="o">.</span><span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="n">checkfirst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_query</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="k">return</span> <span class="n">session</span></div>
+
+<div class="viewcode-block" id="DB.drop_all"><a class="viewcode-back" href="../../_generated/dbbase.DB.drop_all.html#dbbase.DB.drop_all">[docs]</a>    <span class="k">def</span> <span class="nf">drop_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">""" drop_all</span>
+<span class="sd">        Drop all tables and sequences.</span>
+
+<span class="sd">        Leaves the database empty, bereft, alone, a pale shadow of its</span>
+<span class="sd">        former self.</span>
+
+<span class="sd">        Default:</span>
+<span class="sd">            drop_all(echo=False)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            echo: (bool : str) : logs interactions with engine</span>
+<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more detail.</span>
+<span class="sd">        """</span>
+        <span class="c1"># see how this session is not the 'session' object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close_all_sessions</span><span class="p">()</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">drop_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DB.create_all"><a class="viewcode-back" href="../../_generated/dbbase.DB.create_all.html#dbbase.DB.create_all">[docs]</a>    <span class="k">def</span> <span class="nf">create_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">"""create_all</span>
+
+<span class="sd">        This function creates all available tables.</span>
+
+<span class="sd">        Default:</span>
+<span class="sd">            create_all(bind=None, checkfirst=True)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bind: (obj) : sqlalchemy.engine.base.Engine</span>
+<span class="sd">            checkfirst: (bool) : If True, will not recreate a table</span>
+<span class="sd">                that already exists.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">bind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">bind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">bind</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="n">checkfirst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_query</span><span class="p">()</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">_decl_class_registry</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">"__tablename__"</span><span class="p">):</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_apply_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">""" _apply_query</span>
+
+<span class="sd">        This function walks the Model classes and inserts the query object.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">_decl_class_registry</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">"__tablename__"</span><span class="p">):</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_database"><a class="viewcode-back" href="../../_generated/dbbase.create_database.html#dbbase.create_database">[docs]</a><span class="k">def</span> <span class="nf">create_database</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">dbname</span><span class="p">,</span> <span class="n">superuser</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Creates a new database.</span>
+
+<span class="sd">    Default:</span>
+<span class="sd">        create_database(config, dbname)</span>
+
+<span class="sd">    Note that if a superuser is included in the config, that user must have</span>
+<span class="sd">    permissions to create a database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: (str) : Configuration string for the database</span>
+<span class="sd">            SQLALCHEMY_DATABASE_URI</span>
+<span class="sd">        dbname: (str) : The name of the database.</span>
+<span class="sd">        superuser: (str : None) : name to grant privileges to</span>
+<span class="sd">            if the database supports it.</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">_is_sqlite</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="c1"># sqlite does not use CREATE DATABASE</span>
+        <span class="k">return</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"COMMIT;"</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CREATE DATABASE </span><span class="si">{</span><span class="n">dbname</span><span class="si">}</span><span class="s2">;"</span><span class="p">)</span>
+
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"GRANT ALL PRIVILEGES ON DATABASE </span><span class="si">{</span><span class="n">dbname</span><span class="si">}</span><span class="s2"> TO </span><span class="si">{</span><span class="n">superuser</span><span class="si">}</span><span class="s2">;"</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ALTER ROLE </span><span class="si">{</span><span class="n">superuser</span><span class="si">}</span><span class="s2"> SUPERUSER;"</span><span class="p">)</span>
+
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="drop_database"><a class="viewcode-back" href="../../_generated/dbbase.drop_database.html#dbbase.drop_database">[docs]</a><span class="k">def</span> <span class="nf">drop_database</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">dbname</span><span class="p">):</span>
+    <span class="sd">"""drop_database</span>
+
+<span class="sd">    Drops a database</span>
+
+<span class="sd">    Default:</span>
+<span class="sd">        drop_database(config, dbname, superuser=None)</span>
+
+<span class="sd">    Note that if a superuser is included in the config, that user must have</span>
+<span class="sd">    permissions to drop a database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: (str) : Configuration string for the database</span>
+<span class="sd">            SQLALCHEMY_DATABASE_URI</span>
+<span class="sd">        dbname: (str) : The name of the database.</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">_is_sqlite</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="c1"># sqlite does not use drop database</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"memory"</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"///"</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">poolclass</span><span class="o">=</span><span class="n">NullPool</span><span class="p">)</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"COMMIT"</span><span class="p">)</span>
+
+        <span class="c1"># close any existing connections</span>
+        <span class="c1"># NOTE: break this out later</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"postgres"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">stmt</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">"SELECT pg_terminate_backend(pid)"</span><span class="p">,</span>
+                    <span class="s2">"FROM pg_stat_activity WHERE datname = '</span><span class="si">{}</span><span class="s2">'"</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dbname</span><span class="p">)</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DROP DATABASE IF EXISTS </span><span class="si">{</span><span class="n">dbname</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span></div>
+</pre></div>
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2020, Don Smiley.
+              
+          </div>
+            Last updated on
+              Mar 23, 2020.
+            <br/>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle").show();
+        $(".toggle").click(function() {
+            $(this).children().not(".toggle").toggle(400);
+            $(this).toggleClass("open");
+        })
+    });
+</script>
+
+  </body>
+</html>

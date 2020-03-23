@@ -1,0 +1,843 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>User Guide &#8212; dbbase 0.1.4 documentation</title>
+    <link rel="stylesheet" href="_static/material.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+  
+   
+  
+  <script src="_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = ""versions.json"",
+        target_loc = "../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#user_guide" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="index.html" title="dbbase 0.1.4 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">dbbase 0.1.4</span>
+          <span class="md-header-nav__topic"> User Guide </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dbbase
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.1.4 documentation</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="index.html" title="dbbase 0.1.4 documentation" class="md-nav__button md-logo">
+      
+        <img src="_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="index.html"
+       title="dbbase 0.1.4 documentation">dbbase 0.1.4</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dbbase
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  
+    <p class="caption"><span class="caption-text">Contents:</span></p>
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+      <a href="installation.html" class="md-nav__link">Installation</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> User Guide </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">User Guide</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#user-guide--page-root" class="md-nav__link">User Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#database-connections" class="md-nav__link">Database Connections</a>
+        </li>
+        <li class="md-nav__item"><a href="#model-interactions" class="md-nav__link">Model Interactions</a>
+        </li>
+        <li class="md-nav__item"><a href="#serialization" class="md-nav__link">Serialization</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
+        </li>
+        <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/user_guide.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="examples.html" class="md-nav__link">Examples</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="api.html" class="md-nav__link">API Reference</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="testing.html" class="md-nav__link">Running Unit Tests</a>
+      
+    </li>
+    <li class="md-nav__item">
+    
+      <a href="license.html" class="md-nav__link">License</a>
+      
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#user-guide--page-root" class="md-nav__link">User Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#database-connections" class="md-nav__link">Database Connections</a>
+        </li>
+        <li class="md-nav__item"><a href="#model-interactions" class="md-nav__link">Model Interactions</a>
+        </li>
+        <li class="md-nav__item"><a href="#serialization" class="md-nav__link">Serialization</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
+        </li>
+        <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/user_guide.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  
+<h1 id="user-guide--page-root">User Guide<a class="headerlink" href="#user-guide--page-root" title="Permalink to this headline">¶</a></h1>
+<p><strong>dbbase</strong> is a base implementation for creating SQLAlchemy models in a similar fashion to Flask-SQLAlchemy, but for use outside of the Flask environment. By using this it provides continuity to the code base, and maintains some the design advantages that Flask-SQLAlchemy implements.</p>
+<p><strong>dbbase</strong> also embodies default serialization / deserialization services as part of the Model class to cut down on total coding. Since much of the purpose of serialization is the creation of JSON objects that are to be used by JavaScript, it also can automatically convert the keys to camelCase (and back) as well.</p>
+
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>SQLAlchemy’s design implements a clear separation between the session object, connections to a database, and the table definitions, the model. With such a separation, normal database usage involves carrying the session object into each program or function and combining it with the table class model for the appropriate actions.</p>
+<p>Flask-SQLAlchemy uses SQLAlchemy, but provides an alternate approach to the design by embodying the session object into a primary database object (usually <strong>db</strong>), and suffusing the query into the table models as well. By doing so, many of the tools for interacting with the database are present and available within a table class.</p>
+<p><strong>dbbase</strong> maintains some continuity with the Flask-SQLAlchemy coding style.</p>
+
+
+<h2 id="database-connections">Database Connections<a class="headerlink" href="#database-connections" title="Permalink to this headline">¶</a></h2>
+<p>Connecting to a database can be done as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The config is the database URI. There is a convenience function,
+<strong>db_config</strong> that can help configure this URI. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span><span class="p">,</span> <span class="n">db_config</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">db_config</span><span class="p">(</span>
+    <span class="n">base</span><span class="o">=</span><span class="s2">"postgresql://</span><span class="si">{user}</span><span class="s2">:</span><span class="si">{pass}</span><span class="s2">@</span><span class="si">{host}</span><span class="s2">:</span><span class="si">{port}</span><span class="s2">/</span><span class="si">{dbname}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">config_vars</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">'user'</span><span class="p">:</span> <span class="s1">'auser'</span><span class="p">,</span>
+        <span class="s1">'pass'</span><span class="p">:</span> <span class="s1">'123'</span><span class="p">,</span>
+        <span class="s1">'host'</span><span class="p">:</span> <span class="s1">'localhost'</span><span class="p">,</span>
+        <span class="s1">'port'</span><span class="p">:</span> <span class="mi">5432</span><span class="p">,</span>
+        <span class="s1">'dbname'</span><span class="p">:</span> <span class="s1">'mydatadb'</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># create any tables that are new, create a session object</span>
+<span class="c1">#   that is found at db.session</span>
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>db_config</strong> just combines a base string with dict of variables,
+resulting in a string that is fed into DB to configure the connection. So it can be complicated if necessary, but probably will not have to be.</p>
+<p><strong>model_class</strong> can substitute a different Model than this package,
+but it is expected that normally the default would suffice.</p>
+<p><strong>checkfirst</strong> if True, will not recreate a table if it already
+exists in the database.</p>
+<p><strong>echo</strong> if True logs the database interactions.</p>
+<p>Unlike Flask-SQLAlchemy, DB does not default to an environment
+variable <cite>SQLALCHEMY_DATABASE_URI</cite>. However, you could still use
+it by extracting it from the environment and feeding it into DB.</p>
+
+
+<h2 id="model-interactions">Model Interactions<a class="headerlink" href="#model-interactions" title="Permalink to this headline">¶</a></h2>
+<p>The following code compares typical table definition styles:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SQLAlchemy</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
+
+<span class="c1"># Flask-SQLAlchemy</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
+
+<span class="c1"># dbbase</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now if the only difference is a standard as to whether to explicitly import Column, and other classes, or have it ride around on db, no one would care.</p>
+<p>The differences can be seen when interacting with the database. There is a ready conduit to the database within each class. For example, below shows filtering under all three scenarios.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SQLAlchemy</span>
+<span class="n">qry</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="c1"># Flask-SQLAlchemy</span>
+<span class="n">qry</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="c1"># dbbase</span>
+<span class="n">qry</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The query object is conveniently available for use in the Model class.</p>
+<p>First, we will create a user:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># both Flask-SQLAlchemy and dbbase</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>dbbase</strong> also has a reference for convenience to the <strong>db</strong> variable within the Model class and the object instance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># or dbbase via Model class</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
+<span class="n">User</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="n">User</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># or instance object</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
+<span class="n">user</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="n">user</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Or, saving can be done via:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># dbbase</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
+<span class="n">User</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="c1"># or even shorter</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Caveat</p>
+<p><strong>dbbase</strong> objects provide access to the SQLAlchemy <strong>query</strong> object, not the Flask-SQLAlchemy <strong>query</strong> object. Therefore you would not expect <cite>User.query.get_or_404</cite> to be available.</p>
+
+
+<h2 id="serialization">Serialization<a class="headerlink" href="#serialization" title="Permalink to this headline">¶</a></h2>
+<p>For convenience building RESTful APIs, a default serialization function is
+available for outputting JSON style strings. In addition, by default it converts the
+keys to camelCase style to correspond to JavaScript conventions.</p>
+<p>To illustrate some of the features, we will look at two examples: The first will be two tables, one for users and one for addresses</p>
+<p>After the initial import and <strong>db</strong> creation, we create two tables.
+The users table has a relationship with addresses where the user_id entered into the address table must be found in the users table.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create db that is sqlite in memory</span>
+<span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s1">':memory:'</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span>  <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">'</span><span class="si">{first}</span><span class="s1"> </span><span class="si">{last}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">first</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'addresses'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email_address</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">'users.id'</span><span class="p">))</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">first_name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">,</span> <span class="n">last_name</span><span class="o">=</span><span class="s1">'Smith'</span><span class="p">)</span>
+
+<span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="n">address1</span> <span class="o">=</span> <span class="n">Address</span><span class="p">(</span>
+    <span class="n">email_address</span><span class="o">=</span><span class="s1">'email1@example.com'</span><span class="p">,</span>
+    <span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span>
+<span class="p">)</span>
+<span class="n">address2</span> <span class="o">=</span> <span class="n">Address</span><span class="p">(</span>
+    <span class="n">email_address</span><span class="o">=</span><span class="s1">'email2@example.com'</span><span class="p">,</span>
+    <span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span>
+<span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">address1</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">address2</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Accordingly, it makes sense that when the user data is to be pulled from an API the relevant addresses be included.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="go">{</span>
+<span class="go">  "addresses": [</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email1@example.com",</span>
+<span class="go">      "id": 1</span>
+<span class="go">    },</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email2@example.com",</span>
+<span class="go">      "id": 2</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  "lastName": "Smith",</span>
+<span class="go">  "fullName": "Bob Smith",</span>
+<span class="go">  "id": 3,</span>
+<span class="go">  "firstName": "Bob"</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>The default serialization opts for the keys to be put into camelCase. In addition, it walks the object dictionary and recursively evaluates any relationships as well, under the assumption that it would minimize the number of trips to the API from the front end.</p>
+
+<h3 id="controlling-serialization">Controlling Serialization<a class="headerlink" href="#controlling-serialization" title="Permalink to this headline">¶</a></h3>
+<p>You have the ability to limit or expand the items that are included.</p>
+<ul class="simple">
+<li><p><strong>SERIAL_STOPLIST</strong> is a Model class variable that is a list of fields to ignore</p></li>
+<li><p><strong>SERIAL_LIST</strong> is a Model class variable that is a list of fields that would be included. Additional methods can be included in this list to enable fields like <strong>fullname</strong> in place of <strong>first_name</strong> and <strong>last_name</strong>.</p></li>
+<li><p><strong>serialize</strong> of course can be overwritten in your class model so if either method is not right for your situation it is easy enough to set right for that particular class yet use the defaults for other tables.</p></li>
+</ul>
+<p>To reduce ambiguity, if <strong>SERIAL_LIST</strong> is used, serialization
+assumes that the list is explicitly what you want, and ignores the <strong>SERIAL_STOPLIST</strong>.</p>
+<p>From examining the output that we have above, suppose we decide that we will just present the full name and not <strong>first_name</strong> and <strong>last_name</strong>.</p>
+<p>In that case would do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
+    <span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">]</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span>  <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">'</span><span class="si">{first}</span><span class="s1"> </span><span class="si">{last}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">first</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now when we run <strong>serialize</strong>, the fields first_name and last_name are filtered out.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="go">{</span>
+<span class="go">  "addresses": [</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email1@example.com",</span>
+<span class="go">      "id": 1</span>
+<span class="go">    },</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email2@example.com",</span>
+<span class="go">      "id": 2</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  "id": 3,</span>
+<span class="go">  "fullName": "Bob Smith"</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Now since <strong>user_id</strong> in addresses is redundant, we can also filter that out. Let us remove <strong>id</strong> from addresses as well. We could do
+this by adding both to a stop list by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'user_id'</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>But instead, we can minimize our typing by instead adding just the email address to <strong>SERIAL_LIST</strong>. As in the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'addresses'</span>
+    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'email_address'</span><span class="p">]</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email_address</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">'users.id'</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Running <strong>user.serialize()</strong> again we have a more compact result</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">{</span>
+<span class="go">  "addresses": [</span>
+<span class="go">    {</span>
+<span class="go">      "emailAddress": "email1@example.com"</span>
+<span class="go">    },</span>
+<span class="go">    {</span>
+<span class="go">      "emailAddress": "email2@example.com"</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  "id": 3,</span>
+<span class="go">  "fullName": "Bob Smith"</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Dictionary keys have been not guaranteed to print in a particular
+order, although that is changing. If the order of the keys in
+serialization are important in your application, you can control
+that by putting those variables in <strong>SERIAL_LIST</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">,</span> <span class="s1">'addresses'</span><span class="p">]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="p">{</span>
+  <span class="s2">"id"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+  <span class="s2">"firstName"</span><span class="p">:</span> <span class="s2">"Bob"</span><span class="p">,</span>
+  <span class="s2">"lastName"</span><span class="p">:</span> <span class="s2">"Smith"</span><span class="p">,</span>
+  <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"userId"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="s2">"emailAddress"</span><span class="p">:</span> <span class="s2">"email1@example.com"</span><span class="p">,</span>
+      <span class="s2">"id"</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">"userId"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="s2">"emailAddress"</span><span class="p">:</span> <span class="s2">"email2@example.com"</span><span class="p">,</span>
+      <span class="s2">"id"</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+
+
+<h3 id="recursive-serialization">Recursive Serialization<a class="headerlink" href="#recursive-serialization" title="Permalink to this headline">¶</a></h3>
+<p>For this next section, let us start by first revoking the stop lists and serial lists that we have and take a look at the process in a different way.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">{</span>
+<span class="go">  "addresses": [</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email1@example.com",</span>
+<span class="go">      "id": 1</span>
+<span class="go">    },</span>
+<span class="go">    {</span>
+<span class="go">      "userId": 3,</span>
+<span class="go">      "emailAddress": "email2@example.com",</span>
+<span class="go">      "id": 2</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  "lastName": "Smith",</span>
+<span class="go">  "fullName": "Bob Smith",</span>
+<span class="go">  "id": 3,</span>
+<span class="go">  "firstName": "Bob"</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>So we can see that it is back to the original form. But lets choose <strong>address1.serialize()</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">address1</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span>
+<span class="go">{</span>
+<span class="go">  "emailAddress": "email1@example.com",</span>
+<span class="go">  "id": 1,</span>
+<span class="go">  "user": {</span>
+<span class="go">    "lastName": "Smith",</span>
+<span class="go">    "fullName": "Bob Smith",</span>
+<span class="go">    "id": 3,</span>
+<span class="go">    "firstName": "Bob"</span>
+<span class="go">  },</span>
+<span class="go">  "userId": 3</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>See how the address serialization digs back into the user object. This is due to the relationship that Address has with User. But, serializatin does not go back to User once again when you run <strong>user.serialize()</strong>. The reason is that are there are limits in place to avoid going into an endless loop.</p>
+<p>However, there are situations where it is entirely desirable.</p>
+<p>We now create a table for holding network nodes. A node can be connected to other nodes in a relationship to form tree structures for example. Because of that, the relationships are self-referential. Where in the example above, we needed to stop serialization before it turns back in on itself, now we want to follow the relationships all the way down.</p>
+<p>To show this we first create the table and a few nodes, and connect them together. Let’s model
+.. code-block:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span>        <span class="n">node</span> <span class="mi">1</span>
+        <span class="o">|</span>    <span class="o">|</span>
+    <span class="n">node</span> <span class="mi">2</span>   <span class="n">node</span> <span class="mi">5</span>
+    <span class="o">|</span>    <span class="o">|</span>        <span class="o">|</span>
+<span class="n">node</span> <span class="mi">3</span>   <span class="n">node</span> <span class="mi">4</span>   <span class="n">node</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">"""self-referential table"""</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'nodes'</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">'nodes.id'</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Node"</span><span class="p">,</span>
+        <span class="n">lazy</span><span class="o">=</span><span class="s2">"joined"</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="s2">"Node.id"</span><span class="p">,</span>
+        <span class="n">join_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'parent_id'</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">,</span> <span class="s1">'children'</span><span class="p">]</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+<span class="n">node1</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node1'</span><span class="p">)</span>
+<span class="n">node2</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node2'</span><span class="p">)</span>
+<span class="n">node3</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node3'</span><span class="p">)</span>
+<span class="n">node4</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node4'</span><span class="p">)</span>
+<span class="n">node5</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node5'</span><span class="p">)</span>
+<span class="n">node6</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">'this is node6'</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node1</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node2</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node2</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node3</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node2</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node4</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node5</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node5</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node6</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>So the nodes are all linked up with node1 as the root. So when we serialize node 1 we get:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node1</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">  "id": 1,</span>
+<span class="go">  "parentId": null,</span>
+<span class="go">  "data": "this is node1",</span>
+<span class="go">  "children": [</span>
+<span class="go">    {</span>
+<span class="go">      "id": 2,</span>
+<span class="go">      "parentId": 1,</span>
+<span class="go">      "data": "this is node2",</span>
+<span class="go">      "children": [</span>
+<span class="go">        {</span>
+<span class="go">          "id": 3,</span>
+<span class="go">          "parentId": 2,</span>
+<span class="go">          "data": "this is node3",</span>
+<span class="go">          "children": []</span>
+<span class="go">        },</span>
+<span class="go">        {</span>
+<span class="go">          "id": 4,</span>
+<span class="go">          "parentId": 2,</span>
+<span class="go">          "data": "this is node4",</span>
+<span class="go">          "children": []</span>
+<span class="go">        }</span>
+<span class="go">      ]</span>
+<span class="go">    },</span>
+<span class="go">    {</span>
+<span class="go">      "id": 5,</span>
+<span class="go">      "parentId": 1,</span>
+<span class="go">      "data": "this is node5",</span>
+<span class="go">      "children": [</span>
+<span class="go">        {</span>
+<span class="go">          "id": 6,</span>
+<span class="go">          "parentId": 5,</span>
+<span class="go">          "data": "this is node6",</span>
+<span class="go">          "children": []</span>
+<span class="go">        }</span>
+<span class="go">      ]</span>
+<span class="go">    }</span>
+<span class="go">  ]</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>By the way, showing examples of serialization in printed form is much better if the JSON version is indented. In fact, the default is the more compact form to reduce overall size of the output. For example, the above emitted from an API would be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node1</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>{“id”: 1, “parentId”: null, “data”: “this is node1”, “children”: [{“id”: 2, “parentId”: 1, “data”: “this is node2”, “children”: [{“id”: 3, “parentId”: 2, “data”: “this is node3”, “children”: []}, {“id”: 4, “parentId”: 2, “data”: “this is node4”, “children”: []}]}, {“id”: 5, “parentId”: 1, “data”: “this is node5”, “children”: [{“id”: 6, “parentId”: 5, “data”: “this is node6”, “children”: []}]}]}</p>
+<p><strong>dbbase</strong> is compatible with Python &gt;=3.5 and is distributed under the
+MIT license.</p>
+
+
+
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="installation.html" title="Material"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Installation </span>
+              </div>
+            </a>
+          
+          
+            <a href="examples.html" title="Admonition"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Examples </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2020, Don Smiley.
+              
+          </div>
+            Last updated on
+              Mar 23, 2020.
+            <br/>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle").show();
+        $(".toggle").click(function() {
+            $(this).children().not(".toggle").toggle(400);
+            $(this).toggleClass("open");
+        })
+    });
+</script>
+
+  </body>
+</html>

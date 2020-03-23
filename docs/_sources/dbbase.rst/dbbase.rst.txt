@@ -1,0 +1,38 @@
+dbbase package
+==============
+
+Submodules
+----------
+
+dbbase.base module
+------------------
+
+.. automodule:: dbbase.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dbbase.model module
+-------------------
+
+.. automodule:: dbbase.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dbbase.utils module
+-------------------
+
+.. automodule:: dbbase.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: dbbase
+   :members:
+   :undoc-members:
+   :show-inheritance:
