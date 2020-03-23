@@ -29,16 +29,14 @@ logger = logging.getLogger(__file__)
 
 class DB(object):
     """
-    This class defines a central location for accepting database configuration information, creating connections and sessions. In addi
-    Class that holds sqlalchemy items, not intended to be as
-    comprehensive as flask_sqlalchemy.
+    This class defines a central location for accepting database configuration information, creating connections and sessions.
 
     Default:
         DB(config, model_class=None, checkfirst=True, echo=False)
 
     Args:
-        config: (str) : Configuration string for the database
-            SQLALCHEMY_DATABASE_URI
+        config: (str) : Configuration string for the database,
+            the equivalent of SQLALCHEMY_DATABASE_URI.
         model_class: (obj) : An alternate Model class can be inserted.
             Otherwise it defaults to Model in this package.
         checkfirst: (bool) : create tables only if the table
@@ -68,7 +66,6 @@ class DB(object):
         self.Model = self.load_model_class(model_class)
         self.Model.db = self
         self.session = self.create_session(checkfirst=checkfirst, echo=echo)
-        # self.Model.query = orm.Query(self.Model).with_session(self.session)
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -102,7 +99,6 @@ class DB(object):
 
         Args:
             config: (str) : Configuration string for the database
-                SQLALCHEMY_DATABASE_URI
             echo: (bool) : log actions in database engine
 
         Returns:
@@ -120,10 +116,13 @@ class DB(object):
             create_session(checkfirst=True, echo=False)
 
         Args:
-            checkfirst: (bool) : If True, will not recreat a table
+            checkfirst: (bool) : If True, will not recreate a table
                 that already exists.
             echo: (bool : str) : logs interactions with engine
                 to INFO. defaults to False. echo can also be "debug" for more detail.
+
+        Returns:
+            session (obj)
         """
         engine = create_engine(self.config, echo=echo)
         engine.connect()

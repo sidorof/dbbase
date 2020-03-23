@@ -19,6 +19,8 @@ class Node(db.Model):
         order_by="Node.id",
         join_depth=10)
 
+    SERIAL_LIST = ['id', 'parent_id', 'data', 'children']
+
 db.create_all()
 
 node1 = Node(id=1, data='this is node1')

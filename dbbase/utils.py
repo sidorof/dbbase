@@ -69,16 +69,27 @@ def _is_sqlite(config):
 
 def xlate(key, camel_case=True):
     """
-    This function translates a name to a format used in JavaScript.
+    This function translates a name to camel case or back.
 
-    With competing formating standards i
-    examples, camel_case is True:
+    Default:
+        xlate(key, camel_case=True)
+
+    Example:
+        camel_case is True:
         start_date would become startDate
         startdate would remain startdate
 
-    examples, camel_case is False:
+        camel_case is False:
         startDate would become start_date
         startdate would remain startdate
+
+    Args:
+        key: (str) : the key that would be converted
+        camel_case: (bool) : True to convert to camel case
+
+    Returns:
+        key (str) : the converted string
+
     """
     if camel_case:
         return _xlate_camel_case(key)
