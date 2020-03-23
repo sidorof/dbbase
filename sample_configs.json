@@ -1,16 +1,5 @@
 [
-    {
-        "name": "postgresql",
-        "testdb_uri": "postgresql://{user}:{password}@{host}:{port}/{dbname}",
-        "testdb_vars": {
-            "dbname": "testdb",
-            "user": "suser",
-            "password": "mypassword",
-            "host": "localhost",
-            "port": "5432",
-            "basedb": "postgres"
-        }
-    },
+
     {
         "name": "sqlite_memory",
         "testdb_uri": ":memory:",

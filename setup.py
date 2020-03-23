@@ -49,5 +49,5 @@ setup(
     extras_require=EXTRAS_REQUIRE,
     include_package_data=True,
     classifiers=CLASSIFIERS,
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(),
 )
