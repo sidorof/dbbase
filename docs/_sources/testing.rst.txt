@@ -7,6 +7,9 @@ There is a sample set of configs used for testing
 at the root of this repo in the file `sample_configs.json`.
 Change the variables as appropriate for your test environment.
 
+A more complete sample file is `sample_configs_more.json` with
+configuration for PostgreSQL.
+
 .. code-block:: json
 
     [
