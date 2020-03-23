@@ -13,7 +13,7 @@ from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
 @as_declarative()
 class Model(object):
     """
-    This class attempts to replicate some of the design features available
+    This class replicates some of the design features available
     when using flask_sqlalchemy. The primary interest is the embedding of
     references to the database via session and the query object.
 
@@ -40,8 +40,8 @@ class Model(object):
     the database columns plus any methods that have been created. To
     automatically exclude a method, name it with a starting _.
 
-    SERIAL_STOPLIST = None
-    SERIAL_LIST = None
+    `SERIAL_STOPLIST = None`
+    `SERIAL_LIST = None`
 
     If SERIAL_STOPLIST is a list of column names, those names will be
     excluded from serialization.

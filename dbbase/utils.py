@@ -24,13 +24,11 @@ def db_config(base, config_vars=None):
             `"postgresql://{user}:{pass}@{host}:{port}/{dbname}"`
         config_vars: (dict) : variables that will be combined with the base.
         For example:
-            {
-                'user': 'auser',
-                'pass': '123',
-                'host': 'localhost',
-                'port': 5432,
-                'dbname': 'mydatadb'
-            }
+            'user': 'auser',
+            'pass': '123',
+            'host': 'localhost',
+            'port': 5432,
+            'dbname': 'mydatadb'
 
     config_vars can also be a string that successfully converts from JSON
     to a dict.
@@ -40,6 +38,7 @@ def db_config(base, config_vars=None):
 
     Returns:
         completed_URI (str) : the database URI
+
     """
     if config_vars is None:
         config_vars = {}
