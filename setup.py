@@ -32,6 +32,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.7",
 ]
 
+__version__ = None
 exec(open("dbbase/_version.py", encoding="utf-8").read())
 
 setup(
