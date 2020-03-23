@@ -1,9 +1,8 @@
 """
-This package implements base routines for interacting with the database.
+This package implements base routines for interacting with a database.
 """
-__version__ = '0.1.0'
-__author__ = 'Don Smiley'
+from ._version import __version__
 
-from . model import Model
-from . dbinfo import DB, create_database, drop_database
-from . db_utils import db_config, is_sqlite, xlate
+# relevant class and functions for root package level
+from .utils import db_config
+from .base import DB, create_database, drop_database

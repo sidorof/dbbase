@@ -1,11 +1,15 @@
-# test/test_dbbase/dbinfo.py
+# test/test_dbbase/base.py
 from . import DBBaseTestCase
 
 
-class TestDBInfoClass(DBBaseTestCase):
+class TestDBBaseClass(DBBaseTestCase):
     """
     This class tests DB class functions
+
+    Deferred this due to the test fixture using all of these
+    anyway.
     """
+
     def test__DB__init__(self):
         pass
 
@@ -13,8 +17,10 @@ class TestDBInfoClass(DBBaseTestCase):
         pass
 
     def test_create_session(self):
-        # create_session(self, checkfirst=True, echo=False)
         pass
 
     def test_drop_all(self):
+        pass
+
+    def test_reload_model(self):
         pass
