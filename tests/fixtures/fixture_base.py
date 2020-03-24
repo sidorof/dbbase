@@ -63,8 +63,6 @@ class DBBaseTestCase(BaseTestCase):
 
     """
 
-    dbbase = dbbase
-
     @classmethod
     def setUpClass(cls):
         """
