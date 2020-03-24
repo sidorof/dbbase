@@ -6,16 +6,16 @@ from setuptools import setup, find_packages
 
 PACKAGE_NAME = 'dbbase'
 DESCRIPTION = (
-    "A base implementation of SQLAlchemy models that can be"
-    "used with Flask and without using a common code base."
+    "A base implementation of SQLAlchemy models that incorporates "
+    "the query and session variables within the model objects."
 )
 with open('README.rst') as fobj:
     LONG_DESCRIPTION = fobj.read()
-PROJECT_URL = "https://github.com/sidorof/dbbase"
+PROJECT_URL = "https://sidorof.github.io/dbbase/"
 LICENSE = "MIT"
 AUTHOR = "Donald Smiley"
 AUTHOR_EMAIL = "dsmiley@sidorof.com"
-PYTHON_REQUIRES = ">=3.5"
+PYTHON_REQUIRES = ">=3.6"
 INSTALL_REQUIRES = ["sqlalchemy"]
 EXTRAS_REQUIRE = {
     "dev": "unittest"
