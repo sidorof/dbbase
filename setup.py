@@ -6,8 +6,8 @@ from setuptools import setup, find_packages
 
 PACKAGE_NAME = 'dbbase'
 DESCRIPTION = (
-    "A base implementation of SQLAlchemy models that can be "
-    "used with Flask and without using a common code base."
+    "A base implementation of SQLAlchemy models that incorporates "
+    "the query and session variables within the model objects."
 )
 with open('README.rst') as fobj:
     LONG_DESCRIPTION = fobj.read()
