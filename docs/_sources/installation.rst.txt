@@ -22,6 +22,6 @@ Requirements
 * your database driver, for example:
 
   * SQLite3: is already part of the python library
-  * PostgreSQL: psycopg or psycopg_binary
+  * PostgreSQL: psycopg2 or psycopg2_binary
 
 Note that since this is a fairly new project, unit testing has been done for Sqlite3 and PostgreSQL. More are expected to be added.
