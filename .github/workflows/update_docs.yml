@@ -25,6 +25,7 @@ jobs:
     # Runs a single command using the runners shell
     - name: generate docs
       run: |
-        echo "./docsrc/update_github_docs.sh"
-        echo "this needs the sphinx env to run"
+        pip3 install docsrc/requirements.in
+        ./docsrc/update_github_docs.sh
+        # echo "this needs the sphinx env to run"
 
