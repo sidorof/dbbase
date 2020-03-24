@@ -544,5 +544,5 @@ By the way, showing examples of serialization in printed form is much better if 
 
 {"id": 1, "parentId": null, "data": "this is node1", "children": [{"id": 2, "parentId": 1, "data": "this is node2", "children": [{"id": 3, "parentId": 2, "data": "this is node3", "children": []}, {"id": 4, "parentId": 2, "data": "this is node4", "children": []}]}, {"id": 5, "parentId": 1, "data": "this is node5", "children": [{"id": 6, "parentId": 5, "data": "this is node6", "children": []}]}]}
 
-**dbbase** is compatible with Python >=3.5 and is distributed under the
+**dbbase** is compatible with Python >=3.6 and is distributed under the
 MIT license.

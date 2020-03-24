@@ -15,7 +15,7 @@ PROJECT_URL = "https://sidorof.github.io/dbbase/"
 LICENSE = "MIT"
 AUTHOR = "Donald Smiley"
 AUTHOR_EMAIL = "dsmiley@sidorof.com"
-PYTHON_REQUIRES = ">=3.5"
+PYTHON_REQUIRES = ">=3.6"
 INSTALL_REQUIRES = ["sqlalchemy"]
 EXTRAS_REQUIRE = {
     "dev": "unittest"
