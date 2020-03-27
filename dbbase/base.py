@@ -65,7 +65,14 @@ class DB(object):
 
         self.Model = self.load_model_class(model_class)
         self.Model.db = self
-        self.session = self.create_session(checkfirst=checkfirst, echo=echo)
+        
+        print('base:DB: model id', id(self.Model.metadata))
+
+        # now create_session is done after importing models 
+        # self.session = self.create_session(checkfirst=checkfirst, echo=echo)
+
+        #print('base:DB: model id', id(self.Model.metadata))
+        
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -104,7 +111,8 @@ class DB(object):
         Returns:
             engine (obj) : newly created engine
         """
-        return create_engine(self.config, echo=echo)
+        self.engine = create_engine(self.config, echo=echo)
+        return self.engine
 
     def create_session(self, checkfirst=True, echo=False):
         """create_session
@@ -170,19 +178,22 @@ class DB(object):
         if bind is None:
             bind = self.session.bind
         self.Model.metadata.create_all(bind, checkfirst=checkfirst)
-        self._apply_query()
+        self._apply_db()
         for cls in self.Model._decl_class_registry.values():
             if hasattr(cls, "__tablename__"):
                 cls.query = self.session.query(cls)
 
-    def _apply_query(self):
-        """ _apply_query
+    def _apply_db(self):
+        """ _apply_db
 
-        This function walks the Model classes and inserts the query object.
+        This function walks the Model classes and inserts the query
+        and db objects. Applying db helps in situations where the 
+        db has changed from the original creation of the Model.
         """
         for cls in self.Model._decl_class_registry.values():
             if hasattr(cls, "__tablename__"):
                 cls.query = self.session.query(cls)
+                cls.db = self
 
 
 def create_database(config, dbname, superuser=None):
