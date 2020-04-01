@@ -15,6 +15,7 @@ dbbase documentation
    api.rst
    testing.rst
    license.rst
+   changelog.rst
 
 .. mdinclude:: ../../README.md
 

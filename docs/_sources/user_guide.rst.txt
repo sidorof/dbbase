@@ -413,7 +413,7 @@ For this next section, let us start by first revoking the stop lists and serial 
     }
 ..
 
-So we can see that it is back to the original form. But lets choose **address1.serialize()**.
+So we can see that it is back to the original form. But let's choose **address1.serialize()**.
 
 .. code-block:: python
 

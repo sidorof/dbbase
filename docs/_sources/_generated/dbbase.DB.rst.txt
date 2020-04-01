@@ -12,6 +12,8 @@ DB
    .. autosummary::
       :toctree: ../_generated/
    
+         ~DB.apply_db
+      
          ~DB.create_all
       
          ~DB.create_engine

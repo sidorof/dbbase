@@ -45,7 +45,7 @@
   
   
   
-    <title>API Reference &#8212; dbbase 0.1.7 documentation</title>
+    <title>API Reference &#8212; dbbase 0.1.8 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.1.7 documentation"
+        <a href="index.html" title="dbbase 0.1.8 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.7</span>
+          <span class="md-header-nav__topic">dbbase 0.1.8</span>
           <span class="md-header-nav__topic"> API Reference </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.1.7 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.1.8 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.1.7 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.1.8 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.1.7 documentation">dbbase 0.1.7</a>
+       title="dbbase 0.1.8 documentation">dbbase 0.1.8</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -288,12 +288,6 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="_generated/dbbase.DB.html#dbbase.DB" title="dbbase.DB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DB</span></code></a>(config[, model_class, checkfirst, echo])</p></td>
 <td><p>This class defines a central location for accepting database configuration information, creating connections and sessions.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_generated/dbbase.create_database.html#dbbase.create_database" title="dbbase.create_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_database</span></code></a>(config, dbname[, superuser])</p></td>
-<td><p>Creates a new database.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_generated/dbbase.drop_database.html#dbbase.drop_database" title="dbbase.drop_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drop_database</span></code></a>(config, dbname)</p></td>
-<td><p>Drops a database</p></td>
-</tr>
 </tbody>
 </table>
 <table class="longtable docutils align-default">
@@ -304,6 +298,21 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_generated/dbbase.model.Model.html#dbbase.model.Model" title="dbbase.model.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a>(**kwargs)</p></td>
 <td><p>This class replicates some of the design features available when using flask_sqlalchemy.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Maintenance</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_generated/dbbase.maint.create_database.html#dbbase.maint.create_database" title="dbbase.maint.create_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_database</span></code></a>(config, dbname[, superuser])</p></td>
+<td><p>Creates a new database.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_generated/dbbase.maint.drop_database.html#dbbase.maint.drop_database" title="dbbase.maint.drop_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drop_database</span></code></a>(config, dbname)</p></td>
+<td><p>Drops a database</p></td>
 </tr>
 </tbody>
 </table>
@@ -372,7 +381,7 @@
               
           </div>
             Last updated on
-              Mar 23, 2020.
+              Apr 01, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

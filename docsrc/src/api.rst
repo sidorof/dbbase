@@ -12,8 +12,6 @@ This section is a reference for classes and functions of **dbbase**.
     :template: class.rst
 
    DB
-   create_database
-   drop_database
 
 .. currentmodule:: dbbase.model
 .. autosummary::
@@ -22,6 +20,18 @@ This section is a reference for classes and functions of **dbbase**.
     :template: class.rst
 
    Model
+
+.. rubric:: Maintenance
+
+.. currentmodule:: dbbase.maint
+.. autosummary::
+    :toctree: _generated/
+    :nosignatures:
+    :template: class.rst
+
+   create_database
+   drop_database
+
 
 .. rubric:: Utilities
 

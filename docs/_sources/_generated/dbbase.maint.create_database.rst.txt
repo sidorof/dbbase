@@ -1,7 +1,7 @@
 create\_database
 ================
 
-.. currentmodule:: dbbase
+.. currentmodule:: dbbase.maint
 
 .. autoclass:: create_database
 
