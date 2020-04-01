@@ -4,7 +4,7 @@ from . import DBBaseTestCase
 import sqlalchemy
 
 
-class TestMaintClass(DBBaseTestCase):
+class TestMaint(DBBaseTestCase):
     """
     This class tests database maintance functions.
 
