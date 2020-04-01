@@ -4,6 +4,7 @@ This module tests various aspects of serialization.
 """
 from datetime import date, datetime
 from decimal import Decimal
+import uuid
 from random import randint
 
 from . import DBBaseTestCase
@@ -67,6 +68,12 @@ class TestSerializers(DBBaseTestCase):
         self.assertEqual(
             "123.456",
             _eval_value(value, self.to_camel_case, self.level_limits, None),
+        )
+
+        value = uuid.uuid4()
+        self.assertEqual(
+            str(value),
+            _eval_value(value, self.to_camel_case, self.level_limits, None)
         )
 
     def test_eval_value(self):

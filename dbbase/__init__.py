@@ -5,4 +5,5 @@ from ._version import __version__
 
 # relevant class and functions for root package level
 from .utils import db_config
-from .base import DB, create_database, drop_database
+from .base import DB
+from . import maint

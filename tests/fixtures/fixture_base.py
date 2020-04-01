@@ -83,8 +83,8 @@ class DBBaseTestCase(BaseTestCase):
         else:
             config_base = config
         dbname = config_vars[TESTDB_VARS].get(DBNAME)
-        dbbase.base.drop_database(config_base, dbname)
-        dbbase.base.create_database(
+        dbbase.maint.drop_database(config_base, dbname)
+        dbbase.maint.create_database(
             dbname=dbname,
             config=config_base,
             superuser=config_vars[TESTDB_VARS].get(USER),
@@ -98,27 +98,23 @@ class DBBaseTestCase(BaseTestCase):
                 config_vars[TESTDB_URI], config_vars[TESTDB_VARS]
             )
         )
+        self.config = self.db.config
+        self.db.create_session()
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
 
     def verify_requireds(self, obj, req_dict):
         """
         This function receives object and dict of requireds.
-
-        Up to n - 1, an error is raised, then it goes through if all is well.
         """
-        rlist = list(req_dict.items())
-        length = len(rlist)
-        for i in range(length):
-            key, value = rlist[i]
-            obj.__setattr__(key, value)
-            if i < length - 1:
-                self.assertRaises(IntegrityError, self.db.session.add(obj))
-                self.db.session.rollback()
-            else:
-                self.db.session.add(obj)
-                self.db.session.commit()
-                return obj
+        cls = self.db.inspect(obj.__class__)
+        for prop in cls.iterate_properties:
+            if isinstance(prop.expression, self.db.Column):
+                if prop.expression.nullable:
+                    print('testing {}'.format(prop.expression.name))
+                    if prop.expression.name in req_dict:
+                        # cannot be nullable
+                        self.assertFalse(prop.expression.nullable)
 
     def tearDown(self):
         self.db.session.commit()
@@ -144,5 +140,5 @@ class DBBaseTestCase(BaseTestCase):
             config_base = config
 
         dbname = config_vars[TESTDB_VARS].get(DBNAME)
-        dbbase.base.drop_database(config_base, dbname)
+        dbbase.maint.drop_database(config_base, dbname)
         dbname = None

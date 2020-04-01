@@ -45,6 +45,7 @@ class Model(object):
     If SERIAL_LIST is a list, serialization will return ONLY those
     names in the list and in that order.
     """
+
     # catchall for sqlalchemy classes and functions
     db = None
 

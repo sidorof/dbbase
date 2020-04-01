@@ -4,6 +4,7 @@ This module implements serializations.
 """
 from datetime import date, datetime
 from decimal import Decimal
+import uuid
 
 
 SA_INDICATOR = "_sa_instance_state"
@@ -57,6 +58,8 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
     elif isinstance(value, date):
         result = value.strftime(DATE_FMT)
     elif isinstance(value, Decimal):
+        result = str(value)
+    elif isinstance(value, uuid.UUID):
         result = str(value)
     elif isinstance(value, list):
         if len(value) > 0:

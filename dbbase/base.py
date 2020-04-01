@@ -19,7 +19,6 @@ import importlib
 
 import sqlalchemy
 from sqlalchemy import create_engine, orm
-from sqlalchemy.pool import NullPool
 
 from . import model
 from .utils import _is_sqlite
@@ -65,14 +64,9 @@ class DB(object):
 
         self.Model = self.load_model_class(model_class)
         self.Model.db = self
-        
-        print('base:DB: model id', id(self.Model.metadata))
 
-        # now create_session is done after importing models 
-        # self.session = self.create_session(checkfirst=checkfirst, echo=echo)
-
-        #print('base:DB: model id', id(self.Model.metadata))
-        
+        # now create_session is done after importing models
+        self.session = self.create_session(checkfirst=checkfirst, echo=echo)
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -138,9 +132,8 @@ class DB(object):
         session = orm.sessionmaker(bind=engine)()
 
         self.Model().metadata.create_all(engine, checkfirst=checkfirst)
-        self._apply_query()
+        self._apply_db()
 
-        self.session = session
         return session
 
     def drop_all(self, echo=False):
@@ -187,7 +180,7 @@ class DB(object):
         """ _apply_db
 
         This function walks the Model classes and inserts the query
-        and db objects. Applying db helps in situations where the 
+        and db objects. Applying db helps in situations where the
         db has changed from the original creation of the Model.
         """
         for cls in self.Model._decl_class_registry.values():
@@ -195,83 +188,14 @@ class DB(object):
                 cls.query = self.session.query(cls)
                 cls.db = self
 
+    def apply_db(self, cls):
+        """ apply_db
+        This function receives a Model class and applies db and session
+        to the class. This enables model classes to be added if not in
+        the original initialization.
 
-def create_database(config, dbname, superuser=None):
-    """
-    Creates a new database.
-
-    Default:
-        create_database(config, dbname)
-
-    Note that if a superuser is included in the config, that user must have
-    permissions to create a database.
-
-    Args:
-        config: (str) : Configuration string for the database
-            SQLALCHEMY_DATABASE_URI
-        dbname: (str) : The name of the database.
-        superuser: (str : None) : name to grant privileges to
-            if the database supports it.
-    """
-
-    if _is_sqlite(config):
-        # sqlite does not use CREATE DATABASE
-        return
-    engine = create_engine(config)
-
-    conn = engine.connect()
-    conn.execute("COMMIT;")
-    conn.execute(f"CREATE DATABASE {dbname};")
-
-    conn.execute(f"GRANT ALL PRIVILEGES ON DATABASE {dbname} TO {superuser};")
-    conn.execute(f"ALTER ROLE {superuser} SUPERUSER;")
-
-    conn.close()
-    engine.dispose()
-
-
-def drop_database(config, dbname):
-    """drop_database
-
-    Drops a database
-
-    Default:
-        drop_database(config, dbname, superuser=None)
-
-    Note that if a superuser is included in the config, that user must have
-    permissions to drop a database.
-
-    Args:
-        config: (str) : Configuration string for the database
-            SQLALCHEMY_DATABASE_URI
-        dbname: (str) : The name of the database.
-    """
-
-    if _is_sqlite(config):
-        # sqlite does not use drop database
-        if config.find("memory") == -1:
-            filename = config[config.find("///") + 3:]
-            if os.path.exists(filename):
-                os.remove(filename)
-    else:
-        engine = create_engine(config, poolclass=NullPool)
-
-        conn = engine.connect()
-        conn.execute("COMMIT")
-
-        # close any existing connections
-        # NOTE: break this out later
-        if config.find("postgres") > -1:
-            stmt = " ".join(
-                [
-                    "SELECT pg_terminate_backend(pid)",
-                    "FROM pg_stat_activity WHERE datname = '{}'",
-                ]
-            ).format(dbname)
-
-            conn.execute(stmt)
-
-        result = conn.execute(f"DROP DATABASE IF EXISTS {dbname}")
-        result.close()
-        conn.close()
-        engine.dispose()
+        Args:
+            cls: (Model) : the Model class having the attributes updated.
+        """
+        cls.query = self.session.query(cls)
+        cls.db = self

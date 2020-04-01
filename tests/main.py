@@ -16,6 +16,7 @@ from .test_dbbase.utils import TestUtilities
 from .test_dbbase.base import TestDBBaseClass
 from .test_dbbase.model import TestModelClass
 from .test_dbbase.serializers import TestSerializers
+from .test_dbbase.maint import TestMaint
 
 # list of sample configs to test
 SAMPLE_CONFIGS = "sample_configs.json"
@@ -38,7 +39,6 @@ for config in configs:
     suite.addTests(unittest.makeSuite(TestModelClass))
     suite.addTests(unittest.makeSuite(TestDBBaseClass))
 
-    test_result = unittest.TextTestRunner()
     test_result = unittest.TextTestRunner(failfast=True, verbosity=1).run(
         suite
     )
@@ -57,6 +57,6 @@ for config in configs:
     print("success", test_result.wasSuccessful())
 
     print("completed testing with config: {}".format(config["name"]))
-    os.remove(CONFIG_FILE)
+    # os.remove(CONFIG_FILE)
 
 print("completed all testing")
