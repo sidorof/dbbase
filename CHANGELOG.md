@@ -1,9 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-
-## [Unreleased]
-
 ## [0.1.8] - 2020-04-01
 ### Added
 - Add support for uuids to strings in serialization.
