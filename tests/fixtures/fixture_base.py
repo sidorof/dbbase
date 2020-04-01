@@ -103,19 +103,6 @@ class DBBaseTestCase(BaseTestCase):
         self.db.drop_all(echo=False)
         self.db.Model.metadata.clear()
 
-    def verify_requireds(self, obj, req_dict):
-        """
-        This function receives object and dict of requireds.
-        """
-        cls = self.db.inspect(obj.__class__)
-        for prop in cls.iterate_properties:
-            if isinstance(prop.expression, self.db.Column):
-                if prop.expression.nullable:
-                    print('testing {}'.format(prop.expression.name))
-                    if prop.expression.name in req_dict:
-                        # cannot be nullable
-                        self.assertFalse(prop.expression.nullable)
-
     def tearDown(self):
         self.db.session.commit()
         self.db.orm.session.close_all_sessions()
