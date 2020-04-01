@@ -17,10 +17,11 @@ class Model(object):
     when using flask_sqlalchemy. The primary interest is the embedding of
     references to the database via session and the query object.
 
-    selected elements are:
-    * db.session
-    * db.Model
-    * cls.query
+    selected elements are
+
+    * `db.session`
+    * `db.Model`
+    * `cls.query`
 
     To replicate the process, it needs to pull in db as an import to
     each model module.
