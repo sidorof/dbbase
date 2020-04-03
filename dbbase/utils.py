@@ -94,7 +94,7 @@ def xlate(key, camel_case=True):
     if camel_case:
         return _xlate_camel_case(key)
 
-    return _xlate_from_js(key)
+    return _xlate_from_camel_case(key)
 
 
 def _xlate_camel_case(key):
@@ -105,7 +105,7 @@ def _xlate_camel_case(key):
     return key
 
 
-def _xlate_from_js(key):
+def _xlate_from_camel_case(key):
     """Convert example: startDate -> start_date """
     new_key = ""
     for char in key:

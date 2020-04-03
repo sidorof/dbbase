@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 
 ## [Unreleased]
+## [0.1.8] - 2020-04-01
+### Changed
+* Trivially changed utils._xlate_from_js to utils._xlate_from_camel_case
+  for clarity.
 
 ## [0.1.8] - 2020-04-01
 ### Added
