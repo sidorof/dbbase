@@ -92,9 +92,9 @@ class TestUtilities(BaseTestCase):
         key = "start_date"
         self.assertEqual(_xlate_camel_case(key), "startDate")
 
-    def test_xlate_from_js(self):
+    def test_xlate_from_camel_case(self):
         """Test conversion from js formatting to python."""
-        _xlate_from_js = self.dbbase.utils._xlate_from_js
+        _xlate_from_camel_case = self.dbbase.utils._xlate_from_camel_case
 
         key = "startDate"
-        self.assertEqual(_xlate_from_js(key), "start_date")
+        self.assertEqual(_xlate_from_camel_case(key), "start_date")
