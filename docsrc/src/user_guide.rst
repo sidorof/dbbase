@@ -259,6 +259,8 @@ You have the ability to limit or expand the items that are included.
 
 * **SERIAL_LIST** is a Model class variable that is a list of fields that would be included. Additional methods can be included in this list to enable fields like **fullname** in place of **first_name** and **last_name**.
 
+* **RELATIONS_SERIAL_LIST** is a Model class variable that is a dictionary. With this variable you can specify what fields a relation will show. While you could go to the table definition for that relation and specify it directly, using the RELATIONS_SERIAL_LIST variable enables you to show the specific fields appropriate for when that relationship is included with the current table, but have a standard method when show the relation table directly. An example below will help explain that further.
+
 * **serialize** of course can be overwritten in your class model so if either method is not right for your situation it is easy enough to set right for that particular class yet use the defaults for other tables.
 
 To reduce ambiguity, if **SERIAL_LIST** is used, serialization
@@ -349,7 +351,7 @@ Running **user.serialize()** again we have a more compact result
     }
 ..
 
-Dictionary keys have been not guaranteed to print in a particular
+Dictionary keys have not been guaranteed to print in a particular
 order, although that is changing. If the order of the keys in
 serialization are important in your application, you can control
 that by putting those variables in **SERIAL_LIST**.
@@ -378,6 +380,69 @@ that by putting those variables in **SERIAL_LIST**.
     }
 ..
 
+Example of RELATIONS_SERIAL_LIST
+
+In the example above we controlled the output for Address by using `Address.SERIAL_LIST = ['email_address']`. That means that any time an API would call for an addres only the email address would be returned. If it is **only** going to be returned in conjunction with a user, that may be acceptable. However, there are many secondary relationships where more control would be helpful.
+
+In the following code block we will see our tables created again, but with the use of the RELATIONS_SERIAL_LIST variable to help us to a more refined output.
+
+.. code-block:: python
+
+    class User(db.Model):
+        __tablename__ = 'users'
+        SERIAL_STOPLIST = ['first_name', 'last_name']
+        RELATIONS_SERIAL_LIST = {
+            "Address": ["id", "email_address"]
+        }
+
+        id = db.Column(db.Integer, primary_key=True)
+        first_name = db.Column(db.String(50), nullable=False)
+        last_name =  db.Column(db.String(50), nullable=False)
+        addresses = db.relationship(
+            "Address", backref="user", lazy='immediate')
+
+    def full_name(self):
+        return '{first} {last}'.format(
+            first=self.first_name, last=self.last_name)
+
+
+    class Address(db.Model):
+        __tablename__ = 'addresses'
+
+        id = db.Column(db.Integer, primary_key=True)
+        email_address = db.Column(db.String, nullable=False)
+        user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
+    >>> print(user.serialize(indent=2))
+    {
+      "id": 3,
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "addresses": [
+        {
+          "emailAddress": "email1@example.com",
+          "id": 1
+        },
+        {
+          "emailAddress": "email2@example.com",
+          "id": 2
+        }
+      ]
+    }
+
+..
+When a field is found to be an instance of a class that is a key in the `RELATIONS_SERIAL_LIST` dictionary, the corresponding list is used for that class in place of the default class.
+
+
+Ad Hoc Variables
+
+Both the `serialize` and `to_dict` functions have parameters of `serial_list` and `relation_serial_lists`. If not used, the default class variables are
+used. However, with these variables, you can generate custom serializations on the fly to better match specific requirements.
+
+A natural fall-out of this approach means also that such things as views can be easily created for different audiences.
+
+
 Recursive Serialization
 =======================
 
@@ -385,12 +450,14 @@ For this next section, let us start by first revoking the stop lists and serial 
 
 .. code-block:: python
 
-    >>> User.SERIAL_LIST = None
-    >>> User.SERIAL_STOPLIST = None
+    # assume the class variables are set on the defaults in their class definitions.
+    User.SERIAL_LIST = None
+    User.SERIAL_STOPLIST = None
+    User.RELATIONS_SERIAL_LIST = None
 
-    >>> Address.SERIAL_LIST = None
-    >>> Address.SERIAL_STOPLIST = None
-
+    Address.SERIAL_LIST = None
+    Address.SERIAL_STOPLIST = None
+    Address.RELATIONS_SERIAL_LIST = None
 
     >>> print(user.serialize(indent=2))
     {
@@ -412,6 +479,8 @@ For this next section, let us start by first revoking the stop lists and serial 
       "firstName": "Bob"
     }
 ..
+As a note, if you change such class variables on the fly such as User.SERIAL_LIST, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change `user.SERIAL_LIST` rather than `User.SERIAL_LIST`.
+
 
 So we can see that it is back to the original form. But let's choose **address1.serialize()**.
 

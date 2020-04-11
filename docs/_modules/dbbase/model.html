@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; dbbase 0.1.8 documentation</title>
+    <title>dbbase.model &#8212; dbbase 0.1.9 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.1.8 documentation"
+        <a href="../../index.html" title="dbbase 0.1.9 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.8</span>
+          <span class="md-header-nav__topic">dbbase 0.1.9</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.9 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.1.8 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.1.9 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.1.8 documentation">dbbase 0.1.8</a>
+       title="dbbase 0.1.9 documentation">dbbase 0.1.9</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -307,14 +307,22 @@
 <span class="sd">    the database columns plus any methods that have been created. To</span>
 <span class="sd">    automatically exclude a method, name it with a starting _.</span>
 
-<span class="sd">    `SERIAL_STOPLIST = None`</span>
-<span class="sd">    `SERIAL_LIST = None`</span>
+<span class="sd">    * `SERIAL_STOPLIST = None`</span>
+
+<span class="sd">    * `SERIAL_LIST = None`</span>
+
+<span class="sd">    * `RELATION_SERIAL_LISTS = None`</span>
 
 <span class="sd">    If SERIAL_STOPLIST is a list of column names, those names will be</span>
 <span class="sd">    excluded from serialization.</span>
 
 <span class="sd">    If SERIAL_LIST is a list, serialization will return ONLY those</span>
 <span class="sd">    names in the list and in that order.</span>
+
+<span class="sd">    If RELATION_SERIAL_LISTS is a dict of related fields and a list</span>
+<span class="sd">    of fields that would be used as `SERIAL_LIST` when serializing</span>
+<span class="sd">    this class.</span>
+
 <span class="sd">    """</span>
 
     <span class="c1"># catchall for sqlalchemy classes and functions</span>
@@ -324,6 +332,7 @@
     <span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">=</span> <span class="n">SERIAL_STOPLIST</span>
     <span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">RELATION_SERIAL_LISTS</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">query</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -337,23 +346,22 @@
 <span class="sd">            user.__class__</span>
 <span class="sd">            is __main__.User</span>
 
-<span class="sd">            then this function returns 'user'</span>
+<span class="sd">            then this function returns 'User'</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">class_</span><span class="o">.</span><span class="vm">__name__</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_get_serial_stop_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_serial_stop_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""Return default stop list, class stop list."""</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span>
+            <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">serial_stoplist</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">"SERIAL_STOPLIST must be a list of one or more fields that"</span>
                 <span class="s2">"would not be included in a serialization."</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
 
     <span class="k">def</span> <span class="nf">_get_relationship</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="sd">"""_get_relationship</span>
@@ -439,7 +447,14 @@
 
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_serial_stop_list</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="Model.to_dict"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">level_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.to_dict"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">level_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">relation_serial_lists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Returns columns in a dict. The point of this is to make a useful</span>
 <span class="sd">        default. However, this can't be expected to cover every possibility,</span>
@@ -461,21 +476,36 @@
 <span class="sd">                listed in the set, `to_dict` will not process that class.</span>
 <span class="sd">            sort: (bool) : This flag determines whether the keys will be</span>
 <span class="sd">                sorted.</span>
+<span class="sd">            serial_list (list) : a list of fields to be substituted for</span>
+<span class="sd">                `cls.SERIAL_LIST`</span>
+<span class="sd">            relation_serial_lists (dict) : To enable a more nuanced control of</span>
+<span class="sd">                relations objects, the name of a downstream class and a</span>
+<span class="sd">                list of fields to be typically included with the related</span>
+<span class="sd">                object.</span>
+
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">level_limits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">level_limits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">relation_serial_lists</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">relation_serial_lists</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RELATION_SERIAL_LISTS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">relation_serial_lists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RELATION_SERIAL_LISTS</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span> <span class="ow">in</span> <span class="n">level_limits</span><span class="p">:</span>
             <span class="c1"># it has already been done</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_self_ref</span><span class="p">():</span>
                 <span class="k">return</span> <span class="n">STOP_VALUE</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serial_field_list</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
-            <span class="n">field_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_serial_field_list</span><span class="p">())</span>
 
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">field_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">serial_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">serial_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serial_field_list</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">serial_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">serial_list</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">serial_list</span><span class="p">:</span>
             <span class="c1"># special treatment for relationships</span>
             <span class="n">rel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relations_info</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rel_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -485,14 +515,18 @@
                 <span class="p">):</span>
                     <span class="c1"># stop it right there</span>
                     <span class="n">res</span> <span class="o">=</span> <span class="n">STOP_VALUE</span>
-                    <span class="k">break</span>
+
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">()</span>
 
             <span class="n">res</span> <span class="o">=</span> <span class="n">_eval_value</span><span class="p">(</span>
-                <span class="n">value</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="p">,</span> <span class="n">level_limits</span><span class="p">,</span> <span class="n">source_class</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">to_camel_case</span><span class="p">,</span>
+                <span class="n">level_limits</span><span class="p">,</span>
+                <span class="n">source_class</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_class</span><span class="p">(),</span>
+                <span class="n">relation_serial_lists</span><span class="o">=</span><span class="n">relation_serial_lists</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">to_camel_case</span><span class="p">:</span>
@@ -507,14 +541,18 @@
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="Model.serialize"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.serialize.html#dbbase.model.Model.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">level_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">level_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relation_serial_lists</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">):</span>
         <span class="sd">"""serialize</span>
 
 <span class="sd">        Output JSON formatted model.</span>
 
 <span class="sd">        Default:</span>
-<span class="sd">            serialize(to_camel_case=True, level_limits=None, sort=False, indent=None)</span>
+<span class="sd">            serialize(</span>
+<span class="sd">                to_camel_case=True, level_limits=None, sort=False,</span>
+<span class="sd">                indent=None, serial_list=None, relation_serial_lists=None</span>
+<span class="sd">            )</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            to_camel_case (boolean) True converts to camel case.</span>
@@ -525,6 +563,12 @@
 <span class="sd">                sorted.</span>
 <span class="sd">            indent: (integer : None) The number of spaces to indent to improve</span>
 <span class="sd">                readability.</span>
+<span class="sd">            serial_list (None | list) : a list of fields to be substituted for</span>
+<span class="sd">                `cls.SERIAL_LIST`</span>
+<span class="sd">            relation_serial_lists (None | dict) : To enable a more nuanced</span>
+<span class="sd">                control of relations objects, the name of a downstream class</span>
+<span class="sd">                and a list of fields to be typically included with the related</span>
+<span class="sd">                object.</span>
 
 <span class="sd">        return</span>
 <span class="sd">            JSON formatted string of the data.</span>
@@ -534,6 +578,8 @@
                 <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">,</span>
                 <span class="n">level_limits</span><span class="o">=</span><span class="n">level_limits</span><span class="p">,</span>
                 <span class="n">sort</span><span class="o">=</span><span class="n">sort</span><span class="p">,</span>
+                <span class="n">serial_list</span><span class="o">=</span><span class="n">serial_list</span><span class="p">,</span>
+                <span class="n">relation_serial_lists</span><span class="o">=</span><span class="n">relation_serial_lists</span>
             <span class="p">),</span>
             <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
         <span class="p">)</span></div>
@@ -629,7 +675,7 @@
               
           </div>
             Last updated on
-              Apr 01, 2020.
+              Apr 10, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

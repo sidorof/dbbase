@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model.Model.to_dict &#8212; dbbase 0.1.8 documentation</title>
+    <title>dbbase.model.Model.to_dict &#8212; dbbase 0.1.9 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="dbbase 0.1.8 documentation"
+        <a href="../index.html" title="dbbase 0.1.9 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.8</span>
+          <span class="md-header-nav__topic">dbbase 0.1.9</span>
           <span class="md-header-nav__topic"> dbbase.model.Model.to_dict </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.1.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.1.9 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="dbbase 0.1.8 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="dbbase 0.1.9 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="dbbase 0.1.8 documentation">dbbase 0.1.8</a>
+       title="dbbase 0.1.9 documentation">dbbase 0.1.9</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -235,6 +235,11 @@
       <a href="../license.html" class="md-nav__link">License</a>
       
     </li>
+    <li class="md-nav__item">
+    
+      <a href="../changelog.html" class="md-nav__link">Changelog</a>
+      
+    </li>
   </ul>
   
 
@@ -266,7 +271,7 @@
 <h1 id="generated-dbbase-model-model-to-dict--page-root">dbbase.model.Model.to_dict<a class="headerlink" href="#generated-dbbase-model-model-to-dict--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="dbbase.model.Model.to_dict">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><em class="sig-param">to_camel_case=True</em>, <em class="sig-param">level_limits=None</em>, <em class="sig-param">sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/model.html#Model.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.model.Model.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><em class="sig-param">to_camel_case=True</em>, <em class="sig-param">level_limits=None</em>, <em class="sig-param">sort=False</em>, <em class="sig-param">serial_list=None</em>, <em class="sig-param">relation_serial_lists=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/model.html#Model.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.model.Model.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns columns in a dict. The point of this is to make a useful
 default. However, this can’t be expected to cover every possibility,
 so of course it can be overwritten in any particular model.</p>
@@ -284,6 +289,12 @@ Decimal =&gt; str</p>
 listed in the set, <cite>to_dict</cite> will not process that class.</p>
 </dd>
 <dt>sort: (bool)<span class="classifier">This flag determines whether the keys will be</span></dt><dd><p>sorted.</p>
+</dd>
+<dt>serial_list (list)<span class="classifier">a list of fields to be substituted for</span></dt><dd><p><cite>cls.SERIAL_LIST</cite></p>
+</dd>
+<dt>relation_serial_lists (dict)<span class="classifier">To enable a more nuanced control of</span></dt><dd><p>relations objects, the name of a downstream class and a
+list of fields to be typically included with the related
+object.</p>
 </dd>
 </dl>
 </dd>
@@ -315,7 +326,7 @@ listed in the set, <cite>to_dict</cite> will not process that class.</p>
               
           </div>
             Last updated on
-              Apr 01, 2020.
+              Apr 10, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

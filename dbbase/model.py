@@ -37,9 +37,11 @@ class Model(object):
     the database columns plus any methods that have been created. To
     automatically exclude a method, name it with a starting _.
 
-    `SERIAL_STOPLIST = None`
-    `SERIAL_LIST = None`
-    `RELATION_SERIAL_LISTS = None`
+    * `SERIAL_STOPLIST = None`
+
+    * `SERIAL_LIST = None`
+
+    * `RELATION_SERIAL_LISTS = None`
 
     If SERIAL_STOPLIST is a list of column names, those names will be
     excluded from serialization.
