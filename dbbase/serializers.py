@@ -28,10 +28,14 @@ SERIAL_STOPLIST = [
     "to_dict",
     "SERIAL_STOPLIST",
     "SERIAL_LIST",
+    "RELATION_SERIAL_LISTS"
 ]
 
 
-def _eval_value(value, to_camel_case, level_limits, source_class):
+def _eval_value(
+        value, to_camel_case, level_limits, source_class,
+        relation_serial_lists
+    ):
     """ _eval_value
 
     This function converts some of the standard values as needed based
@@ -64,13 +68,21 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
     elif isinstance(value, list):
         if len(value) > 0:
             result, level_limits = _eval_value_list(
-                value, to_camel_case, level_limits, source_class
+                value,
+                to_camel_case,
+                level_limits,
+                source_class,
+                relation_serial_lists,
             )
         else:
             result = []
     elif hasattr(value, "to_dict"):
         result, level_limits = _eval_value_model(
-            value, to_camel_case, level_limits, source_class
+            value,
+            to_camel_case,
+            level_limits,
+            source_class,
+            relation_serial_lists,
         )
     else:
         result = value
@@ -78,21 +90,44 @@ def _eval_value(value, to_camel_case, level_limits, source_class):
     return result
 
 
-def _eval_value_model(value, to_camel_case, level_limits, source_class):
+def _eval_value_model(
+        value, to_camel_case, level_limits, source_class,
+        relation_serial_lists
+    ):
     """_eval_value_model
 
     if any class within level_limits i self-referential it gets
     passed on.
     """
     result = STOP_VALUE
+    class_name = value._class()
+    if class_name in level_limits and not value._has_self_ref:
+        # already done
+        return result
+
+    serial_list = value.SERIAL_LIST
+
+    if class_name in relation_serial_lists:
+        serial_list = relation_serial_lists[class_name]
+
     if source_class is not None:
         level_limits.add(source_class)
-    result = value.to_dict(to_camel_case, level_limits=level_limits)
-    level_limits.add(value._class())
+
+    result = value.to_dict(
+        to_camel_case,
+        level_limits=level_limits,
+        serial_list=serial_list,
+        relation_serial_lists=relation_serial_lists)
+
+    level_limits.add(class_name)
+
     return result, level_limits
 
 
-def _eval_value_list(value, to_camel_case, level_limits, source_class):
+def _eval_value_list(
+        value, to_camel_case, level_limits, source_class,
+        relation_serial_lists
+    ):
     """_eval_value_list
 
     This function handles values that are lists. While a list that is not
@@ -122,10 +157,20 @@ def _eval_value_list(value, to_camel_case, level_limits, source_class):
                     status = False
             if status:
                 result, tmp_limits = _eval_value_model(
-                    item, to_camel_case, tmp_limits, source_class
+                    item,
+                    to_camel_case,
+                    tmp_limits,
+                    source_class,
+                    relation_serial_lists,
                 )
         else:
-            result = _eval_value(item, to_camel_case, tmp_limits, source_class)
+            result = _eval_value(
+                item,
+                to_camel_case,
+                tmp_limits,
+                source_class,
+                relation_serial_lists,
+            )
 
         tmp_list.append(result)
 

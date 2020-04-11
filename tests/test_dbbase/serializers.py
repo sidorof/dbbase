@@ -16,6 +16,23 @@ def init_variables(obj):
     obj.level_limits = set()
 
 
+def reset_serial_variables(cls, objs):
+    """Reset serial variables back to null"""
+    cls.SERIAL_LIST = None
+    cls.SERIAL_STOPLIST = None
+    cls.RELATION_SERIAL_LISTS = None
+
+    if isinstance(objs, list):
+        for obj in objs:
+            obj.SERIAL_LIST = cls.SERIAL_LIST
+            obj.SERIAL_STOPLIST = cls.SERIAL_STOPLIST
+            obj.RELATION_SERIAL_LISTS = cls.RELATION_SERIAL_LISTS
+    else:
+        objs.SERIAL_LIST = cls.SERIAL_LIST
+        objs.SERIAL_STOPLIST = cls.SERIAL_STOPLIST
+        objs.RELATION_SERIAL_LISTS = cls.RELATION_SERIAL_LISTS
+
+
 class TestSerializers(DBBaseTestCase):
     """Test class for serializers """
 
@@ -31,49 +48,49 @@ class TestSerializers(DBBaseTestCase):
         value = 1
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = datetime(2020, 7, 24, 12, 31, 5)
         self.assertEqual(
             "2020-07-24 12:31:05",
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = date(2020, 7, 24)
         self.assertEqual(
             "2020-07-24",
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = 123.456
         self.assertAlmostEqual(
             123.456,
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = Decimal("123.456")
         self.assertEqual(
             "123.456",
-            _eval_value(value, self.to_camel_case, self.level_limits, None),
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
         )
 
         value = uuid.uuid4()
         self.assertEqual(
             str(value),
-            _eval_value(value, self.to_camel_case, self.level_limits, None)
+            _eval_value(value, self.to_camel_case, self.level_limits, None, None)
         )
 
     def test_eval_value(self):
@@ -123,6 +140,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
@@ -134,6 +152,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=False,
                 level_limits=set(),
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
@@ -147,6 +166,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=False,
                 level_limits=level_limits,
                 source_class=value._class(),
+                relation_serial_lists={}
             ),
         )
 
@@ -216,12 +236,12 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
         value = user
         level_limits = set()
-
         self.assertDictEqual(
             {
                 "id": user.id,
@@ -244,6 +264,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
@@ -284,6 +305,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
@@ -303,6 +325,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
@@ -383,9 +406,11 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
+        # starting with address
         # should find and include the user data as well
         value = address1
         level_limits = set()
@@ -404,15 +429,18 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
+
         # test modifications via serial stop lists
         # do it wrong first
-        Address.SERIAL_STOPLIST = "user_id"
+        address1.SERIAL_STOPLIST = "user_id"
         self.assertRaises(ValueError, address1._get_serial_stop_list)
 
         # now remove user_id from via the stop list
-        Address.SERIAL_STOPLIST = ["user_id"]
+        reset_serial_variables(Address, [address1, address2])
+        address1.SERIAL_STOPLIST = ["user_id"]
         self.assertSetEqual(
             set(["id", "email_address", "user"]),
             set(address1.get_serial_field_list()),
@@ -420,11 +448,16 @@ class TestSerializers(DBBaseTestCase):
 
         # now add email_address to the include list
         # do it wrong first
-        Address.SERIAL_LIST = "email_address"
+        reset_serial_variables(Address, [address1, address2])
+        address1.SERIAL_LIST = "email_address"
         self.assertRaises(ValueError, address1.get_serial_field_list)
 
         # now add email_address to the include list
-        Address.SERIAL_LIST = ["email_address"]
+        reset_serial_variables(Address, [address1, address2])
+
+        # see how this is changed now at the instance level
+        address1.SERIAL_LIST = ["email_address"]
+        address2.SERIAL_LIST = ["email_address"]
         self.assertSetEqual(
             set(["email_address"]), set(address1.get_serial_field_list())
         )
@@ -442,13 +475,14 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
         # Combine user and addresses
-        # still uses SERIAL_LIST from above for addresses
         value = user
         level_limits = set()
+        reset_serial_variables(User, user)
         self.assertTupleEqual(
             (
                 {
@@ -470,14 +504,14 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
 
         # Combine user and addresses
         # release SERIAL_LIST restrictions
         # SERIAL_STOPLIST
-        Address.SERIAL_LIST = None
-        Address.SERIAL_STOPLIST = []
+        reset_serial_variables(Address, [address1, address2])
 
         value = user
         level_limits = set()
@@ -510,8 +544,47 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
+                relation_serial_lists={}
             ),
         )
+
+        # modify address via relation_serial_lists
+        level_limits = set()
+        value = user
+        self.assertTupleEqual(
+            (
+                {
+                    "id": user.id,
+                    "name": "Bob",
+                    "addresses": [
+                        {
+                            "emailAddress": "email1@example.com",
+                        },
+                        {
+                            "emailAddress": "email2@example.com",
+                        },
+                    ],
+                },
+                # same note as above
+                # NOTE: not quite sure if address should be included here
+                #       it certainly processed an address enough to get the
+                #       address.
+                set([user._class()]),
+            ),
+            _eval_value_model(
+                value,
+                to_camel_case=True,
+                level_limits=level_limits,
+                source_class=None,
+                relation_serial_lists={'Address': ['email_address']}
+            ),
+        )
+
+        # check the aftermath
+        self.assertIsNone(Address.SERIAL_LIST)
+        self.assertIsNone(address1.SERIAL_LIST)
+        self.assertIsNone(address1.SERIAL_LIST)
+
 
     def test_eval_value_model_self_referential(self):
         """Test test_eval_value_model_self_referential
@@ -614,5 +687,6 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
+                relation_serial_lists={}
             ),
         )

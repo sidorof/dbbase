@@ -62,22 +62,31 @@ print(user.serialize(indent=2))
 input('ready')
 
 # ------------------------------------------------
-User.SERIAL_LIST = None
-User.SERIAL_STOPLIST = []
-User.SERIAL_STOPLIST = None
 
-Address.SERIAL_LIST = None
-Address.SERIAL_STOPLIST = []
-Address.SERIAL_STOPLIST = None
-
-print('full again')
-print(user.serialize(indent=2, sort=True))
+print('Now ad hoc variables')
+print('user serial_list is {}'.format("['id', 'first_name', 'last_name', 'addresses']"))
+print('user relation_serial_lists is {}'.format("{'Address': ['id', 'email_address'] "))
+print(
+    user.serialize(
+        indent=2,
+        sort=True,
+        serial_list=['id', 'first_name', 'last_name', 'addresses'],
+        relation_serial_lists={
+            'Address': ['id', 'email_address']
+        }
+    )
+)
 input('ready')
 print()
 print('serialization of just an address')
-print(address1.serialize(indent=2, sort=True))
+print(
+    address1.serialize(
+        indent=2,
+        sort=True,
+        serial_list=['id', 'email_address'],
+        relation_serial_lists={
+            'User': ['user_id', 'first_name', 'last_name']
+        }
+    )
+)
 input('ready')
-
-# ------------------------------------------------
-User.SERIAL_LIST = ['id', 'first_name', 'last_name', 'addresses']
-print(user.serialize(indent=2))

@@ -31,6 +31,7 @@ Model
 
    .. autosummary::
    
+      ~Model.RELATION_SERIAL_LISTS
       ~Model.SERIAL_LIST
       ~Model.SERIAL_STOPLIST
       ~Model.db

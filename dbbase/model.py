@@ -37,14 +37,22 @@ class Model(object):
     the database columns plus any methods that have been created. To
     automatically exclude a method, name it with a starting _.
 
-    `SERIAL_STOPLIST = None`
-    `SERIAL_LIST = None`
+    * `SERIAL_STOPLIST = None`
+
+    * `SERIAL_LIST = None`
+
+    * `RELATION_SERIAL_LISTS = None`
 
     If SERIAL_STOPLIST is a list of column names, those names will be
     excluded from serialization.
 
     If SERIAL_LIST is a list, serialization will return ONLY those
     names in the list and in that order.
+
+    If RELATION_SERIAL_LISTS is a dict of related fields and a list
+    of fields that would be used as `SERIAL_LIST` when serializing
+    this class.
+
     """
 
     # catchall for sqlalchemy classes and functions
@@ -54,6 +62,7 @@ class Model(object):
     _DEFAULT_SERIAL_STOPLIST = SERIAL_STOPLIST
     SERIAL_STOPLIST = None
     SERIAL_LIST = None
+    RELATION_SERIAL_LISTS = None
 
     query = None
 
@@ -67,23 +76,22 @@ class Model(object):
             user.__class__
             is __main__.User
 
-            then this function returns 'user'
+            then this function returns 'User'
         """
-        return cls.__table__.name.lower()
+        return cls.db.inspect(cls).class_.__name__
 
-    @classmethod
-    def _get_serial_stop_list(cls):
+    def _get_serial_stop_list(self):
         """Return default stop list, class stop list."""
-        if cls.SERIAL_STOPLIST is None:
+        if self.SERIAL_STOPLIST is None:
             serial_stoplist = []
         else:
-            serial_stoplist = cls.SERIAL_STOPLIST
+            serial_stoplist = self.SERIAL_STOPLIST
         if not isinstance(serial_stoplist, list):
             raise ValueError(
                 "SERIAL_STOPLIST must be a list of one or more fields that"
                 "would not be included in a serialization."
             )
-        return cls._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
+        return self._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
 
     def _get_relationship(self, field):
         """_get_relationship
@@ -169,7 +177,14 @@ class Model(object):
 
         return list(set(fields) - set(self._get_serial_stop_list()))
 
-    def to_dict(self, to_camel_case=True, level_limits=None, sort=False):
+    def to_dict(
+        self,
+        to_camel_case=True,
+        level_limits=None,
+        sort=False,
+        serial_list=None,
+        relation_serial_lists=None,
+    ):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
@@ -191,21 +206,36 @@ class Model(object):
                 listed in the set, `to_dict` will not process that class.
             sort: (bool) : This flag determines whether the keys will be
                 sorted.
+            serial_list (list) : a list of fields to be substituted for
+                `cls.SERIAL_LIST`
+            relation_serial_lists (dict) : To enable a more nuanced control of
+                relations objects, the name of a downstream class and a
+                list of fields to be typically included with the related
+                object.
+
         """
         self.db.session.flush()
         if level_limits is None:
             level_limits = set()
+
+        if relation_serial_lists is None:
+            relation_serial_lists = {}
+            if self.RELATION_SERIAL_LISTS is not None:
+                relation_serial_lists = self.RELATION_SERIAL_LISTS
 
         if self._class() in level_limits:
             # it has already been done
             if not self._has_self_ref():
                 return STOP_VALUE
         result = {}
-        field_list = self.get_serial_field_list()
-        if sort:
-            field_list = sorted(self.get_serial_field_list())
 
-        for key in field_list:
+        if serial_list is None:
+            serial_list = self.get_serial_field_list()
+
+        if sort:
+            serial_list = sorted(serial_list)
+
+        for key in serial_list:
             # special treatment for relationships
             rel_info = self._relations_info(key)
             if rel_info is not None:
@@ -215,14 +245,18 @@ class Model(object):
                 ):
                     # stop it right there
                     res = STOP_VALUE
-                    break
+
             value = self.__getattribute__(key)
 
             if callable(value):
                 value = value()
 
             res = _eval_value(
-                value, to_camel_case, level_limits, source_class=self._class()
+                value,
+                to_camel_case,
+                level_limits,
+                source_class=self._class(),
+                relation_serial_lists=relation_serial_lists,
             )
 
             if to_camel_case:
@@ -237,14 +271,18 @@ class Model(object):
         return result
 
     def serialize(
-        self, to_camel_case=True, level_limits=None, sort=False, indent=None
-    ):
+            self, to_camel_case=True, level_limits=None, sort=False, indent=None,
+            serial_list=None, relation_serial_lists=None
+        ):
         """serialize
 
         Output JSON formatted model.
 
         Default:
-            serialize(to_camel_case=True, level_limits=None, sort=False, indent=None)
+            serialize(
+                to_camel_case=True, level_limits=None, sort=False,
+                indent=None, serial_list=None, relation_serial_lists=None
+            )
 
         Args:
             to_camel_case (boolean) True converts to camel case.
@@ -255,6 +293,12 @@ class Model(object):
                 sorted.
             indent: (integer : None) The number of spaces to indent to improve
                 readability.
+            serial_list (None | list) : a list of fields to be substituted for
+                `cls.SERIAL_LIST`
+            relation_serial_lists (None | dict) : To enable a more nuanced
+                control of relations objects, the name of a downstream class
+                and a list of fields to be typically included with the related
+                object.
 
         return
             JSON formatted string of the data.
@@ -264,6 +308,8 @@ class Model(object):
                 to_camel_case=to_camel_case,
                 level_limits=level_limits,
                 sort=sort,
+                serial_list=serial_list,
+                relation_serial_lists=relation_serial_lists
             ),
             indent=indent,
         )

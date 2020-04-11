@@ -259,8 +259,8 @@ class TestModelClass(DBBaseTestCase):
         table1 = Table1(name="test").save()
         table2 = Table2(name="test").save()
 
-        self.assertEqual("table1", table1._class())
-        self.assertEqual("table2", table2._class())
+        self.assertEqual("Table1", table1._class())
+        self.assertEqual("Table2", table2._class())
 
     def test__get_serial_stop_list(self):
         """Test get_serial_stop_list """
@@ -277,12 +277,12 @@ class TestModelClass(DBBaseTestCase):
 
         Table1.SERIAL_STOPLIST = "potato"
 
-        self.assertRaises(ValueError, Table1._get_serial_stop_list)
+        self.assertRaises(ValueError, Table1._get_serial_stop_list, Table1)
 
         # does SERIAL_STOPLIST get screened?
         Table1.SERIAL_STOPLIST = ["potato"]
 
-        self.assertIn("potato", Table1._get_serial_stop_list())
+        self.assertIn("potato", Table1._get_serial_stop_list(Table1))
 
     def test__get_relationship_none(self):
         """test__get_relationship_none"""
@@ -556,6 +556,83 @@ class TestModelClass(DBBaseTestCase):
                 )
             ),
             str(OrderedDict(node1.to_dict(to_camel_case=True, sort=False))),
+        )
+
+        # test ad hoc serial list
+        self.assertDictEqual(
+            {'parentId': None},
+            node1.to_dict(serial_list=['parent_id'])
+        )
+
+        # test ad hoc serial list with children
+        # serial list should be only with parent not children
+        #   since it is updating self rather than cls
+        self.assertDictEqual(
+            {
+                'id': 1,
+                'children': [
+                    {
+                        'id': 2,
+                        'parentId': 1,
+                        'data': 'this is node2',
+                        'children': [
+                            {
+                                'id': 3,
+                                'parentId': 2,
+                                'data': 'this is node3',
+                                'children': []
+                            }
+                        ]
+                    }
+                ]
+            },
+            node1.to_dict(serial_list=['id', 'children'])
+        )
+
+        # test serial list for relations not the parent
+        # parent will be complete, children will be limited
+        self.assertDictEqual(
+            {
+                "id": 1,
+                "parentId": None,
+                "data": "this is node1",
+                "children": [
+                    {
+                        "id": 2,
+                        "children": [
+                            {
+                                "id": 3,
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            node1.to_dict(
+                relation_serial_lists={'Node': ['id', 'children']})
+        )
+        # test both serial list and relation_serial_lists
+        # this is equivalent to having set the class SERIAL_LIST
+        #   in the first place.
+        self.assertDictEqual(
+            {
+                "id": 1,
+                "children": [
+                    {
+                        "id": 2,
+                        "children": [
+                            {
+                                "id": 3,
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            node1.to_dict(
+                serial_list=['id', 'children'],
+                relation_serial_lists={'Node': ['id', 'children']}
+            )
         )
 
     def test_serialize(self):
