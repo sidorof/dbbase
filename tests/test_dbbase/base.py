@@ -74,4 +74,3 @@ class TestDBBaseClass(DBBaseTestCase):
         # test self.attributes
 
         # test return
-

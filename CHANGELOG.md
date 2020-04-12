@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.10] -
+### Changed
+*   Changed base._apply_db to recognize materialized views as well as
+    regular tables.
+
+
 ## [0.1.9] -
 ### Added
 * Added to Model.to_dict and Model.serialize a parameter, `serial_list`,

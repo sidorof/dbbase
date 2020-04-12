@@ -172,9 +172,6 @@ class DB(object):
             bind = self.session.bind
         self.Model.metadata.create_all(bind, checkfirst=checkfirst)
         self._apply_db()
-        for cls in self.Model._decl_class_registry.values():
-            if hasattr(cls, "__tablename__"):
-                cls.query = self.session.query(cls)
 
     def _apply_db(self):
         """ _apply_db
@@ -184,9 +181,9 @@ class DB(object):
         db has changed from the original creation of the Model.
         """
         for cls in self.Model._decl_class_registry.values():
-            if hasattr(cls, "__tablename__"):
-                cls.query = self.session.query(cls)
-                cls.db = self
+            if hasattr(cls, '__table__'):
+                if isinstance(cls.__table__, self.Table):
+                    self.apply_db(cls)
 
     def apply_db(self, cls):
         """ apply_db
