@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.11] -
+### Removed
+*   Removed tests, docs, docsrc from setup.py
+
+
 ## [0.1.10] -
 ### Changed
 *   Changed base._apply_db to recognize materialized views as well as
