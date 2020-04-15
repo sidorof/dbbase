@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.12] -
+### Removed
+*   Removed tests again. Included more thorough approach.
+
 ## [0.1.11] -
 ### Removed
 *   Removed tests, docs, docsrc from setup.py
