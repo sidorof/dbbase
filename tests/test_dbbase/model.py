@@ -709,6 +709,26 @@ class TestModelClass(DBBaseTestCase):
             table1.deserialize(data, from_camel_case=True),
         )
 
+        # test for byte conversion
+        data = json.dumps(
+            [
+                {"id": 3, "longName": "this is a long name"},
+                {"id": 4, "longName": "this is a long name"},
+            ]
+        )
+        self.assertIsInstance(data, str)
+
+        data = data.encode()
+        self.assertIsInstance(data, bytes)
+
+        self.assertListEqual(
+            [
+                {"id": 3, "long_name": "this is a long name"},
+                {"id": 4, "long_name": "this is a long name"},
+            ],
+            table1.deserialize(data, from_camel_case=True),
+        )
+
     def test_save(self):
         """test_save"""
 

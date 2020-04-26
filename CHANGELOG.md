@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.13] -
+### Added
+*   Added conversion from bytes as well as strings for the
+    deserialization function. This aids in conversion for
+    query_strings received, eliminating a step.
+
 ## [0.1.12] -
 ### Removed
 *   Removed tests again. Included more thorough approach.
