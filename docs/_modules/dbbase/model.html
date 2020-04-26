@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; dbbase 0.1.12 documentation</title>
+    <title>dbbase.model &#8212; dbbase 0.1.13 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.1.12 documentation"
+        <a href="../../index.html" title="dbbase 0.1.13 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.12</span>
+          <span class="md-header-nav__topic">dbbase 0.1.13</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.12 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.13 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.1.12 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.1.13 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.1.12 documentation">dbbase 0.1.12</a>
+       title="dbbase 0.1.13 documentation">dbbase 0.1.13</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -598,7 +598,7 @@
 <span class="sd">            deserialize(data, from_camel_case=True)</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            data: (str : dict) : JSON string that is to be converted back to</span>
+<span class="sd">            data: (bytes : str : dict) : JSON string that is to be converted back to</span>
 <span class="sd">                a dict. `data` can also be a dict or list that simply needs to</span>
 <span class="sd">                have the keys converted to snake_case.</span>
 <span class="sd">            from_camel_case: (bool) : True will cause the keys to be converted</span>
@@ -606,7 +606,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            data (obj) : the converted data</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="c1"># assume json</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
