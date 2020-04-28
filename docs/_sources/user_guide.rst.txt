@@ -161,6 +161,53 @@ Or, saving can be done via:
   user = User(name='Bob').save()
 ..
 
+Deletion can also be done via the instance.
+
+.. code-block:: python
+
+  # dbbase
+  user = User(name='Bob')
+  User.save()
+
+  # then delete
+  user.delete()
+..
+
+
+-----------------
+Record Validation
+-----------------
+
+A minor check can be performed prior to saving a record to ensure that all required fields have values. If there are any default values for the table, those will be ignored, but otherwise you can get a quick list of required columns without values.
+
+.. code-block:: python
+
+    status, errors = self.validate_record()
+    if status:
+        self.save()
+    else:
+        return errors
+..
+
+Suppose you have a user table with required first and last names. A user is created, but for some reason the last name is not filled in.
+
+.. code-block:: python
+
+    status, errors = user.validate_record()
+
+    >> False, {"missing_values": ["last_name"]}
+..
+
+For consistency when communicating from an API to a front end application, a conversion to camel case can be done as well.
+
+
+.. code-block:: python
+
+    status, errors = user.validate_record(camel_case=True)
+
+    >> False, {"missingValues": ["lastName"]}
+..
+
 
 Caveat
 

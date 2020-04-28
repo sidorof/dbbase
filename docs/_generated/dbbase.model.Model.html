@@ -45,7 +45,7 @@
   
   
   
-    <title>Model &#8212; dbbase 0.1.13 documentation</title>
+    <title>Model &#8212; dbbase 0.1.14 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="dbbase 0.1.13 documentation"
+        <a href="../index.html" title="dbbase 0.1.14 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.13</span>
+          <span class="md-header-nav__topic">dbbase 0.1.14</span>
           <span class="md-header-nav__topic"> Model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.1.13 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.1.14 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="dbbase 0.1.13 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="dbbase 0.1.14 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="dbbase 0.1.13 documentation">dbbase 0.1.13</a>
+       title="dbbase 0.1.14 documentation">dbbase 0.1.14</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -311,20 +311,26 @@ this class.</p>
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize" title="dbbase.model.Model.deserialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize</span></code></a>(data[, from_camel_case])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.delete.html#dbbase.model.Model.delete" title="dbbase.model.Model.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a>()</p></td>
+<td><p>This function deletes and commits the object via session.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize" title="dbbase.model.Model.deserialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize</span></code></a>(data[, from_camel_case])</p></td>
 <td><p>Convert back to column names that are more pythonic.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_field_list.html#dbbase.model.Model.get_serial_field_list" title="dbbase.model.Model.get_serial_field_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_field_list</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_field_list.html#dbbase.model.Model.get_serial_field_list" title="dbbase.model.Model.get_serial_field_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_field_list</span></code></a>()</p></td>
 <td><p>This function returns a list of table properties that will be used in serialization.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.save.html#dbbase.model.Model.save" title="dbbase.model.Model.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.save.html#dbbase.model.Model.save" title="dbbase.model.Model.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
 <td><p>This function saves adds and commits the object via session.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.serialize.html#dbbase.model.Model.serialize" title="dbbase.model.Model.serialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize</span></code></a>([to_camel_case, level_limits, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.serialize.html#dbbase.model.Model.serialize" title="dbbase.model.Model.serialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize</span></code></a>([to_camel_case, level_limits, …])</p></td>
 <td><p>Output JSON formatted model.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict" title="dbbase.model.Model.to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_dict</span></code></a>([to_camel_case, level_limits, sort, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict" title="dbbase.model.Model.to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_dict</span></code></a>([to_camel_case, level_limits, sort, …])</p></td>
 <td><p>Returns columns in a dict.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.validate_record.html#dbbase.model.Model.validate_record" title="dbbase.model.Model.validate_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_record</span></code></a>([camel_case])</p></td>
+<td><p>This function attempts to report any missing data from a record.</p></td>
 </tr>
 </tbody>
 </table>
@@ -382,7 +388,7 @@ this class.</p>
               
           </div>
             Last updated on
-              Apr 26, 2020.
+              Apr 28, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -12,6 +12,8 @@ Model
    .. autosummary::
       :toctree: ../_generated/
    
+         ~Model.delete
+      
          ~Model.deserialize
       
          ~Model.get_serial_field_list
@@ -21,6 +23,8 @@ Model
          ~Model.serialize
       
          ~Model.to_dict
+      
+         ~Model.validate_record
       
    
    

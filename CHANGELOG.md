@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.1.14] -
+### Added
+*   Added a function `validate_record` to the Model class. The
+    initial version evaluates a record by comparing columns defined as required
+    that do not have default values filled in. Of course more issues can
+    contribute to a failure to save a record, but it is a start. It also
+    has the ability to return the error message in camel case for front end
+    use.
+    The expected usage:
+
+```python
+        status, errors = self.validate_record()
+        if status:
+            self.save()
+        else:
+            return errors
+```
+*  Added a `delete` function to the Model class.
+
+```python
+
+  # dbbase
+  user = User(name='Bob')
+  User.save()
+
+  # then delete
+  user.delete()
+```
+
+
 ## [0.1.13] -
 ### Added
 *   Added conversion from bytes as well as strings for the
@@ -23,7 +53,7 @@
 
 ## [0.1.9] -
 ### Added
-* Added to Model.to_dict and Model.serialize a parameter, `serial_list`,
+* Added to `Model.to_dict` and `Model.serialize` a parameter, `serial_list`,
   `serial_list` enables displacing the class `SERIAL_LIST` attribute for
   on an ad hoc basis to the fields that are included in serialization.
 * Added a class attribute, `RELATION_SERIAL_LISTS`, to better control the
@@ -38,11 +68,11 @@
 ### Changed
 * Trivially changed utils._xlate_from_js to utils._xlate_from_camel_case
   for clarity.
-* Changed Model._get_serial_stop_list from a class method. It is only
+* Changed `Model._get_serial_stop_list` from a class method. It is only
   useful with an instance.
 
 ### Fixed
-* Fixed Model._class() function. When used as part of a Python package, it
+* Fixed `Model._class()` function. When used as part of a Python package, it
   identified the class as DeclarativeMeta rather than the correct class
   name. Also, it now works for Postgres materialized views.
 
