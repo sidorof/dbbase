@@ -91,7 +91,9 @@ class Model(object):
                 "SERIAL_STOPLIST must be a list of one or more fields that"
                 "would not be included in a serialization."
             )
-        return self._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
+        return (
+            self._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
+        )
 
     def _get_relationship(self, field):
         """_get_relationship
@@ -271,9 +273,14 @@ class Model(object):
         return result
 
     def serialize(
-            self, to_camel_case=True, level_limits=None, sort=False, indent=None,
-            serial_list=None, relation_serial_lists=None
-        ):
+        self,
+        to_camel_case=True,
+        level_limits=None,
+        sort=False,
+        indent=None,
+        serial_list=None,
+        relation_serial_lists=None,
+    ):
         """serialize
 
         Output JSON formatted model.
@@ -309,7 +316,7 @@ class Model(object):
                 level_limits=level_limits,
                 sort=sort,
                 serial_list=serial_list,
-                relation_serial_lists=relation_serial_lists
+                relation_serial_lists=relation_serial_lists,
             ),
             indent=indent,
         )
@@ -380,3 +387,85 @@ class Model(object):
         self.db.session.add(self)
         self.db.session.commit()
         return self
+
+    def delete(self):
+        """delete
+
+        This function deletes and commits the object via session.
+
+        Since this can of course be overwritten in your class to
+        simply mark the record as inactive to avoid losing an
+        audit trail.
+
+        Default:
+            delete()
+
+        Return
+            None
+        """
+        self.db.session.delete(self)
+        self.db.session.commit()
+
+    def _null_columns(self):
+        """_null_columns
+
+        This function walks the columns and lists any columns that are null.
+        """
+        return [
+            column.name
+            for column in self.__table__.columns
+            if getattr(self, column.name) is None
+        ]
+
+    def validate_record(self, camel_case=False):
+        """validate_record
+
+        This function attempts to report any missing data from a
+        record. Intended to be run just prior to saving, the idea is that
+        meaningful feedback could be provided without raising an error in
+        the database.
+
+        The function walks the record for required fields. If there
+        are no defaults, local or server, that will be filled in for that
+        column that triggers a report.
+
+        The response is a dict with a key of "missing_values". There may
+        be other keys added later to further evaluate the record.
+
+        Default:
+            validate_record(camel_case=False)
+
+        Args:
+            camel_case (bool) : error message converted to camel case
+
+        Return
+            status (bool) : True if no errors found
+            error_dict (None : dict ) | a dict that contains an error list
+        """
+        errors = []
+        tmp = self.db.inspect(self.__class__).all_orm_descriptors
+        null_cols = self._null_columns()
+        for column in null_cols:
+            expr = tmp[column].expression
+            status = True
+            if expr.nullable is False:
+                if expr.default is not None:
+                    status = False
+                if expr.server_default is not None:
+                    status = False
+                if expr.server_onupdate is not None:
+                    status = False
+                if expr.primary_key:
+                    status = False
+                if status:
+                    errors.append(column)
+
+        if errors:
+            key = "missing_values"
+            if camel_case:
+                msg = {xlate(key): [xlate(error) for error in errors]}
+            else:
+                msg = {key: errors}
+            return False, msg
+
+        return True, None

@@ -46,6 +46,109 @@ class TestModelClass(DBBaseTestCase):
         self.assertEqual(table1_rec.start_date, date.today())
         self.assertIsInstance(table1_rec.update_time, datetime)
 
+    def test__null_columns(self):
+        """test__null_columns
+
+        This function tests the _null_columns function for missing
+        values.
+        """
+        db = self.db
+
+        class Table1(db.Model):
+            __tablename__ = "table1"
+
+            id = db.Column(db.Integer, primary_key=True)
+            name = db.Column(db.String, nullable=False)
+            start_date = db.Column(db.Date, default=date.today)
+            created_at1 = db.Column(db.DateTime, default=datetime.now)
+            created_at2 = db.Column(db.DateTime, server_default=db.func.now())
+            update_time1 = db.Column(db.DateTime, onupdate=datetime.now())
+            update_time2 = db.Column(
+                db.DateTime, server_onupdate=db.func.now()
+            )
+
+            # adapted from sqlalchemy docs
+            abc = db.Column(db.String(20), server_default="abc")
+            index_value = db.Column(db.Integer, server_default=db.text("0"))
+
+        db.create_all()
+
+        table1_rec = Table1(name="test")
+
+        self.assertListEqual(
+            [
+                "id",
+                "start_date",
+                "created_at1",
+                "created_at2",
+                "update_time1",
+                "update_time2",
+                "abc",
+                "index_value",
+            ],
+            table1_rec._null_columns(),
+        )
+
+    def test_validate_record(self):
+        """
+        This function tests whether missing values can be found
+        prior to attempting to save.
+        """
+        db = self.db
+
+        # a table with various kinds of default values
+        class Table1(db.Model):
+            __tablename__ = "table1"
+
+            id = db.Column(db.Integer, primary_key=True)
+            first_name = db.Column(db.String, nullable=False)
+            last_name = db.Column(db.String, nullable=False)
+            start_date = db.Column(db.Date, default=date.today)
+            created_at1 = db.Column(db.DateTime, default=datetime.now)
+            created_at2 = db.Column(db.DateTime, server_default=db.func.now())
+            update_time1 = db.Column(db.DateTime, onupdate=datetime.now())
+            update_time2 = db.Column(
+                db.DateTime, server_onupdate=db.func.now()
+            )
+
+            # adapted from sqlalchemy docs
+            abc = db.Column(db.String(20), server_default="abc")
+            index_value = db.Column(db.Integer, server_default=db.text("0"))
+
+        db.create_all()
+
+        table1_rec = Table1(
+            # id filled in by server
+            first_name='Bob',
+            # last_name skipped to test the function
+            # start_date has local default
+            # created_at1 has local default
+            # created_at2 has server default
+            # update_time1 has local default, but only on update
+            # update_time2 has server default, but only on update
+        )
+
+        # default
+        status, errors = table1_rec.validate_record()
+
+        self.assertFalse(status)
+        self.assertDictEqual(
+            {"missing_values": ["last_name"]}, errors
+        )
+
+        # camel_case
+        status, errors = table1_rec.validate_record(camel_case=True)
+
+        self.assertFalse(status)
+        self.assertDictEqual(
+            {"missingValues": ["lastName"]}, errors
+        )
+
+        table1_rec.last_name='name is filled in'
+        status, errors = table1_rec.validate_record()
+        self.assertTrue(status)
+        self.assertIsNone(errors)
+
     def test_relationships(self):
         """This function tests relationships between tables."""
         db = self.db
@@ -560,8 +663,7 @@ class TestModelClass(DBBaseTestCase):
 
         # test ad hoc serial list
         self.assertDictEqual(
-            {'parentId': None},
-            node1.to_dict(serial_list=['parent_id'])
+            {"parentId": None}, node1.to_dict(serial_list=["parent_id"])
         )
 
         # test ad hoc serial list with children
@@ -569,24 +671,24 @@ class TestModelClass(DBBaseTestCase):
         #   since it is updating self rather than cls
         self.assertDictEqual(
             {
-                'id': 1,
-                'children': [
+                "id": 1,
+                "children": [
                     {
-                        'id': 2,
-                        'parentId': 1,
-                        'data': 'this is node2',
-                        'children': [
+                        "id": 2,
+                        "parentId": 1,
+                        "data": "this is node2",
+                        "children": [
                             {
-                                'id': 3,
-                                'parentId': 2,
-                                'data': 'this is node3',
-                                'children': []
+                                "id": 3,
+                                "parentId": 2,
+                                "data": "this is node3",
+                                "children": [],
                             }
-                        ]
+                        ],
                     }
-                ]
+                ],
             },
-            node1.to_dict(serial_list=['id', 'children'])
+            node1.to_dict(serial_list=["id", "children"]),
         )
 
         # test serial list for relations not the parent
@@ -597,19 +699,10 @@ class TestModelClass(DBBaseTestCase):
                 "parentId": None,
                 "data": "this is node1",
                 "children": [
-                    {
-                        "id": 2,
-                        "children": [
-                            {
-                                "id": 3,
-                                "children": []
-                            }
-                        ]
-                    }
-                ]
+                    {"id": 2, "children": [{"id": 3, "children": []}]}
+                ],
             },
-            node1.to_dict(
-                relation_serial_lists={'Node': ['id', 'children']})
+            node1.to_dict(relation_serial_lists={"Node": ["id", "children"]}),
         )
         # test both serial list and relation_serial_lists
         # this is equivalent to having set the class SERIAL_LIST
@@ -618,21 +711,13 @@ class TestModelClass(DBBaseTestCase):
             {
                 "id": 1,
                 "children": [
-                    {
-                        "id": 2,
-                        "children": [
-                            {
-                                "id": 3,
-                                "children": []
-                            }
-                        ]
-                    }
-                ]
+                    {"id": 2, "children": [{"id": 3, "children": []}]}
+                ],
             },
             node1.to_dict(
-                serial_list=['id', 'children'],
-                relation_serial_lists={'Node': ['id', 'children']}
-            )
+                serial_list=["id", "children"],
+                relation_serial_lists={"Node": ["id", "children"]},
+            ),
         )
 
     def test_serialize(self):
@@ -751,3 +836,30 @@ class TestModelClass(DBBaseTestCase):
         self.assertIsNotNone(table1.id)
 
         self.assertEqual(table1, table_saved)
+
+    def test_delete(self):
+        """test_delete"""
+
+        db = self.db
+
+        class Table1(db.Model):
+            __tablename__ = "table1"
+
+            id = db.Column(db.Integer, primary_key=True)
+            long_name = db.Column(db.String, nullable=False)
+
+        db.create_all()
+
+        table1 = Table1(long_name="this is a long name")
+
+        table_saved = table1.save()
+
+        table_id = table1.id
+
+        self.assertIsNotNone(table1.id)
+
+        table1.delete()
+
+        self.assertIsNone(Table1.query.get(table_id))
+
+

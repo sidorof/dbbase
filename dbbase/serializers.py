@@ -19,6 +19,7 @@ SERIAL_STOPLIST = [
     "_sa_class_manager",
     "_sa_instance_state",
     "db",
+    "delete",
     "deserialize",
     "get_serial_field_list",
     "metadata",
@@ -26,6 +27,7 @@ SERIAL_STOPLIST = [
     "save",
     "serialize",
     "to_dict",
+    "validate_record",
     "SERIAL_STOPLIST",
     "SERIAL_LIST",
     "RELATION_SERIAL_LISTS"
