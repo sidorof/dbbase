@@ -66,7 +66,7 @@ def _eval_value(
     elif isinstance(value, Decimal):
         result = str(value)
     elif isinstance(value, uuid.UUID):
-        result = str(value)
+        result = str(value).replace('-', '')
     elif isinstance(value, list):
         if len(value) > 0:
             result, level_limits = _eval_value_list(

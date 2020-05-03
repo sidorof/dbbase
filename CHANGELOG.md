@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.15] -
+### Changed
+*   Changed conversion of UUIDs conversion to strings to remove hyphens.
+    A serialized uuid is shortened from `1f4fdf7e-6f8d-4a7e-b0bd-7ae0722b324d`
+    to `1f4fdf7e6f8d4a7eb0bd7ae0722b324d`.
+
 ## [0.1.14] -
 ### Added
 *   Added a function `validate_record` to the Model class. The
