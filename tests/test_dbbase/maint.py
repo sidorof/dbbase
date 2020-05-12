@@ -22,9 +22,8 @@ class TestMaint(DBBaseTestCase):
 
     def test_drop_all(self):
         pass
-         # test defaults
+        # test defaults
 
         # test self.attributes
 
         # test return
-

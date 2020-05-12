@@ -8,15 +8,15 @@ expected usage on your systems.
 For each configuration, the set of test cases are run to ensure that
 everything works as expected.
 """
-import os
 import json
 import unittest
 
+from .test_dbbase.doc_utils import TestDocUtilities
 from .test_dbbase.utils import TestUtilities
 from .test_dbbase.base import TestDBBaseClass
 from .test_dbbase.model import TestModelClass
 from .test_dbbase.serializers import TestSerializers
-from .test_dbbase.maint import TestMaint
+# from .test_dbbase.maint import TestMaint # empty still
 
 # list of sample configs to test
 SAMPLE_CONFIGS = "sample_configs.json"
@@ -34,14 +34,14 @@ for config in configs:
         json.dump(config, fobj)
     suite = unittest.TestSuite()
 
+    suite.addTests(unittest.makeSuite(TestDocUtilities))
     suite.addTests(unittest.makeSuite(TestSerializers))
     suite.addTests(unittest.makeSuite(TestUtilities))
     suite.addTests(unittest.makeSuite(TestModelClass))
     suite.addTests(unittest.makeSuite(TestDBBaseClass))
 
-    test_result = unittest.TextTestRunner(failfast=True, verbosity=1).run(
-        suite
-    )
+    test_result = unittest.TextTestRunner(
+        failfast=True, verbosity=1).run(suite)
 
     print("result", test_result)
     print()

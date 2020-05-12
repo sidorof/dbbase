@@ -51,25 +51,23 @@ class TestDBBaseClass(DBBaseTestCase):
 
     def test_create_session(self):
         pass
-         # test defaults
+        # test defaults
 
         # test self.attributes
 
         # test return
-
 
     def test_drop_all(self):
         pass
-         # test defaults
+        # test defaults
 
         # test self.attributes
 
         # test return
 
-
     def test_reload_model(self):
         pass
-         # test defaults
+        # test defaults
 
         # test self.attributes
 

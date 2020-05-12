@@ -48,49 +48,65 @@ class TestSerializers(DBBaseTestCase):
         value = 1
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = "this is text"
         self.assertEqual(
             value,
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = datetime(2020, 7, 24, 12, 31, 5)
         self.assertEqual(
             "2020-07-24 12:31:05",
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = date(2020, 7, 24)
         self.assertEqual(
             "2020-07-24",
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = 123.456
         self.assertAlmostEqual(
             123.456,
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = Decimal("123.456")
         self.assertEqual(
             "123.456",
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
         value = uuid.uuid4()
         self.assertEqual(
-            str(value).replace('-', ''),
-            _eval_value(value, self.to_camel_case, self.level_limits, None, None)
+            str(value).replace("-", ""),
+            _eval_value(
+                value, self.to_camel_case, self.level_limits, None, None
+            ),
         )
 
     def test_eval_value(self):
@@ -140,7 +156,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -152,7 +168,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=False,
                 level_limits=set(),
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -166,7 +182,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=False,
                 level_limits=level_limits,
                 source_class=value._class(),
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -236,7 +252,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -264,7 +280,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -305,7 +321,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -325,7 +341,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -406,7 +422,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -429,7 +445,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -475,7 +491,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -504,7 +520,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -544,7 +560,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )
 
@@ -557,12 +573,8 @@ class TestSerializers(DBBaseTestCase):
                     "id": user.id,
                     "name": "Bob",
                     "addresses": [
-                        {
-                            "emailAddress": "email1@example.com",
-                        },
-                        {
-                            "emailAddress": "email2@example.com",
-                        },
+                        {"emailAddress": "email1@example.com",},
+                        {"emailAddress": "email2@example.com",},
                     ],
                 },
                 # same note as above
@@ -576,7 +588,7 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=level_limits,
                 source_class=None,
-                relation_serial_lists={'Address': ['email_address']}
+                relation_serial_lists={"Address": ["email_address"]},
             ),
         )
 
@@ -584,7 +596,6 @@ class TestSerializers(DBBaseTestCase):
         self.assertIsNone(Address.SERIAL_LIST)
         self.assertIsNone(address1.SERIAL_LIST)
         self.assertIsNone(address1.SERIAL_LIST)
-
 
     def test_eval_value_model_self_referential(self):
         """Test test_eval_value_model_self_referential
@@ -687,6 +698,6 @@ class TestSerializers(DBBaseTestCase):
                 to_camel_case=True,
                 level_limits=set(),
                 source_class=None,
-                relation_serial_lists={}
+                relation_serial_lists={},
             ),
         )

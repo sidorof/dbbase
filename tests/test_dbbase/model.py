@@ -119,7 +119,7 @@ class TestModelClass(DBBaseTestCase):
 
         table1_rec = Table1(
             # id filled in by server
-            first_name='Bob',
+            first_name="Bob",
             # last_name skipped to test the function
             # start_date has local default
             # created_at1 has local default
@@ -132,19 +132,15 @@ class TestModelClass(DBBaseTestCase):
         status, errors = table1_rec.validate_record()
 
         self.assertFalse(status)
-        self.assertDictEqual(
-            {"missing_values": ["last_name"]}, errors
-        )
+        self.assertDictEqual({"missing_values": ["last_name"]}, errors)
 
         # camel_case
         status, errors = table1_rec.validate_record(camel_case=True)
 
         self.assertFalse(status)
-        self.assertDictEqual(
-            {"missingValues": ["lastName"]}, errors
-        )
+        self.assertDictEqual({"missingValues": ["lastName"]}, errors)
 
-        table1_rec.last_name='name is filled in'
+        table1_rec.last_name = "name is filled in"
         status, errors = table1_rec.validate_record()
         self.assertTrue(status)
         self.assertIsNone(errors)
@@ -861,5 +857,3 @@ class TestModelClass(DBBaseTestCase):
         table1.delete()
 
         self.assertIsNone(Table1.query.get(table_id))
-
-
