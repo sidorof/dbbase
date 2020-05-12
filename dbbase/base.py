@@ -13,22 +13,25 @@ needed actions, and a base database such as with PostgreSQL.
 To that end there is also a config function for flexibility.
 
 """
-import os
 import logging
 import importlib
+from collections import OrderedDict
 
 import sqlalchemy
 from sqlalchemy import create_engine, orm
 
 from . import model
-from .utils import _is_sqlite
+from .utils import xlate
+from .doc_utils import process_expression
+
 
 logger = logging.getLogger(__file__)
 
 
 class DB(object):
     """
-    This class defines a central location for accepting database configuration information, creating connections and sessions.
+    This class defines a central location for accepting database
+    configuration information, creating connections and sessions.
 
     Default:
         DB(config, model_class=None, checkfirst=True, echo=False)
@@ -196,3 +199,72 @@ class DB(object):
         """
         cls.query = self.session.query(cls)
         cls.db = self
+
+    def doc_table(
+            self, cls, to_camel_case=False, serial_list=None,
+            column_props=None):
+        """ doc_table
+
+        This function creates a dict of a table configuraton to aid in
+        documenting.
+
+        The function can be used in several ways:
+
+        * Communicate characteristics about a resource in an API.
+        * Provide a basis for unittesting a table to verify settings.
+        * Enable API resource validation prior to record creation.
+
+        Usage:
+            doc_table(
+                cls,
+                to_camel_case=False,
+                serial_list=None,
+                column_props=None
+            )
+
+        Args:
+            cls: (class) : the table to be documented
+            to_camel_case: (bool) : converts the column names to camel case
+            serial_list: (None : list) : specify a limited list of columns
+            column_props: (None : list) : filter column details to specific
+                                          items
+
+        Return:
+
+            doc (dict) : a dict of the column values
+
+        The column props included are name, type, required, default detail,
+        foreign_keys, and unique.
+        """
+
+        properties = {}
+        doc = {
+            cls.__name__: {
+                'type': 'object',
+                'properties': properties
+            }
+        }
+        doc = OrderedDict(doc)
+
+        tmp = self.inspect(cls).all_orm_descriptors
+        if serial_list is not None:
+            columns = serial_list
+        else:
+            columns = tmp.keys()
+
+        for key in columns:
+            value = tmp[key]
+
+            item_dict = process_expression(value.expression)
+            # done afterwards because keys in expression can change
+            if column_props is not None:
+                for prop_key in list(item_dict.keys()):
+                    if prop_key not in column_props:
+                        del item_dict[prop_key]
+
+            if to_camel_case:
+                key = xlate(key)
+
+            properties[key] = item_dict
+
+        return doc

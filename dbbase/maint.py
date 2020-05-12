@@ -3,7 +3,7 @@
 This module implements maintenance tools for creating and deleting/dropping databases.
 """
 import os
-from sqlalchemy import create_engine, orm
+from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
 from .utils import _is_sqlite
 

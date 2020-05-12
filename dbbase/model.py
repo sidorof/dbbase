@@ -180,13 +180,8 @@ class Model(object):
         return list(set(fields) - set(self._get_serial_stop_list()))
 
     def to_dict(
-        self,
-        to_camel_case=True,
-        level_limits=None,
-        sort=False,
-        serial_list=None,
-        relation_serial_lists=None,
-    ):
+            self, to_camel_case=True, level_limits=None, sort=False,
+            serial_list=None, relation_serial_lists=None):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
