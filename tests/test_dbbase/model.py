@@ -848,7 +848,7 @@ class TestModelClass(DBBaseTestCase):
 
         table1 = Table1(long_name="this is a long name")
 
-        table_saved = table1.save()
+        table1.save()
 
         table_id = table1.id
 

@@ -1,6 +1,7 @@
 # dbbase/maint.py
 """
-This module implements maintenance tools for creating and deleting/dropping databases.
+This module implements maintenance tools for creating and deleting/dropping
+databases.
 """
 import os
 from sqlalchemy import create_engine
@@ -62,7 +63,7 @@ def drop_database(config, dbname):
     if _is_sqlite(config):
         # sqlite does not use drop database
         if config.find("memory") == -1:
-            filename = config[config.find("///") + 3 :]
+            filename = config[config.find("///") + 3:]
             if os.path.exists(filename):
                 os.remove(filename)
     else:

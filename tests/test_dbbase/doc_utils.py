@@ -1,19 +1,11 @@
 # tests/test_dbbase/utils.py
 """This module tests doc utility functions."""
-import json
-
 from . import DBBaseTestCase
 from datetime import date, datetime
 import uuid
 import sqlalchemy.types as types
 
-
-try:
-    from sqlalchemy.dialects.postgresql import JSON, UUID, ARRAY
-
-    postgres = True
-except:
-    postgres = False
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 
 
 class TestDocUtilities(DBBaseTestCase):
@@ -58,7 +50,6 @@ class TestDocUtilities(DBBaseTestCase):
                 """called when pulling from database"""
                 return self.choices[value]
 
-
         class Main(db.Model):
             """Test class with a variety of column types"""
             __tablename__ = "main"
@@ -74,7 +65,8 @@ class TestDocUtilities(DBBaseTestCase):
             status_id = db.Column(
                 StatusCodes(status_codes),
                 nullable=False,
-                comment="Choices from a list. String descriptors change to integer upon saving. Enums without the headache.",
+                comment="Choices from a list. String descriptors "
+                "change to integer upon saving. Enums without the headache.",
             )
 
             @db.orm.validates("status_id")
@@ -137,7 +129,8 @@ class TestDocUtilities(DBBaseTestCase):
                 db.Integer,
                 db.ForeignKey("other_table.id"),
                 nullable=False,
-                comment="This field is constrained by a foreign key on another table",
+                comment="This field is constrained by a foreign key on"
+                "another table",
             )
 
             today = db.Column(
@@ -156,7 +149,8 @@ class TestDocUtilities(DBBaseTestCase):
             created_at2 = db.Column(
                 db.DateTime,
                 server_default=db.func.now(),
-                comment="This field defaults to now, created at the server level",
+                comment="This field defaults to now, created at the server"
+                "level",
             )
             update_time1 = db.Column(
                 db.DateTime,
@@ -166,7 +160,8 @@ class TestDocUtilities(DBBaseTestCase):
             update_time2 = db.Column(
                 db.DateTime,
                 server_onupdate=db.func.now(),
-                comment="This field defaults only on updates, but on the server",
+                comment="This field defaults only on updates, but on the"
+                "server",
             )
 
             unique_col = db.Column(
@@ -211,7 +206,8 @@ class TestDocUtilities(DBBaseTestCase):
                 )
                 example_array2 = db.Column(
                     ARRAY(db.Integer, dimensions=2),
-                    comment="this is an array of integers with two dimensions.",
+                    comment="this is an array of integers with two "
+                    "dimensions.",
                 )
 
             self.PostgresTable = PostgresTable
@@ -219,7 +215,14 @@ class TestDocUtilities(DBBaseTestCase):
         self.Main = Main
         self.OtherTable = OtherTable
         self.db.create_all()
+        import json
+        print(json.dumps(db.doc_table(
+            Main), indent=4))
 
+        import yaml
+        print(yaml.dump(db.doc_table(
+            Main), indent=4, default_flow_style=False))
+        input('ready')
     def test_doc_util_types(self):
         """ Test the conversion of generic fields in Main.
 
@@ -485,13 +488,94 @@ class TestDocUtilities(DBBaseTestCase):
             {"default": None}, doc_utils._default(expression.default)
         )
 
+        # onupdate
+        field = "update_time1"
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {
+                'onupdate': {
+                    'for_update': True,
+                    'arg': 'datetime.now'
+                }
+            },
+            doc_utils._onupdate(expression.onupdate)
+        )
+
+        # server_default - function
+        field = "created_at2"
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {
+                'server_default': {
+                    'for_update': False,
+                    'arg': 'db.func.now()',
+                    'reflected': False
+                }
+            },
+            doc_utils._server_default(expression.server_default)
+        )
+
+        # server_default - value -- text in this case
+        field = "abc"
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {
+                'server_default': {
+                    'for_update': False,
+                    'arg': 'abc',
+                    'reflected': False
+                }
+            },
+            doc_utils._server_default(expression.server_default)
+        )
+
+        # server_default - value -- text in this case
+        field = "index_value"
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {
+                'server_default': {
+                    'for_update': False,
+                    'arg': 'db.text("0")',
+                    'reflected': False
+                }
+            },
+            doc_utils._server_default(expression.server_default)
+        )
+
+        # server_onupdate
+        field = 'update_time2'
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {
+                'server_onupdate': {
+                    'for_update': True,
+                    'arg': 'db.func.now()',
+                    'reflected': False
+                }
+            },
+            doc_utils._server_onupdate(expression.server_onupdate)
+        )
+
+        # example of no server default/onupdate
+        field = 'created_at1'
+        expression = tmp[field].expression
+        self.assertDictEqual(
+            {'default': None},
+            doc_utils._server_default(
+                expression.server_default
+            )
+        )
+
+        self.assertDictEqual(
+            {'default': None},
+            doc_utils._server_onupdate(expression.server_onupdate)
+        )
+
         # foreign key
         field = "id"
         expression = tmp[field].expression
-        self.assertDictEqual(
-            {"foreign_key": None},
-            doc_utils._foreign_keys(expression.foreign_keys),
-        )
+        self.assertIsNone(doc_utils._foreign_keys(expression.foreign_keys))
 
         field = "fk_id"
         expression = tmp[field].expression
@@ -502,10 +586,7 @@ class TestDocUtilities(DBBaseTestCase):
 
         field = "today"
         expression = tmp[field].expression
-        self.assertDictEqual(
-            {"foreign_key": None},
-            doc_utils._foreign_keys(expression.foreign_keys),
-        )
+        self.assertIsNone(doc_utils._foreign_keys(expression.foreign_keys))
 
         # unique and other only_if_true
         field = "id"
@@ -534,7 +615,6 @@ class TestDocUtilities(DBBaseTestCase):
                 "format": "int32",
                 "primary_key": True,
                 "nullable": True,
-                "foreign_key": None,
                 "comment": "Primary key with a value assigned by the database",
                 "info": {"extra": "info here"},
             },
@@ -549,7 +629,6 @@ class TestDocUtilities(DBBaseTestCase):
                 "type": "text",
                 "nullable": False,
                 "default": {"for_update": False, "arg": "test"},
-                "foreign_key": None,
                 "comment": "This field has a default value",
                 "info": {},
                 "index": True,
@@ -560,7 +639,6 @@ class TestDocUtilities(DBBaseTestCase):
     def test_doc_postgres(self):
 
         db = self.db
-        doc_utils = self.dbbase.doc_utils
 
         if self.PostgresTable is not None:
 
@@ -578,7 +656,6 @@ class TestDocUtilities(DBBaseTestCase):
                                     "for_update": False,
                                     "arg": "uuid4",
                                 },
-                                "foreign_key": None,
                                 "info": {},
                             },
                             "example_array1": {
@@ -590,8 +667,8 @@ class TestDocUtilities(DBBaseTestCase):
                                     "format": "int32",
                                 },
                                 "nullable": True,
-                                "foreign_key": None,
-                                "comment": "This is the default array of integers.",
+                                "comment": "This is the default array "
+                                "of integers.",
                                 "info": {},
                             },
                             "example_array2": {
@@ -603,8 +680,8 @@ class TestDocUtilities(DBBaseTestCase):
                                     "format": "int32",
                                 },
                                 "nullable": True,
-                                "foreign_key": None,
-                                "comment": "this is an array of integers with two dimensions.",
+                                "comment": "this is an array of integers"
+                                "with two dimensions.",
                                 "info": {},
                             },
                         },

@@ -573,8 +573,8 @@ class TestSerializers(DBBaseTestCase):
                     "id": user.id,
                     "name": "Bob",
                     "addresses": [
-                        {"emailAddress": "email1@example.com",},
-                        {"emailAddress": "email2@example.com",},
+                        {"emailAddress": "email1@example.com"},
+                        {"emailAddress": "email2@example.com"},
                     ],
                 },
                 # same note as above

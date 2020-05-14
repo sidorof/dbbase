@@ -36,8 +36,7 @@ SERIAL_STOPLIST = [
 
 def _eval_value(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists
-    ):
+        relation_serial_lists):
     """ _eval_value
 
     This function converts some of the standard values as needed based
@@ -94,8 +93,7 @@ def _eval_value(
 
 def _eval_value_model(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists
-    ):
+        relation_serial_lists):
     """_eval_value_model
 
     if any class within level_limits i self-referential it gets
@@ -128,8 +126,7 @@ def _eval_value_model(
 
 def _eval_value_list(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists
-    ):
+        relation_serial_lists):
     """_eval_value_list
 
     This function handles values that are lists. While a list that is not

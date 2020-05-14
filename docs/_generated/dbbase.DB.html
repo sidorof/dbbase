@@ -45,7 +45,7 @@
   
   
   
-    <title>DB &#8212; dbbase 0.1.15 documentation</title>
+    <title>DB &#8212; dbbase 0.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="dbbase 0.1.15 documentation"
+        <a href="../index.html" title="dbbase 0.2.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.15</span>
+          <span class="md-header-nav__topic">dbbase 0.2.0</span>
           <span class="md-header-nav__topic"> DB </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.1.15 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.2.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="dbbase 0.1.15 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="dbbase 0.2.0 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="dbbase 0.1.15 documentation">dbbase 0.1.15</a>
+       title="dbbase 0.2.0 documentation">dbbase 0.2.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -273,7 +273,8 @@
 <dt id="dbbase.DB">
 <em class="property">class </em><code class="sig-prename descclassname">dbbase.</code><code class="sig-name descname">DB</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">model_class=None</em>, <em class="sig-param">checkfirst=True</em>, <em class="sig-param">echo=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class defines a central location for accepting database configuration information, creating connections and sessions.</p>
+<p>This class defines a central location for accepting database
+configuration information, creating connections and sessions.</p>
 <dl class="simple">
 <dt>Default:</dt><dd><p>DB(config, model_class=None, checkfirst=True, echo=False)</p>
 </dd>
@@ -310,6 +311,12 @@ does not exist</p></li>
 <tr class="row-even"><td><p><a class="reference internal" href="dbbase.DB.create_session.html#dbbase.DB.create_session" title="dbbase.DB.create_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_session</span></code></a>([checkfirst, echo])</p></td>
 <td><p>This function instantiates an engine, and connects to the database.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.DB.doc_table.html#dbbase.DB.doc_table" title="dbbase.DB.doc_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doc_table</span></code></a>(cls[, to_camel_case, serial_list, …])</p></td>
+<td><p>This function creates a dictionary of a table configuraton to aid in documenting.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.DB.doc_tables.html#dbbase.DB.doc_tables" title="dbbase.DB.doc_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doc_tables</span></code></a>([class_list, to_camel_case, …])</p></td>
+<td><p>This function creates a dictionary of all the table configuratons.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="dbbase.DB.drop_all.html#dbbase.DB.drop_all" title="dbbase.DB.drop_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drop_all</span></code></a>([echo])</p></td>
 <td><p>Drop all tables and sequences.</p></td>
 </tr>
@@ -345,7 +352,7 @@ does not exist</p></li>
               
           </div>
             Last updated on
-              May 03, 2020.
+              May 13, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

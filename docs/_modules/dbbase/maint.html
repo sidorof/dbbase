@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.maint &#8212; dbbase 0.1.15 documentation</title>
+    <title>dbbase.maint &#8212; dbbase 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.1.15 documentation"
+        <a href="../../index.html" title="dbbase 0.2.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.15</span>
+          <span class="md-header-nav__topic">dbbase 0.2.0</span>
           <span class="md-header-nav__topic"> dbbase.maint </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.15 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.1.15 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.2.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.1.15 documentation">dbbase 0.1.15</a>
+       title="dbbase 0.2.0 documentation">dbbase 0.2.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -270,10 +270,11 @@
   <h1 id="modules-dbbase-maint--page-root">Source code for dbbase.maint</h1><div class="highlight"><pre>
 <span></span><span class="c1"># dbbase/maint.py</span>
 <span class="sd">"""</span>
-<span class="sd">This module implements maintenance tools for creating and deleting/dropping databases.</span>
+<span class="sd">This module implements maintenance tools for creating and deleting/dropping</span>
+<span class="sd">databases.</span>
 <span class="sd">"""</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">orm</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">NullPool</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_is_sqlite</span>
 
@@ -332,7 +333,7 @@
     <span class="k">if</span> <span class="n">_is_sqlite</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
         <span class="c1"># sqlite does not use drop database</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"memory"</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"///"</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">:]</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"///"</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">:]</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -382,7 +383,7 @@
               
           </div>
             Last updated on
-              May 03, 2020.
+              May 13, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

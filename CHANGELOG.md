@@ -1,5 +1,256 @@
 # Changelog
 
+## (0.2.00) -
+### Added
+*   Added `db.doc_tables()` function to help build documentation for table
+    objects in a way that is reminiscent of Swagger / OpenApi.
+
+    For example, here is the output in JSON format using the approach that
+    OpenApi takes. In fact, there are some differences. These differences
+    stem from the more nuanced approach that SQLAlchemy takes for things like
+    defaults. For example, server side defaults are specified. Also, on update functions are detailed as well.
+
+    Usage:
+
+```python
+    doc_table(
+        cls,                   # the class
+        to_camel_case=False,   # convert column names to camel case
+        serial_list=None,      # select only specific columns
+        column_props=None      # select only certain column properties
+    )
+```
+Some uses for this function:
+*   Detail on the tables can be part of a larger communication with
+    developers using an API.
+*   Meta information can be resourced about particular views.
+*   Unit / integration tests can use the output to ensure that table
+    columns are created to specifications.
+
+Here is an example of some of the column types that are tested.
+
+```json
+
+    {
+        "SampleTable": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "format": "int32",
+                    "primary_key": true,
+                    "nullable": true,
+                    "comment": "Primary key with a value assigned by the database",
+                    "info": {
+                        "extra": "info here"
+                    }
+                },
+                "name1": {
+                    "name": "name1",
+                    "type": "string",
+                    "maxLength": 50,
+                    "nullable": false,
+                    "comment": "This field is required",
+                    "info": {}
+                },
+                "indexValue": {
+                    "name": "index_value",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "db.text(\"0\")",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to an integer on the server.",
+                    "info": {}
+                },
+                "createdAt1": {
+                    "name": "created_at1",
+                    "type": "date-time",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": "datetime.now"
+                    },
+                    "comment": "This field defaults to now, created at model level",
+                    "info": {}
+                },
+                "updateTime1": {
+                    "name": "update_time1",
+                    "type": "date-time",
+                    "nullable": true,
+                    "onupdate": {
+                        "for_update": true,
+                        "arg": "datetime.now"
+                    },
+                    "comment": "This field defaults only on updates",
+                    "info": {}
+                },
+                "uniqueCol": {
+                    "name": "unique_col",
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": true,
+                    "unique": true,
+                    "comment": "This must be a unique value in the database.",
+                    "info": {}
+                },
+                "name2": {
+                    "name": "name2",
+                    "type": "string",
+                    "maxLength": 50,
+                    "nullable": true,
+                    "comment": "This field is not required",
+                    "info": {}
+                },
+                "fkId": {
+                    "name": "fk_id",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": false,
+                    "foreign_key": "other_table.id",
+                    "comment": "This field is constrained by a foreign key on another table",
+                    "info": {}
+                },
+                "someSmallInt": {
+                    "name": "some_small_int",
+                    "type": "integer",
+                    "format": "int8",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a small integer",
+                    "info": {}
+                },
+                "someInt": {
+                    "name": "some_int",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a 32 bit integer",
+                    "info": {}
+                },
+                "today": {
+                    "name": "today",
+                    "type": "date",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": "date.today"
+                    },
+                    "doc": "this is a test",
+                    "comment": "This field defaults to today, created at model level",
+                    "info": {
+                        "test": "this is"
+                    }
+                },
+                "someBigInt": {
+                    "name": "some_big_int",
+                    "type": "integer",
+                    "format": "int64",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a big integer",
+                    "info": {}
+                },
+                "statusId": {
+                    "name": "status_id",
+                    "type": "integer",
+                    "format": "int32",
+                    "choices": {
+                        "0": "New",
+                        "1": "Active",
+                        "2": "Suspended",
+                        "3": "Inactive"
+                    },
+                    "nullable": false,
+                    "comment": "Choices from a list. String descriptors change to integer upon saving. Enums without the headache.",
+                    "info": {}
+                },
+                "name3": {
+                    "name": "name3",
+                    "type": "text",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": "test"
+                    },
+                    "index": true,
+                    "comment": "This field has a default value",
+                    "info": {}
+                },
+                "itemLength": {
+                    "name": "item_length",
+                    "type": "float",
+                    "nullable": false,
+                    "comment": "This field is a float value",
+                    "info": {}
+                },
+                "abc": {
+                    "name": "abc",
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "abc",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to text but on the server.",
+                    "info": {}
+                },
+                "itemAmount": {
+                    "name": "item_amount",
+                    "type": "numeric(17, 6)",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0.0
+                    },
+                    "info": {}
+                },
+                "updateTime2": {
+                    "name": "update_time2",
+                    "type": "date-time",
+                    "nullable": true,
+                    "server_onupdate": {
+                        "for_update": true,
+                        "arg": "db.func.now()",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults only on updates, but on the server",
+                    "info": {}
+                },
+                "createdAt2": {
+                    "name": "created_at2",
+                    "type": "date-time",
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "db.func.now()",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to now, created at the server level",
+                    "info": {}
+                }
+            }
+        }
+    }
+
+```
+
 ## [0.1.15] -
 ### Changed
 *   Changed conversion of UUIDs conversion to strings to remove hyphens.

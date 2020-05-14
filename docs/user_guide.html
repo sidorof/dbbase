@@ -45,7 +45,7 @@
   
   
   
-    <title>User Guide &#8212; dbbase 0.1.15 documentation</title>
+    <title>User Guide &#8212; dbbase 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.1.15 documentation"
+        <a href="index.html" title="dbbase 0.2.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.15</span>
+          <span class="md-header-nav__topic">dbbase 0.2.0</span>
           <span class="md-header-nav__topic"> User Guide </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.1.15 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.1.15 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.2.0 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.1.15 documentation">dbbase 0.1.15</a>
+       title="dbbase 0.2.0 documentation">dbbase 0.2.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -238,6 +238,16 @@
         <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
         </li>
         <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#document-dictionaries" class="md-nav__link">Document Dictionaries</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#table-documentation" class="md-nav__link">Table Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#filtering-for-form-data-and-query-strings" class="md-nav__link">Filtering for Form Data and Query Strings</a>
+        </li>
+        <li class="md-nav__item"><a href="#a-larger-example-of-a-document-dictionary" class="md-nav__link">A Larger Example of a Document Dictionary</a>
         </li></ul>
             </nav>
         </li></ul>
@@ -303,6 +313,16 @@
         <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
         </li>
         <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#document-dictionaries" class="md-nav__link">Document Dictionaries</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#table-documentation" class="md-nav__link">Table Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#filtering-for-form-data-and-query-strings" class="md-nav__link">Filtering for Form Data and Query Strings</a>
+        </li>
+        <li class="md-nav__item"><a href="#a-larger-example-of-a-document-dictionary" class="md-nav__link">A Larger Example of a Document Dictionary</a>
         </li></ul>
             </nav>
         </li></ul>
@@ -858,6 +878,671 @@ used. However, with these variables, you can generate custom serializations on t
 </pre></div>
 </div>
 <p>{“id”: 1, “parentId”: null, “data”: “this is node1”, “children”: [{“id”: 2, “parentId”: 1, “data”: “this is node2”, “children”: [{“id”: 3, “parentId”: 2, “data”: “this is node3”, “children”: []}, {“id”: 4, “parentId”: 2, “data”: “this is node4”, “children”: []}]}, {“id”: 5, “parentId”: 1, “data”: “this is node5”, “children”: [{“id”: 6, “parentId”: 5, “data”: “this is node6”, “children”: []}]}]}</p>
+
+
+
+<h2 id="document-dictionaries">Document Dictionaries<a class="headerlink" href="#document-dictionaries" title="Permalink to this headline">¶</a></h2>
+<p>Document Dictionaries introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.</p>
+
+<h3 id="table-documentation">Table Documentation<a class="headerlink" href="#table-documentation" title="Permalink to this headline">¶</a></h3>
+<p>Suppose we were to describe the two tables created above, User, and Address.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">doc_tables</span><span class="p">(</span><span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This would yield the following output that details object models similarly to OpenApi. It details the column characteristics for each table. Note how the foreign key is annotated in Address. If defaults had been defined for the tables, it would detail the default type including server defaults.</p>
+<p>In the example shown, the column names have been converted to camel case. Front end developers, used to JavaScript notation may be more comfortable in this format.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">"definitions"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"Address"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+            <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"emailAddress"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"email_address"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                    <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                    <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"userId"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"user_id"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                    <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"foreign_key"</span><span class="p">:</span> <span class="s2">"users.id"</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">"User"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+            <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                    <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                    <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"firstName"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"first_name"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                    <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"lastName"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"last_name"</span><span class="p">,</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                    <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+
+
+<h3 id="filtering-for-form-data-and-query-strings">Filtering for Form Data and Query Strings<a class="headerlink" href="#filtering-for-form-data-and-query-strings" title="Permalink to this headline">¶</a></h3>
+<p>If you have used Flask-Restful, one of the features involves argument parsing of form data, query strings, etc. This involves entering arguments such as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">reqparse</span><span class="o">.</span><span class="n">RequestParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"firstName"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"lastName"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The kind of characteristics necessary to process that data is already available from the above objects. The creators of Flask-Restful have indicated that they are going to eventually drop support of the <cite>reqparse</cite> class would does the above.</p>
+<p>Using generated objects such as above can be wrapped into a parsing mechanism reducing the need for a duplication of effort. You have already done the work of carefully crafting your tables. Using the document dictionaries you can get more mileage out of it.</p>
+
+
+<h3 id="a-larger-example-of-a-document-dictionary">A Larger Example of a Document Dictionary<a class="headerlink" href="#a-larger-example-of-a-document-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>To get an idea of the range of support it helps to see a more complicated table. The following table is basically a zoo of different combinations of column types and parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>      <span class="n">status_codes</span> <span class="o">=</span> <span class="p">[</span>
+           <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"New"</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Active"</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Suspended"</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Inactive"</span><span class="p">],</span>
+       <span class="p">]</span>
+
+       <span class="k">class</span> <span class="nc">StatusCodes</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">TypeDecorator</span><span class="p">):</span>
+           <span class="sd">"""</span>
+<span class="sd">           Status codes are entered as strings and converted to</span>
+<span class="sd">           integers when saved to the database.</span>
+<span class="sd">           """</span>
+           <span class="n">impl</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">Integer</span>
+
+           <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_codes</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">status_codes</span><span class="p">)</span>
+               <span class="nb">super</span><span class="p">(</span><span class="n">StatusCodes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+           <span class="k">def</span> <span class="nf">process_bind_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
+               <span class="sd">"""called when saving to the database"""</span>
+               <span class="k">return</span> <span class="p">[</span>
+                   <span class="n">k</span>
+                   <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                   <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">value</span>
+               <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+           <span class="k">def</span> <span class="nf">process_result_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
+               <span class="sd">"""called when pulling from database"""</span>
+               <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+
+       <span class="k">class</span> <span class="nc">BigTable</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+           <span class="sd">"""Test class with a variety of column types"""</span>
+           <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"main"</span>
+
+           <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+               <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"Primary key with a value assigned by the database"</span><span class="p">,</span>
+               <span class="n">info</span><span class="o">=</span><span class="p">{</span><span class="s2">"extra"</span><span class="p">:</span> <span class="s2">"info here"</span><span class="p">},</span>
+           <span class="p">)</span>
+
+           <span class="n">status_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">StatusCodes</span><span class="p">(</span><span class="n">status_codes</span><span class="p">),</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"Choices from a list. String descriptors "</span>
+               <span class="s2">"change to integer upon saving. Enums without the headache."</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="nd">@db</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">validates</span><span class="p">(</span><span class="s2">"status_id"</span><span class="p">)</span>
+           <span class="k">def</span> <span class="nf">_validate_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+               <span class="sd">"""_validate_id</span>
+
+<span class="sd">               Args:</span>
+<span class="sd">                   id: (int) : id must be in cls.choices</span>
+<span class="sd">               """</span>
+               <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">status_codes</span><span class="p">):</span>
+                   <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"</span><span class="si">{}</span><span class="s2"> is not valid"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+               <span class="k">return</span> <span class="nb">id</span>
+
+           <span class="c1"># nullable / not nullable</span>
+           <span class="n">name1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is required"</span>
+           <span class="p">)</span>
+           <span class="n">name2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is not required"</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="c1"># text default</span>
+           <span class="n">name3</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Text</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="s2">"test"</span><span class="p">,</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field has a default value"</span><span class="p">,</span>
+               <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">item_length</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Float</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a float value"</span>
+           <span class="p">)</span>
+
+           <span class="n">item_amount</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Numeric</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+           <span class="c1"># integer and default</span>
+           <span class="n">some_small_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">SmallInteger</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a small integer"</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">some_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a 32 bit integer"</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">some_big_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">BigInteger</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a big integer"</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">fk_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"other_table.id"</span><span class="p">),</span>
+               <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is constrained by a foreign key on"</span>
+               <span class="s2">"another table"</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">today</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Date</span><span class="p">,</span>
+               <span class="n">doc</span><span class="o">=</span><span class="s2">"this is a test"</span><span class="p">,</span>
+               <span class="n">info</span><span class="o">=</span><span class="p">{</span><span class="s2">"test"</span><span class="p">:</span> <span class="s2">"this is"</span><span class="p">},</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to today, created at model level"</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">created_at1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to now, created at model level"</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">created_at2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+               <span class="n">server_default</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to now, created at the server"</span>
+               <span class="s2">"level"</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">update_time1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+               <span class="n">onupdate</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults only on updates"</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">update_time2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+               <span class="n">server_onupdate</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults only on updates, but on the"</span>
+               <span class="s2">"server"</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">unique_col</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+               <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This must be a unique value in the database."</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="c1"># adapted from sqlalchemy docs</span>
+           <span class="n">abc</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+               <span class="n">server_default</span><span class="o">=</span><span class="s2">"abc"</span><span class="p">,</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to text but on the server."</span><span class="p">,</span>
+           <span class="p">)</span>
+           <span class="n">index_value</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+               <span class="n">server_default</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">"0"</span><span class="p">),</span>
+               <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to an integer on the server."</span><span class="p">,</span>
+           <span class="p">)</span>
+
+           <span class="n">__table_args</span> <span class="o">=</span> <span class="p">(</span>
+               <span class="n">db</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="s2">"ix_name1_name2"</span><span class="p">,</span> <span class="s2">"name1"</span><span class="p">,</span> <span class="s2">"name2"</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+           <span class="p">)</span>
+
+       <span class="k">class</span> <span class="nc">OtherTable</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+           <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"other_table"</span>
+           <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="o">..</span>
+</pre></div>
+</div>
+<p>From that table we can generation our document dictionary:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">"BigTable"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+        <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"item_amount"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"item_amount"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"numeric(17, 6)"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="mf">0.0</span>
+                <span class="p">},</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"name2"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name2"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is not required"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"abc"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"abc"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"server_default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"abc"</span><span class="p">,</span>
+                    <span class="nt">"reflected"</span><span class="p">:</span> <span class="kc">false</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults to text but on the server."</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"fk_id"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"fk_id"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"foreign_key"</span><span class="p">:</span> <span class="s2">"other_table.id"</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is constrained by a foreign key onanother table"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"some_small_int"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_small_int"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is a small integer"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"some_int"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_int"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is a 32 bit integer"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"update_time2"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_time2"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"server_onupdate"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"db.func.now()"</span><span class="p">,</span>
+                    <span class="nt">"reflected"</span><span class="p">:</span> <span class="kc">false</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults only on updates, but on theserver"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"index_value"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"index_value"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"server_default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"db.text(\"0\")"</span><span class="p">,</span>
+                    <span class="nt">"reflected"</span><span class="p">:</span> <span class="kc">false</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults to an integer on the server."</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"update_time1"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_time1"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"onupdate"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"datetime.now"</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults only on updates"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"today"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"today"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"date.today"</span>
+                <span class="p">},</span>
+                <span class="nt">"doc"</span><span class="p">:</span> <span class="s2">"this is a test"</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults to today, created at model level"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"test"</span><span class="p">:</span> <span class="s2">"this is"</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"Primary key with a value assigned by the database"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"extra"</span><span class="p">:</span> <span class="s2">"info here"</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">"created_at1"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"created_at1"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"datetime.now"</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults to now, created at model level"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"name1"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name1"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is required"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"created_at2"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"created_at2"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"server_default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"db.func.now()"</span><span class="p">,</span>
+                    <span class="nt">"reflected"</span><span class="p">:</span> <span class="kc">false</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field defaults to now, created at the serverlevel"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"some_big_int"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_big_int"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int64"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">},</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is a big integer"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"unique_col"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"unique_col"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"unique"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This must be a unique value in the database."</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"item_length"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"item_length"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is a float value"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"status_id"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"status_id"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"choices"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"0"</span><span class="p">:</span> <span class="s2">"New"</span><span class="p">,</span>
+                    <span class="nt">"1"</span><span class="p">:</span> <span class="s2">"Active"</span><span class="p">,</span>
+                    <span class="nt">"2"</span><span class="p">:</span> <span class="s2">"Suspended"</span><span class="p">,</span>
+                    <span class="nt">"3"</span><span class="p">:</span> <span class="s2">"Inactive"</span>
+                <span class="p">},</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"Choices from a list. String descriptors change to integer upon saving. Enums without the headache."</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"name3"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name3"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"test"</span>
+                <span class="p">},</span>
+                <span class="nt">"index"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field has a default value"</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This output illustrates a range of some of what is available and how the parameters are formatted.</p>
+<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span>Main:
+  type: object
+  properties:
+      abc:
+          comment: This field defaults to text but on the server.
+          info: {}
+          maxLength: 20
+          name: abc
+          nullable: true
+          server_default:
+              arg: abc
+              for_update: false
+              reflected: false
+          type: string
+      created_at1:
+          comment: This field defaults to now, created at model level
+          default:
+              arg: datetime.now
+              for_update: false
+          info: {}
+          name: created_at1
+          nullable: true
+          type: date-time
+      created_at2:
+          comment: This field defaults to now, created at the serverlevel
+          info: {}
+          name: created_at2
+          nullable: true
+          server_default:
+              arg: db.func.now()
+              for_update: false
+              reflected: false
+          type: date-time
+      fk_id:
+          comment: This field is constrained by a foreign key onanother table
+          foreign_key: other_table.id
+          format: int32
+          info: {}
+          name: fk_id
+          nullable: false
+          type: integer
+      id:
+          comment: Primary key with a value assigned by the database
+          format: int32
+          info:
+              extra: info here
+          name: id
+          nullable: true
+          primary_key: true
+          type: integer
+      index_value:
+          comment: This field defaults to an integer on the server.
+          format: int32
+          info: {}
+          name: index_value
+          nullable: true
+          server_default:
+              arg: db.text("0")
+              for_update: false
+              reflected: false
+          type: integer
+      item_amount:
+          default:
+              arg: 0.0
+              for_update: false
+          info: {}
+          name: item_amount
+          nullable: true
+          type: numeric(17, 6)
+      item_length:
+          comment: This field is a float value
+          info: {}
+          name: item_length
+          nullable: false
+          type: float
+      name1:
+          comment: This field is required
+          info: {}
+          maxLength: 50
+          name: name1
+          nullable: false
+          type: string
+      name2:
+          comment: This field is not required
+          info: {}
+          maxLength: 50
+          name: name2
+          nullable: true
+          type: string
+      name3:
+          comment: This field has a default value
+          default:
+              arg: test
+              for_update: false
+          index: true
+          info: {}
+          name: name3
+          nullable: false
+          type: text
+      some_big_int:
+          comment: This field is a big integer
+          default:
+              arg: 0
+              for_update: false
+          format: int64
+          info: {}
+          name: some_big_int
+          nullable: false
+          type: integer
+      some_int:
+          comment: This field is a 32 bit integer
+          default:
+              arg: 0
+              for_update: false
+          format: int32
+          info: {}
+          name: some_int
+          nullable: false
+          type: integer
+      some_small_int:
+          comment: This field is a small integer
+          default:
+              arg: 0
+              for_update: false
+          format: int8
+          info: {}
+          name: some_small_int
+          nullable: false
+          type: integer
+      status_id:
+          choices:
+              0: New
+              1: Active
+              2: Suspended
+              3: Inactive
+          comment: Choices from a list. String descriptors change to integer upon
+              saving. Enums without the headache.
+          format: int32
+          info: {}
+          name: status_id
+          nullable: false
+          type: integer
+      today:
+          comment: This field defaults to today, created at model level
+          default:
+              arg: date.today
+              for_update: false
+          doc: this is a test
+          info:
+              test: this is
+          name: today
+          nullable: true
+          type: date
+      unique_col:
+          comment: This must be a unique value in the database.
+          info: {}
+          maxLength: 20
+          name: unique_col
+          nullable: true
+          type: string
+          unique: true
+      update_time1:
+          comment: This field defaults only on updates
+          info: {}
+          name: update_time1
+          nullable: true
+          onupdate:
+              arg: datetime.now
+              for_update: true
+          type: date-time
+      update_time2:
+          comment: This field defaults only on updates, but on theserver
+          info: {}
+          name: update_time2
+          nullable: true
+          server_onupdate:
+              arg: db.func.now()
+              for_update: true
+              reflected: false
+          type: date-time
+</pre></div>
+</div>
 <p><strong>dbbase</strong> is compatible with Python &gt;=3.6 and is distributed under the
 MIT license.</p>
 
@@ -912,7 +1597,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              May 03, 2020.
+              May 13, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

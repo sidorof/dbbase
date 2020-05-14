@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.base &#8212; dbbase 0.1.15 documentation</title>
+    <title>dbbase.base &#8212; dbbase 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.1.15 documentation"
+        <a href="../../index.html" title="dbbase 0.2.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.15</span>
+          <span class="md-header-nav__topic">dbbase 0.2.0</span>
           <span class="md-header-nav__topic"> dbbase.base </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.1.15 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.1.15 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.2.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.1.15 documentation">dbbase 0.1.15</a>
+       title="dbbase 0.2.0 documentation">dbbase 0.2.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -283,7 +283,6 @@
 <span class="sd">To that end there is also a config function for flexibility.</span>
 
 <span class="sd">"""</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 
@@ -291,14 +290,17 @@
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">orm</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">model</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_is_sqlite</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">xlate</span>
+<span class="kn">from</span> <span class="nn">.doc_utils</span> <span class="kn">import</span> <span class="n">process_expression</span>
+
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DB"><a class="viewcode-back" href="../../_generated/dbbase.DB.html#dbbase.DB">[docs]</a><span class="k">class</span> <span class="nc">DB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    This class defines a central location for accepting database configuration information, creating connections and sessions.</span>
+<span class="sd">    This class defines a central location for accepting database</span>
+<span class="sd">    configuration information, creating connections and sessions.</span>
 
 <span class="sd">    Default:</span>
 <span class="sd">        DB(config, model_class=None, checkfirst=True, echo=False)</span>
@@ -391,7 +393,8 @@
 <span class="sd">            checkfirst: (bool) : If True, will not recreate a table</span>
 <span class="sd">                that already exists.</span>
 <span class="sd">            echo: (bool : str) : logs interactions with engine</span>
-<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more detail.</span>
+<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more</span>
+<span class="sd">                detail.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            session (obj)</span>
@@ -418,7 +421,8 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            echo: (bool : str) : logs interactions with engine</span>
-<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more detail.</span>
+<span class="sd">                to INFO. defaults to False. echo can also be "debug" for more</span>
+<span class="sd">                detail.</span>
 <span class="sd">        """</span>
         <span class="c1"># see how this session is not the 'session' object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close_all_sessions</span><span class="p">()</span>
@@ -465,7 +469,131 @@
 <span class="sd">            cls: (Model) : the Model class having the attributes updated.</span>
 <span class="sd">        """</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span></div></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DB.doc_tables"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_tables.html#dbbase.DB.doc_tables">[docs]</a>    <span class="k">def</span> <span class="nf">doc_tables</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">class_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">""" doc_tables</span>
+
+<span class="sd">        This function creates a dictionary of all the table configuratons.</span>
+
+<span class="sd">        The function can be used in several ways:</span>
+
+<span class="sd">        * Communicate characteristics about a resource in an API.</span>
+<span class="sd">        * Provide a basis for unittesting a table to verify settings.</span>
+<span class="sd">        * Enable API resource validation prior to record creation.</span>
+
+<span class="sd">        Usage:</span>
+<span class="sd">            doc_tables(</span>
+<span class="sd">                class_list=None</span>
+<span class="sd">                to_camel_case=False,</span>
+<span class="sd">                column_props=None</span>
+<span class="sd">            )</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            #class_list: (None : list) : if left as None, returns all classes</span>
+<span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
+<span class="sd">            serial_list: (None : list) : specify a limited list of columns</span>
+<span class="sd">            column_props: (None : list) : filter column details to specific</span>
+<span class="sd">                                          items</span>
+
+<span class="sd">        Return:</span>
+
+<span class="sd">            doc (dict) : a dict of the classes with an initial key of</span>
+<span class="sd">                         'definitions'</span>
+
+<span class="sd">        The column props included are name, type, required, default detail,</span>
+<span class="sd">        foreign_keys, and unique.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">class_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">_decl_class_registry</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="n">class_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">_decl_class_registry</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">class_names</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">class_list</span><span class="p">]</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">_decl_class_registry</span><span class="p">[</span><span class="n">class_name</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">class_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">class_names</span><span class="p">)]</span>
+
+        <span class="n">doc_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="n">column_props</span><span class="p">)</span>
+            <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'definitions'</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">for</span> <span class="n">doc_cls</span> <span class="ow">in</span> <span class="n">doc_list</span><span class="p">:</span>
+            <span class="n">doc</span><span class="p">[</span><span class="s1">'definitions'</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">doc_cls</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">doc</span></div>
+
+<div class="viewcode-block" id="DB.doc_table"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_table.html#dbbase.DB.doc_table">[docs]</a>    <span class="k">def</span> <span class="nf">doc_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">""" doc_table</span>
+
+<span class="sd">        This function creates a dictionary of a table configuraton to aid in</span>
+<span class="sd">        documenting.</span>
+
+<span class="sd">        The function can be used in several ways:</span>
+
+<span class="sd">        * Communicate characteristics about a resource in an API.</span>
+<span class="sd">        * Provide a basis for unittesting a table to verify settings.</span>
+<span class="sd">        * Enable API resource validation prior to record creation.</span>
+
+<span class="sd">        Usage:</span>
+<span class="sd">            doc_table(</span>
+<span class="sd">                cls,</span>
+<span class="sd">                to_camel_case=False,</span>
+<span class="sd">                serial_list=None,</span>
+<span class="sd">                column_props=None</span>
+<span class="sd">            )</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls: (class) : the table to be documented</span>
+<span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
+<span class="sd">            serial_list: (None : list) : specify a limited list of columns</span>
+<span class="sd">            column_props: (None : list) : filter column details to specific</span>
+<span class="sd">                                          items</span>
+
+<span class="sd">        Return:</span>
+
+<span class="sd">            doc (dict) : a dict of the column values</span>
+
+<span class="sd">        The column props included are name, type, required, default detail,</span>
+<span class="sd">        foreign_keys, and unique.</span>
+<span class="sd">        """</span>
+
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'object'</span><span class="p">,</span>
+                <span class="s1">'properties'</span><span class="p">:</span> <span class="n">properties</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">all_orm_descriptors</span>
+        <span class="k">if</span> <span class="n">serial_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">serial_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="c1"># weed out relations</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Column</span><span class="p">):</span>
+                <span class="n">item_dict</span> <span class="o">=</span> <span class="n">process_expression</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
+                <span class="c1"># done afterwards because keys in expression can change</span>
+                <span class="k">if</span> <span class="n">column_props</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop_key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                        <span class="k">if</span> <span class="n">prop_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">column_props</span><span class="p">:</span>
+                            <span class="k">del</span> <span class="n">item_dict</span><span class="p">[</span><span class="n">prop_key</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">to_camel_case</span><span class="p">:</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">xlate</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+                <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item_dict</span>
+
+        <span class="k">return</span> <span class="n">doc</span></div></div>
 </pre></div>
 
           </article>
@@ -491,7 +619,7 @@
               
           </div>
             Last updated on
-              May 03, 2020.
+              May 13, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -3,7 +3,8 @@
 This module supports documenting tables with helper functions.
 """
 from copy import deepcopy
-from collections import OrderedDict
+from sqlalchemy.sql import functions
+from sqlalchemy.sql import elements
 
 
 def _default(value):
@@ -21,10 +22,65 @@ def _default(value):
     if "column" in ddict:
         ddict.pop("column")
 
-    if callable(ddict["arg"]):
+    if isinstance(ddict["arg"], elements.TextClause):
+        # ex. server_default=db.text("0") -- place a number
+        ddict["arg"] = f'db.text("{ddict["arg"].text}")'
+
+    elif callable(ddict["arg"]):
+        # local function
         ddict["arg"] = ddict["arg"].__qualname__
 
+    elif isinstance(ddict["arg"], functions.GenericFunction):
+        # hopefully just server functions
+        # trying to get to ex: db.func.now()
+        name = str(ddict["arg"].__class__)
+        name = name[name.find("<class '") + 8: name.find('>') - 1]
+
+        ddict["arg"] = f"db.func.{name.split('.')[-1]}()"
+
+    else:
+        # leave it alone
+        pass
+
     return {key: ddict}
+
+
+def _onupdate(value):
+    """ _onupdate
+
+    This function marks the default as on update.
+    """
+    res = _default(value)
+    if res['default'] is not None:
+        return {"onupdate": res["default"]}
+
+    return res
+
+
+def _server_default(value):
+    """ _server_default
+
+    This function marks the default as server_default
+
+    """
+    res = _default(value)
+    if res['default'] is not None:
+        return {"server_default": res["default"]}
+
+    return res
+
+
+def _server_onupdate(value):
+    """ _server_onupdate
+
+    This function marks the default as _server_onupdate
+
+    """
+    res = _default(value)
+    if res['default'] is not None:
+        return {"server_onupdate": res["default"]}
+
+    return res
 
 
 def _foreign_keys(value):
@@ -44,10 +100,7 @@ def _foreign_keys(value):
 
         return {key: foreign_keys[0]}
 
-    else:
-        value = None
-
-    return {key: value}
+    return None
 
 
 def _only_if_true(value):
@@ -110,7 +163,7 @@ def _type(value):
         if val_str == "VARCHAR":
             res = {"type": "string"}
         elif pos1 > -1:
-            res = {"type": "string", "maxLength": int(val_str[pos1 + 1 : -1])}
+            res = {"type": "string", "maxLength": int(val_str[pos1 + 1: -1])}
         else:
             res = {"type": val_str}
     else:
@@ -128,6 +181,9 @@ EXPRESSION_KEYS = {
     "primary_key": _only_if_true,
     "nullable": None,
     "default": _default,
+    "onupdate": _onupdate,
+    "server_default": _server_default,
+    "server_onupdate": _server_onupdate,
     "index": None,
     "unique": _only_if_true,
     "system": _only_if_true,
@@ -143,10 +199,8 @@ def process_expression(expression):
     This function uses the dict from expression and converts selected elements
     for documentation.
     """
-    doc_dict = OrderedDict()
-    # doc_dict = {}
+    doc_dict = {}
     for key, func in EXPRESSION_KEYS.items():
-        # evaluate the ones that require special treatment first
         expr_value = getattr(expression, key)
         if expr_value is not None:
             if func is not None:

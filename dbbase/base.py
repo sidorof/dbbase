@@ -15,7 +15,6 @@ To that end there is also a config function for flexibility.
 """
 import logging
 import importlib
-from collections import OrderedDict
 
 import sqlalchemy
 from sqlalchemy import create_engine, orm
@@ -124,7 +123,8 @@ class DB(object):
             checkfirst: (bool) : If True, will not recreate a table
                 that already exists.
             echo: (bool : str) : logs interactions with engine
-                to INFO. defaults to False. echo can also be "debug" for more detail.
+                to INFO. defaults to False. echo can also be "debug" for more
+                detail.
 
         Returns:
             session (obj)
@@ -151,7 +151,8 @@ class DB(object):
 
         Args:
             echo: (bool : str) : logs interactions with engine
-                to INFO. defaults to False. echo can also be "debug" for more detail.
+                to INFO. defaults to False. echo can also be "debug" for more
+                detail.
         """
         # see how this session is not the 'session' object
         self.orm.session.close_all_sessions()
@@ -200,12 +201,68 @@ class DB(object):
         cls.query = self.session.query(cls)
         cls.db = self
 
+    def doc_tables(
+            self, class_list=None, to_camel_case=False, column_props=None):
+        """ doc_tables
+
+        This function creates a dictionary of all the table configuratons.
+
+        The function can be used in several ways:
+
+        * Communicate characteristics about a resource in an API.
+        * Provide a basis for unittesting a table to verify settings.
+        * Enable API resource validation prior to record creation.
+
+        Usage:
+            doc_tables(
+                class_list=None
+                to_camel_case=False,
+                column_props=None
+            )
+
+        Args:
+            #class_list: (None : list) : if left as None, returns all classes
+            to_camel_case: (bool) : converts the column names to camel case
+            serial_list: (None : list) : specify a limited list of columns
+            column_props: (None : list) : filter column details to specific
+                                          items
+
+        Return:
+
+            doc (dict) : a dict of the classes with an initial key of
+                         'definitions'
+
+        The column props included are name, type, required, default detail,
+        foreign_keys, and unique.
+        """
+        if class_list is None:
+            classes = self.Model._decl_class_registry.values()
+            class_names = self.Model._decl_class_registry.keys()
+        else:
+            class_names = [cls.__name__ for cls in class_list]
+
+        classes = [
+            self.Model._decl_class_registry[class_name]
+            for class_name in sorted(class_names)]
+
+        doc_list = [
+            self.doc_table(
+                cls, to_camel_case=to_camel_case, column_props=column_props)
+            for cls in classes
+            if isinstance(cls, type) and issubclass(cls, self.Model)
+        ]
+        doc = {'definitions': {}}
+        for doc_cls in doc_list:
+            doc['definitions'].update(doc_cls)
+
+        return doc
+
     def doc_table(
             self, cls, to_camel_case=False, serial_list=None,
             column_props=None):
         """ doc_table
 
-        This function creates a dict of a table configuraton to aid in
+        This function creates a dictionary of a table configuraton to aid in
         documenting.
 
         The function can be used in several ways:
@@ -244,8 +301,6 @@ class DB(object):
                 'properties': properties
             }
         }
-        doc = OrderedDict(doc)
-
         tmp = self.inspect(cls).all_orm_descriptors
         if serial_list is not None:
             columns = serial_list
@@ -254,17 +309,18 @@ class DB(object):
 
         for key in columns:
             value = tmp[key]
+            # weed out relations
+            if isinstance(value.expression, self.Column):
+                item_dict = process_expression(value.expression)
+                # done afterwards because keys in expression can change
+                if column_props is not None:
+                    for prop_key in list(item_dict.keys()):
+                        if prop_key not in column_props:
+                            del item_dict[prop_key]
 
-            item_dict = process_expression(value.expression)
-            # done afterwards because keys in expression can change
-            if column_props is not None:
-                for prop_key in list(item_dict.keys()):
-                    if prop_key not in column_props:
-                        del item_dict[prop_key]
+                if to_camel_case:
+                    key = xlate(key)
 
-            if to_camel_case:
-                key = xlate(key)
-
-            properties[key] = item_dict
+                properties[key] = item_dict
 
         return doc

@@ -3,7 +3,7 @@
 This example mirrors the user guide example for serialization with
 two tables.
 """
-
+import json
 from dbbase import DB
 
 db = DB(config=':memory:')
@@ -89,4 +89,5 @@ print(
         }
     )
 )
+
 input('ready')

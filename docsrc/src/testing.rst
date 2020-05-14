@@ -44,7 +44,7 @@ Run the following command in the root of this repo:
 
 .. code-block:: bash
 
-    python3 -m unittest
+    python3 -m unittest tests.main
 
 ..
 

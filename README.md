@@ -1,16 +1,17 @@
-## Motivation
+## Introduction
 
-When starting out with Python long ago, the accepted method of interacting with PostgreSQL involved `psycopg` and some method of defining classes that represented table objects. To that end I created objects that could save, load, and interact with the database. From a design standpoint, this seemed natural and effective.
+This package implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts.
 
-Then, SQLAlchemy came on the scene with its layer of abstraction. The design of table objects entailed a clear separation between table (model) objects and the connection to the database in the form of a session object. Moving with the times, I created a body of code organized around that principle and carted around the session object anytime I needed to interact with the database.
+The package focuses on three areas of interest.
 
-When using Flask with Flask-SQLAlchemy, the design pattern returned to access to the database  being once again integrated into the model object as well as available separately.
+* Convenience functions as part of the Model class with easy access to the session and query object, as well as simple functions for saving, etc. within the Model class.
 
-SQLAlchemy models outside of Flask can be shoehorned into the app, but we are left with the uneasy tension of interacting with the models in a different way.
+* Serialization functions enable expressing model data as both JSON and dictionary objects. This feature facilitates easy access to views. The views can be scaled up to include objects created by relationships with explicit control over the content, or show only the bare minimum. These functions can be used as part of an API.
 
-This package implements a light-weight integration of a prototypical Model class with the session object and using a db object reminiscent of Flask-SQLAlchemy. The result of this tack is that the same interactions with the database can be applied whether the program is within the Flask environment or not.
+* Documentation functions introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.
 
-## Goals
+
+## Characteristics
 
 ### Engine Behavior
 
@@ -33,8 +34,8 @@ version of SQLAlchemy's declarative base.
         name = db.Column(db.String, nullable=False)
         another_id = db.Column(db.SmallInteger)
         start_date = db.Column(db.Date, default=date.today)
-        update_time = db.Column(db.DateTime, default=datetime.now)
-        end_date = db.Column(db.Date)
+        update_at = db.Column(db.DateTime, onupdate=datetime.now)
+        completed_at = db.Column(db.DateTime)
         completion_status = db.Column(db.SmallInteger, default=0)
 
 ```
@@ -87,8 +88,8 @@ job = Job(
     name='model build process',
     another_id=4,
     start_date='2020-04-15',
-    update_time=datetime.datetime(2020, 4, 20, 3, 2, 1)
-    end_date = datetime.date(2020, 4, 30)
+    update_at=datetime.datetime(2020, 4, 20, 3, 2, 1)
+    completed_at = datetime.date(2020, 4, 30)
     completion_status = 0
 ).save()
 
@@ -99,7 +100,7 @@ job.serialize()
     "name": "model build process",
     "anotherId": 4,
     "startDate": "2020-04-15",
-    "updateTime": "2020-04-20 03:02:01"
+    "updateAt": "2020-04-20 03:02:01"
     "endDate" = "2020-4-30"
     "completionStatus" = 0
 }
@@ -115,7 +116,7 @@ via
 Note that this does not update the record directly (the job in this example). Rather, the output is in the form of a dict. This gives an opportunity to evaluate the data prior to updating the record and database.
 
 For example, suppose you also use `parser = reqparse.RequestParser()` from
-flask_restful on the flask side of things:
+Flask-Restful on the Flask side of things:
 
 ```python
     data = Job.deserialize(
@@ -124,6 +125,86 @@ flask_restful on the flask side of things:
 ```
 
 Finally, the serialize / deserialize functions can always be subclassed for special requirements of that particular model.
+
+### Docs
+
+The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions. Just as serialization mentioned above of objects can control what columns to include, the documentation function, `db.doc_table` enables control of what fields to include and what column properties to include.
+
+The following command
+```python
+    db.doc_table(Job, to_camel_case=True, serial_list=None, column_props=None)
+
+```
+produces this output.
+
+```json
+{
+    "Job": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "name": "id",
+                "type": "integer",
+                "format": "int32",
+                "primary_key": true,
+                "nullable": false,
+                "info": {}
+            },
+            "name": {
+                "name": "name",
+                "type": "string",
+                "nullable": false,
+                "info": {}
+            },
+            "anotherId": {
+                "name": "another_id",
+                "type": "integer",
+                "format": "int8",
+                "nullable": true,
+                "info": {}
+            },
+            "startDate": {
+                "name": "start_date",
+                "type": "date",
+                "nullable": true,
+                "default": {
+                    "for_update": false,
+                    "arg": "date.today"
+                },
+                "info": {}
+            },
+            "updateAt": {
+                "name": "update_at",
+                "type": "date-time",
+                "nullable": true,
+                "onupdate": {
+                    "for_update": true,
+                    "arg": "datetime.now"
+                },
+                "info": {}
+            },
+            "completedAt": {
+                "name": "completed_at",
+                "type": "date-time",
+                "nullable": true,
+                "info": {}
+            },
+            "completionStatus": {
+                "name": "completion_status",
+                "type": "integer",
+                "format": "int8",
+                "nullable": true,
+                "default": {
+                    "for_update": false,
+                    "arg": 0
+                },
+                "info": {}
+            }
+        }
+    }
+}
+```
+
 
 ## More
 

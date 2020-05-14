@@ -29,7 +29,6 @@ To test then for sqlite, one URI can be used
 import unittest
 import json
 import warnings
-from sqlalchemy.exc import IntegrityError
 
 import dbbase
 

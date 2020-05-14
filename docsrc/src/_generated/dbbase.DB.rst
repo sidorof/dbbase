@@ -20,6 +20,10 @@ DB
       
          ~DB.create_session
       
+         ~DB.doc_table
+      
+         ~DB.doc_tables
+      
          ~DB.drop_all
       
          ~DB.load_model_class

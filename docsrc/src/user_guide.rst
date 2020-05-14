@@ -660,5 +660,697 @@ By the way, showing examples of serialization in printed form is much better if 
 
 {"id": 1, "parentId": null, "data": "this is node1", "children": [{"id": 2, "parentId": 1, "data": "this is node2", "children": [{"id": 3, "parentId": 2, "data": "this is node3", "children": []}, {"id": 4, "parentId": 2, "data": "this is node4", "children": []}]}, {"id": 5, "parentId": 1, "data": "this is node5", "children": [{"id": 6, "parentId": 5, "data": "this is node6", "children": []}]}]}
 
+
+---------------------
+Document Dictionaries
+---------------------
+
+Document Dictionaries introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.
+
+Table Documentation
+===================
+
+Suppose we were to describe the two tables created above, User, and Address.
+
+.. code-block:: python
+
+    >>> db.doc_tables(to_camel_case=True)
+
+..
+This would yield the following output that details object models similarly to OpenApi. It details the column characteristics for each table. Note how the foreign key is annotated in Address. If defaults had been defined for the tables, it would detail the default type including server defaults.
+
+In the example shown, the column names have been converted to camel case. Front end developers, used to JavaScript notation may be more comfortable in this format.
+
+
+.. code-block:: json
+
+    {
+        "definitions": {
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "emailAddress": {
+                        "name": "email_address",
+                        "type": "string",
+                        "nullable": false,
+                        "info": {}
+                    },
+                    "id": {
+                        "name": "id",
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": true,
+                        "nullable": false,
+                        "info": {}
+                    },
+                    "userId": {
+                        "name": "user_id",
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true,
+                        "foreign_key": "users.id",
+                        "info": {}
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "name": "id",
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": true,
+                        "nullable": false,
+                        "info": {}
+                    },
+                    "firstName": {
+                        "name": "first_name",
+                        "type": "string",
+                        "maxLength": 50,
+                        "nullable": false,
+                        "info": {}
+                    },
+                    "lastName": {
+                        "name": "last_name",
+                        "type": "string",
+                        "maxLength": 50,
+                        "nullable": false,
+                        "info": {}
+                    }
+                }
+            }
+        }
+    }
+
+Filtering for Form Data and Query Strings
+=========================================
+
+If you have used Flask-Restful, one of the features involves argument parsing of form data, query strings, etc. This involves entering arguments such as:
+
+.. code-block:: python
+
+    parser = reqparse.RequestParser()
+    parser.add_argument("id", type=int, required=False)
+    parser.add_argument("firstName", type=str, required=True)
+    parser.add_argument("lastName", type=str, required=True)
+
+..
+
+The kind of characteristics necessary to process that data is already available from the above objects. The creators of Flask-Restful have indicated that they are going to eventually drop support of the `reqparse` class would does the above.
+
+Using generated objects such as above can be wrapped into a parsing mechanism reducing the need for a duplication of effort. You have already done the work of carefully crafting your tables. Using the document dictionaries you can get more mileage out of it.
+
+A Larger Example of a Document Dictionary
+========================================
+
+To get an idea of the range of support it helps to see a more complicated table. The following table is basically a zoo of different combinations of column types and parameters.
+
+.. code-block:: python
+
+       status_codes = [
+            [0, "New"],
+            [1, "Active"],
+            [2, "Suspended"],
+            [3, "Inactive"],
+        ]
+
+        class StatusCodes(types.TypeDecorator):
+            """
+            Status codes are entered as strings and converted to
+            integers when saved to the database.
+            """
+            impl = types.Integer
+
+            def __init__(self, status_codes, **kw):
+                self.choices = dict(status_codes)
+                super(StatusCodes, self).__init__(**kw)
+
+            def process_bind_param(self, value, dialect):
+                """called when saving to the database"""
+                return [
+                    k
+                    for k, v in self.choices.items()
+                    if v == value
+                ][0]
+
+            def process_result_value(self, value, dialect):
+                """called when pulling from database"""
+                return self.choices[value]
+
+        class BigTable(db.Model):
+            """Test class with a variety of column types"""
+            __tablename__ = "main"
+
+            id = db.Column(
+                db.Integer,
+                primary_key=True,
+                nullable=True,
+                comment="Primary key with a value assigned by the database",
+                info={"extra": "info here"},
+            )
+
+            status_id = db.Column(
+                StatusCodes(status_codes),
+                nullable=False,
+                comment="Choices from a list. String descriptors "
+                "change to integer upon saving. Enums without the headache.",
+            )
+
+            @db.orm.validates("status_id")
+            def _validate_id(self, key, id):
+                """_validate_id
+
+                Args:
+                    id: (int) : id must be in cls.choices
+                """
+                if id not in dict(status_codes):
+                    raise ValueError("{} is not valid".format(id))
+                return id
+
+            # nullable / not nullable
+            name1 = db.Column(
+                db.String(50), nullable=False, comment="This field is required"
+            )
+            name2 = db.Column(
+                db.String(50),
+                nullable=True,
+                comment="This field is not required",
+            )
+
+            # text default
+            name3 = db.Column(
+                db.Text,
+                default="test",
+                nullable=False,
+                comment="This field has a default value",
+                index=True,
+            )
+
+            item_length = db.Column(
+                db.Float, nullable=False, comment="This field is a float value"
+            )
+
+            item_amount = db.Column(db.Numeric(17, 6), default=0.0)
+
+            # integer and default
+            some_small_int = db.Column(
+                db.SmallInteger,
+                default=0,
+                nullable=False,
+                comment="This field is a small integer",
+            )
+            some_int = db.Column(
+                db.Integer,
+                default=0,
+                nullable=False,
+                comment="This field is a 32 bit integer",
+            )
+            some_big_int = db.Column(
+                db.BigInteger,
+                default=0,
+                nullable=False,
+                comment="This field is a big integer",
+            )
+
+            fk_id = db.Column(
+                db.Integer,
+                db.ForeignKey("other_table.id"),
+                nullable=False,
+                comment="This field is constrained by a foreign key on"
+                "another table",
+            )
+
+            today = db.Column(
+                db.Date,
+                doc="this is a test",
+                info={"test": "this is"},
+                comment="This field defaults to today, created at model level",
+                default=date.today,
+            )
+
+            created_at1 = db.Column(
+                db.DateTime,
+                default=datetime.now,
+                comment="This field defaults to now, created at model level",
+            )
+            created_at2 = db.Column(
+                db.DateTime,
+                server_default=db.func.now(),
+                comment="This field defaults to now, created at the server"
+                "level",
+            )
+            update_time1 = db.Column(
+                db.DateTime,
+                onupdate=datetime.now,
+                comment="This field defaults only on updates",
+            )
+            update_time2 = db.Column(
+                db.DateTime,
+                server_onupdate=db.func.now(),
+                comment="This field defaults only on updates, but on the"
+                "server",
+            )
+
+            unique_col = db.Column(
+                db.String(20),
+                unique=True,
+                comment="This must be a unique value in the database.",
+            )
+
+            # adapted from sqlalchemy docs
+            abc = db.Column(
+                db.String(20),
+                server_default="abc",
+                comment="This field defaults to text but on the server.",
+            )
+            index_value = db.Column(
+                db.Integer,
+                server_default=db.text("0"),
+                comment="This field defaults to an integer on the server.",
+            )
+
+            __table_args = (
+                db.Index("ix_name1_name2", "name1", "name2", unique=True),
+            )
+
+        class OtherTable(db.Model):
+            __tablename__ = "other_table"
+            id = db.Column(db.Integer, primary_key=True, nullable=True)
+
+ ..
+
+From that table we can generation our document dictionary:
+
+.. code-block:: json
+
+    {
+        "BigTable": {
+            "type": "object",
+            "properties": {
+                "item_amount": {
+                    "name": "item_amount",
+                    "type": "numeric(17, 6)",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0.0
+                    },
+                    "info": {}
+                },
+                "name2": {
+                    "name": "name2",
+                    "type": "string",
+                    "maxLength": 50,
+                    "nullable": true,
+                    "comment": "This field is not required",
+                    "info": {}
+                },
+                "abc": {
+                    "name": "abc",
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "abc",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to text but on the server.",
+                    "info": {}
+                },
+                "fk_id": {
+                    "name": "fk_id",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": false,
+                    "foreign_key": "other_table.id",
+                    "comment": "This field is constrained by a foreign key onanother table",
+                    "info": {}
+                },
+                "some_small_int": {
+                    "name": "some_small_int",
+                    "type": "integer",
+                    "format": "int8",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a small integer",
+                    "info": {}
+                },
+                "some_int": {
+                    "name": "some_int",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a 32 bit integer",
+                    "info": {}
+                },
+                "update_time2": {
+                    "name": "update_time2",
+                    "type": "date-time",
+                    "nullable": true,
+                    "server_onupdate": {
+                        "for_update": true,
+                        "arg": "db.func.now()",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults only on updates, but on theserver",
+                    "info": {}
+                },
+                "index_value": {
+                    "name": "index_value",
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "db.text(\"0\")",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to an integer on the server.",
+                    "info": {}
+                },
+                "update_time1": {
+                    "name": "update_time1",
+                    "type": "date-time",
+                    "nullable": true,
+                    "onupdate": {
+                        "for_update": true,
+                        "arg": "datetime.now"
+                    },
+                    "comment": "This field defaults only on updates",
+                    "info": {}
+                },
+                "today": {
+                    "name": "today",
+                    "type": "date",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": "date.today"
+                    },
+                    "doc": "this is a test",
+                    "comment": "This field defaults to today, created at model level",
+                    "info": {
+                        "test": "this is"
+                    }
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "format": "int32",
+                    "primary_key": true,
+                    "nullable": true,
+                    "comment": "Primary key with a value assigned by the database",
+                    "info": {
+                        "extra": "info here"
+                    }
+                },
+                "created_at1": {
+                    "name": "created_at1",
+                    "type": "date-time",
+                    "nullable": true,
+                    "default": {
+                        "for_update": false,
+                        "arg": "datetime.now"
+                    },
+                    "comment": "This field defaults to now, created at model level",
+                    "info": {}
+                },
+                "name1": {
+                    "name": "name1",
+                    "type": "string",
+                    "maxLength": 50,
+                    "nullable": false,
+                    "comment": "This field is required",
+                    "info": {}
+                },
+                "created_at2": {
+                    "name": "created_at2",
+                    "type": "date-time",
+                    "nullable": true,
+                    "server_default": {
+                        "for_update": false,
+                        "arg": "db.func.now()",
+                        "reflected": false
+                    },
+                    "comment": "This field defaults to now, created at the serverlevel",
+                    "info": {}
+                },
+                "some_big_int": {
+                    "name": "some_big_int",
+                    "type": "integer",
+                    "format": "int64",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": 0
+                    },
+                    "comment": "This field is a big integer",
+                    "info": {}
+                },
+                "unique_col": {
+                    "name": "unique_col",
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": true,
+                    "unique": true,
+                    "comment": "This must be a unique value in the database.",
+                    "info": {}
+                },
+                "item_length": {
+                    "name": "item_length",
+                    "type": "float",
+                    "nullable": false,
+                    "comment": "This field is a float value",
+                    "info": {}
+                },
+                "status_id": {
+                    "name": "status_id",
+                    "type": "integer",
+                    "format": "int32",
+                    "choices": {
+                        "0": "New",
+                        "1": "Active",
+                        "2": "Suspended",
+                        "3": "Inactive"
+                    },
+                    "nullable": false,
+                    "comment": "Choices from a list. String descriptors change to integer upon saving. Enums without the headache.",
+                    "info": {}
+                },
+                "name3": {
+                    "name": "name3",
+                    "type": "text",
+                    "nullable": false,
+                    "default": {
+                        "for_update": false,
+                        "arg": "test"
+                    },
+                    "index": true,
+                    "comment": "This field has a default value",
+                    "info": {}
+                }
+            }
+        }
+    }
+
+..
+
+This output illustrates a range of some of what is available and how the parameters are formatted.
+
+.. code-block:: yml
+
+  BigTable:
+    type: object
+    properties:
+        abc:
+            comment: This field defaults to text but on the server.
+            info: {}
+            maxLength: 20
+            name: abc
+            nullable: true
+            server_default:
+                arg: abc
+                for_update: false
+                reflected: false
+            type: string
+        created_at1:
+            comment: This field defaults to now, created at model level
+            default:
+                arg: datetime.now
+                for_update: false
+            info: {}
+            name: created_at1
+            nullable: true
+            type: date-time
+        created_at2:
+            comment: This field defaults to now, created at the serverlevel
+            info: {}
+            name: created_at2
+            nullable: true
+            server_default:
+                arg: db.func.now()
+                for_update: false
+                reflected: false
+            type: date-time
+        fk_id:
+            comment: This field is constrained by a foreign key onanother table
+            foreign_key: other_table.id
+            format: int32
+            info: {}
+            name: fk_id
+            nullable: false
+            type: integer
+        id:
+            comment: Primary key with a value assigned by the database
+            format: int32
+            info:
+                extra: info here
+            name: id
+            nullable: true
+            primary_key: true
+            type: integer
+        index_value:
+            comment: This field defaults to an integer on the server.
+            format: int32
+            info: {}
+            name: index_value
+            nullable: true
+            server_default:
+                arg: db.text("0")
+                for_update: false
+                reflected: false
+            type: integer
+        item_amount:
+            default:
+                arg: 0.0
+                for_update: false
+            info: {}
+            name: item_amount
+            nullable: true
+            type: numeric(17, 6)
+        item_length:
+            comment: This field is a float value
+            info: {}
+            name: item_length
+            nullable: false
+            type: float
+        name1:
+            comment: This field is required
+            info: {}
+            maxLength: 50
+            name: name1
+            nullable: false
+            type: string
+        name2:
+            comment: This field is not required
+            info: {}
+            maxLength: 50
+            name: name2
+            nullable: true
+            type: string
+        name3:
+            comment: This field has a default value
+            default:
+                arg: test
+                for_update: false
+            index: true
+            info: {}
+            name: name3
+            nullable: false
+            type: text
+        some_big_int:
+            comment: This field is a big integer
+            default:
+                arg: 0
+                for_update: false
+            format: int64
+            info: {}
+            name: some_big_int
+            nullable: false
+            type: integer
+        some_int:
+            comment: This field is a 32 bit integer
+            default:
+                arg: 0
+                for_update: false
+            format: int32
+            info: {}
+            name: some_int
+            nullable: false
+            type: integer
+        some_small_int:
+            comment: This field is a small integer
+            default:
+                arg: 0
+                for_update: false
+            format: int8
+            info: {}
+            name: some_small_int
+            nullable: false
+            type: integer
+        status_id:
+            choices:
+                0: New
+                1: Active
+                2: Suspended
+                3: Inactive
+            comment: Choices from a list. String descriptors change to integer upon
+                saving. Enums without the headache.
+            format: int32
+            info: {}
+            name: status_id
+            nullable: false
+            type: integer
+        today:
+            comment: This field defaults to today, created at model level
+            default:
+                arg: date.today
+                for_update: false
+            doc: this is a test
+            info:
+                test: this is
+            name: today
+            nullable: true
+            type: date
+        unique_col:
+            comment: This must be a unique value in the database.
+            info: {}
+            maxLength: 20
+            name: unique_col
+            nullable: true
+            type: string
+            unique: true
+        update_time1:
+            comment: This field defaults only on updates
+            info: {}
+            name: update_time1
+            nullable: true
+            onupdate:
+                arg: datetime.now
+                for_update: true
+            type: date-time
+        update_time2:
+            comment: This field defaults only on updates, but on theserver
+            info: {}
+            name: update_time2
+            nullable: true
+            server_onupdate:
+                arg: db.func.now()
+                for_update: true
+                reflected: false
+            type: date-time
+
+..
+
+
 **dbbase** is compatible with Python >=3.6 and is distributed under the
 MIT license.

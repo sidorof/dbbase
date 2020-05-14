@@ -1,8 +1,6 @@
 # test/test_dbbase/maint.py
 from . import DBBaseTestCase
 
-import sqlalchemy
-
 
 class TestMaint(DBBaseTestCase):
     """

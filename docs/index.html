@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase documentation &#8212; dbbase 0.1.15 documentation</title>
+    <title>dbbase documentation &#8212; dbbase 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -89,7 +89,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="#" title="dbbase 0.1.15 documentation"
+        <a href="#" title="dbbase 0.2.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -101,7 +101,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.1.15</span>
+          <span class="md-header-nav__topic">dbbase 0.2.0</span>
           <span class="md-header-nav__topic"> dbbase documentation </span>
         </div>
       </div>
@@ -164,7 +164,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="#" class="md-tabs__link">dbbase 0.1.15 documentation</a></li>
+          <li class="md-tabs__item"><a href="#" class="md-tabs__link">dbbase 0.2.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="#" title="dbbase 0.1.15 documentation" class="md-nav__button md-logo">
+    <a href="#" title="dbbase 0.2.0 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="#"
-       title="dbbase 0.1.15 documentation">dbbase 0.1.15</a>
+       title="dbbase 0.2.0 documentation">dbbase 0.2.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -257,9 +257,9 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#index--page-root" class="md-nav__link">dbbase documentation</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#motivation" class="md-nav__link">Motivation</a>
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
         </li>
-        <li class="md-nav__item"><a href="#goals" class="md-nav__link">Goals</a><nav class="md-nav">
+        <li class="md-nav__item"><a href="#characteristics" class="md-nav__link">Characteristics</a><nav class="md-nav">
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#engine-behavior" class="md-nav__link">Engine Behavior</a>
         </li>
@@ -274,6 +274,8 @@
         <li class="md-nav__item"><a href="#serialization" class="md-nav__link">Serialization</a>
         </li></ul>
             </nav>
+        </li>
+        <li class="md-nav__item"><a href="#docs" class="md-nav__link">Docs</a>
         </li></ul>
             </nav>
         </li>
@@ -299,87 +301,18 @@
             
   
 <h1 id="index--page-root">dbbase documentation<a class="headerlink" href="#index--page-root" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#database-connections">Database Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#model-interactions">Model Interactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#record-validation">Record Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#serialization">Serialization</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user_guide.html#controlling-serialization">Controlling Serialization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide.html#recursive-serialization">Recursive Serialization</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Running Unit Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">[0.1.15] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[0.1.14] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">[0.1.13] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id5">[0.1.12] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">[0.1.11] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Removed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">[0.1.10] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Changed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">[0.1.9] -</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id12">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id13">[0.1.8] - 2020-04-01</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id14">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id15">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Removed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id18">[0.1.8] - 2020-03-23</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id19">Added</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
 
-<h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
-<p>When starting out with Python long ago, the accepted method of interacting with PostgreSQL involved <code class="docutils literal notranslate"><span class="pre">psycopg</span></code> and some method of defining classes that represented table objects. To that end I created objects that could save, load, and interact with the database. From a design standpoint, this seemed natural and effective.</p>
-<p>Then, SQLAlchemy came on the scene with its layer of abstraction. The design of table objects entailed a clear separation between table (model) objects and the connection to the database in the form of a session object. Moving with the times, I created a body of code organized around that principle and carted around the session object anytime I needed to interact with the database.</p>
-<p>When using Flask with Flask-SQLAlchemy, the design pattern returned to access to the database  being once again integrated into the model object as well as available separately.</p>
-<p>SQLAlchemy models outside of Flask can be shoehorned into the app, but we are left with the uneasy tension of interacting with the models in a different way.</p>
-<p>This package implements a light-weight integration of a prototypical Model class with the session object and using a db object reminiscent of Flask-SQLAlchemy. The result of this tack is that the same interactions with the database can be applied whether the program is within the Flask environment or not.</p>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This package implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts.</p>
+<p>The package focuses on three areas of interest.</p>
+<ul class="simple">
+<li><p>Convenience functions as part of the Model class with easy access to the session and query object, as well as simple functions for saving, etc. within the Model class.</p></li>
+<li><p>Serialization functions enable expressing model data as both JSON and dictionary objects. This feature facilitates easy access to views. The views can be scaled up to include objects created by relationships with explicit control over the content, or show only the bare minimum. These functions can be used as part of an API.</p></li>
+<li><p>Documentation functions introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.</p></li>
+</ul>
 
 
-<h2 id="goals">Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<h2 id="characteristics">Characteristics<a class="headerlink" href="#characteristics" title="Permalink to this headline">¶</a></h2>
 
 <h3 id="engine-behavior">Engine Behavior<a class="headerlink" href="#engine-behavior" title="Permalink to this headline">¶</a></h3>
 <p>Integration of session / query with table classes.</p>
@@ -399,8 +332,8 @@ version of SQLAlchemy’s declarative base.</p>
     <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">another_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">SmallInteger</span><span class="p">)</span>
     <span class="n">start_date</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Date</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">)</span>
-    <span class="n">update_time</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
-    <span class="n">end_date</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Date</span><span class="p">)</span>
+    <span class="n">update_at</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">onupdate</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+    <span class="n">completed_at</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">)</span>
     <span class="n">completion_status</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">SmallInteger</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -444,8 +377,8 @@ lines of:</p>
     <span class="n">name</span><span class="o">=</span><span class="s1">'model build process'</span><span class="p">,</span>
     <span class="n">another_id</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">start_date</span><span class="o">=</span><span class="s1">'2020-04-15'</span><span class="p">,</span>
-    <span class="n">update_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">update_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">completed_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">completion_status</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
@@ -456,7 +389,7 @@ lines of:</p>
     <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"model build process"</span><span class="p">,</span>
     <span class="s2">"anotherId"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
     <span class="s2">"startDate"</span><span class="p">:</span> <span class="s2">"2020-04-15"</span><span class="p">,</span>
-    <span class="s2">"updateTime"</span><span class="p">:</span> <span class="s2">"2020-04-20 03:02:01"</span>
+    <span class="s2">"updateAt"</span><span class="p">:</span> <span class="s2">"2020-04-20 03:02:01"</span>
     <span class="s2">"endDate"</span> <span class="o">=</span> <span class="s2">"2020-4-30"</span>
     <span class="s2">"completionStatus"</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">}</span>
@@ -470,7 +403,7 @@ via</p>
 </div>
 <p>Note that this does not update the record directly (the job in this example). Rather, the output is in the form of a dict. This gives an opportunity to evaluate the data prior to updating the record and database.</p>
 <p>For example, suppose you also use <code class="docutils literal notranslate"><span class="pre">parser</span> <span class="pre">=</span> <span class="pre">reqparse.RequestParser()</span></code> from
-flask_restful on the flask side of things:</p>
+Flask-Restful on the Flask side of things:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span>
     <span class="n">JobResource</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">())</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span>
@@ -480,9 +413,164 @@ flask_restful on the flask side of things:</p>
 
 
 
+<h3 id="docs">Docs<a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h3>
+<p>The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions. Just as serialization mentioned above of objects can control what columns to include, the documentation function, <code class="docutils literal notranslate"><span class="pre">db.doc_table</span></code> enables control of what fields to include and what column properties to include.</p>
+<p>The following command</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>produces this output.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">"Job"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+        <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"name"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"anotherId"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"another_id"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"startDate"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"start_date"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"date.today"</span>
+                <span class="p">},</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"updateAt"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_at"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"onupdate"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="s2">"datetime.now"</span>
+                <span class="p">},</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"completedAt"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"completed_at"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"completionStatus"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"completion_status"</span><span class="p">,</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"for_update"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"arg"</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">},</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+
+
 
 <h2 id="more">More<a class="headerlink" href="#more" title="Permalink to this headline">¶</a></h2>
 <p>Additional documentation can be found at <a class="reference external" href="https://sidorof.github.io/dbbase/">https://sidorof.github.io/dbbase/</a></p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#database-connections">Database Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#model-interactions">Model Interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#record-validation">Record Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#serialization">Serialization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#controlling-serialization">Controlling Serialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#recursive-serialization">Recursive Serialization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#document-dictionaries">Document Dictionaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#table-documentation">Table Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#filtering-for-form-data-and-query-strings">Filtering for Form Data and Query Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#a-larger-example-of-a-document-dictionary">A Larger Example of a Document Dictionary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Running Unit Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">(0.2.00) -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[0.1.15] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">[0.1.14] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id5">[0.1.13] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">[0.1.12] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">[0.1.11] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">[0.1.10] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">[0.1.9] -</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id14">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">[0.1.8] - 2020-04-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id18">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id19">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id20">[0.1.8] - 2020-03-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 
 
 
@@ -529,7 +617,7 @@ flask_restful on the flask side of things:</p>
               
           </div>
             Last updated on
-              May 03, 2020.
+              May 13, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

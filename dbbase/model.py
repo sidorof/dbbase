@@ -330,9 +330,9 @@ class Model(object):
             deserialize(data, from_camel_case=True)
 
         Args:
-            data: (bytes : str : dict) : JSON string that is to be converted back to
-                a dict. `data` can also be a dict or list that simply needs to
-                have the keys converted to snake_case.
+            data: (bytes : str : dict) : JSON string that is to be converted
+                back to a dict. `data` can also be a dict or list that simply
+                needs to have the keys converted to snake_case.
             from_camel_case: (bool) : True will cause the keys to be converted
                 back to snake_case.
         Returns:
