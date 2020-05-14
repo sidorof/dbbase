@@ -2,7 +2,7 @@
 
 ## (0.2.00) -
 ### Added
-*   Added `db.doc_tables()` function to help build documentation for table
+*   Added `db.doc_table()` and `db.doc_tables()` function to help build documentation for table
     objects in a way that is reminiscent of Swagger / OpenApi.
 
     For example, here is the output in JSON format using the approach that
@@ -36,7 +36,6 @@ Here is an example of some of the column types that are tested.
             "type": "object",
             "properties": {
                 "id": {
-                    "name": "id",
                     "type": "integer",
                     "format": "int32",
                     "primary_key": true,
@@ -47,7 +46,6 @@ Here is an example of some of the column types that are tested.
                     }
                 },
                 "name1": {
-                    "name": "name1",
                     "type": "string",
                     "maxLength": 50,
                     "nullable": false,
@@ -55,7 +53,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "indexValue": {
-                    "name": "index_value",
                     "type": "integer",
                     "format": "int32",
                     "nullable": true,
@@ -68,7 +65,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "createdAt1": {
-                    "name": "created_at1",
                     "type": "date-time",
                     "nullable": true,
                     "default": {
@@ -90,7 +86,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "uniqueCol": {
-                    "name": "unique_col",
                     "type": "string",
                     "maxLength": 20,
                     "nullable": true,
@@ -99,7 +94,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "name2": {
-                    "name": "name2",
                     "type": "string",
                     "maxLength": 50,
                     "nullable": true,
@@ -107,7 +101,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "fkId": {
-                    "name": "fk_id",
                     "type": "integer",
                     "format": "int32",
                     "nullable": false,
@@ -116,7 +109,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "someSmallInt": {
-                    "name": "some_small_int",
                     "type": "integer",
                     "format": "int8",
                     "nullable": false,
@@ -128,7 +120,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "someInt": {
-                    "name": "some_int",
                     "type": "integer",
                     "format": "int32",
                     "nullable": false,
@@ -140,7 +131,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "today": {
-                    "name": "today",
                     "type": "date",
                     "nullable": true,
                     "default": {
@@ -166,7 +156,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "statusId": {
-                    "name": "status_id",
                     "type": "integer",
                     "format": "int32",
                     "choices": {
@@ -180,7 +169,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "name3": {
-                    "name": "name3",
                     "type": "text",
                     "nullable": false,
                     "default": {
@@ -192,14 +180,12 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "itemLength": {
-                    "name": "item_length",
                     "type": "float",
                     "nullable": false,
                     "comment": "This field is a float value",
                     "info": {}
                 },
                 "abc": {
-                    "name": "abc",
                     "type": "string",
                     "maxLength": 20,
                     "nullable": true,
@@ -222,7 +208,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "updateTime2": {
-                    "name": "update_time2",
                     "type": "date-time",
                     "nullable": true,
                     "server_onupdate": {
@@ -234,7 +219,6 @@ Here is an example of some of the column types that are tested.
                     "info": {}
                 },
                 "createdAt2": {
-                    "name": "created_at2",
                     "type": "date-time",
                     "nullable": true,
                     "server_default": {
@@ -245,7 +229,8 @@ Here is an example of some of the column types that are tested.
                     "comment": "This field defaults to now, created at the server level",
                     "info": {}
                 }
-            }
+            },
+            "xml": "SampleTable"
         }
     }
 

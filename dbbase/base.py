@@ -298,7 +298,8 @@ class DB(object):
         doc = {
             cls.__name__: {
                 'type': 'object',
-                'properties': properties
+                'properties': properties,
+                'xml': cls.__name__
             }
         }
         tmp = self.inspect(cls).all_orm_descriptors

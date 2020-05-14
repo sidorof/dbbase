@@ -176,7 +176,6 @@ def _type(value):
 
 
 EXPRESSION_KEYS = {
-    "name": None,
     "type": _type,
     "primary_key": _only_if_true,
     "nullable": None,

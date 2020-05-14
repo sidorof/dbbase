@@ -32,6 +32,7 @@ class TestDocUtilities(DBBaseTestCase):
             Status codes are entered as strings and converted to
             integers when saved to the database.
             """
+
             impl = types.Integer
 
             def __init__(self, status_codes, **kw):
@@ -40,11 +41,7 @@ class TestDocUtilities(DBBaseTestCase):
 
             def process_bind_param(self, value, dialect):
                 """called when saving to the database"""
-                return [
-                    k
-                    for k, v in self.choices.items()
-                    if v == value
-                ][0]
+                return [k for k, v in self.choices.items() if v == value][0]
 
             def process_result_value(self, value, dialect):
                 """called when pulling from database"""
@@ -52,6 +49,7 @@ class TestDocUtilities(DBBaseTestCase):
 
         class Main(db.Model):
             """Test class with a variety of column types"""
+
             __tablename__ = "main"
 
             id = db.Column(
@@ -215,14 +213,7 @@ class TestDocUtilities(DBBaseTestCase):
         self.Main = Main
         self.OtherTable = OtherTable
         self.db.create_all()
-        import json
-        print(json.dumps(db.doc_table(
-            Main), indent=4))
 
-        import yaml
-        print(yaml.dump(db.doc_table(
-            Main), indent=4, default_flow_style=False))
-        input('ready')
     def test_doc_util_types(self):
         """ Test the conversion of generic fields in Main.
 
@@ -492,13 +483,8 @@ class TestDocUtilities(DBBaseTestCase):
         field = "update_time1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {
-                'onupdate': {
-                    'for_update': True,
-                    'arg': 'datetime.now'
-                }
-            },
-            doc_utils._onupdate(expression.onupdate)
+            {"onupdate": {"for_update": True, "arg": "datetime.now"}},
+            doc_utils._onupdate(expression.onupdate),
         )
 
         # server_default - function
@@ -506,13 +492,13 @@ class TestDocUtilities(DBBaseTestCase):
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                'server_default': {
-                    'for_update': False,
-                    'arg': 'db.func.now()',
-                    'reflected': False
+                "server_default": {
+                    "for_update": False,
+                    "arg": "db.func.now()",
+                    "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default)
+            doc_utils._server_default(expression.server_default),
         )
 
         # server_default - value -- text in this case
@@ -520,13 +506,13 @@ class TestDocUtilities(DBBaseTestCase):
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                'server_default': {
-                    'for_update': False,
-                    'arg': 'abc',
-                    'reflected': False
+                "server_default": {
+                    "for_update": False,
+                    "arg": "abc",
+                    "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default)
+            doc_utils._server_default(expression.server_default),
         )
 
         # server_default - value -- text in this case
@@ -534,42 +520,40 @@ class TestDocUtilities(DBBaseTestCase):
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                'server_default': {
-                    'for_update': False,
-                    'arg': 'db.text("0")',
-                    'reflected': False
+                "server_default": {
+                    "for_update": False,
+                    "arg": 'db.text("0")',
+                    "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default)
+            doc_utils._server_default(expression.server_default),
         )
 
         # server_onupdate
-        field = 'update_time2'
+        field = "update_time2"
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                'server_onupdate': {
-                    'for_update': True,
-                    'arg': 'db.func.now()',
-                    'reflected': False
+                "server_onupdate": {
+                    "for_update": True,
+                    "arg": "db.func.now()",
+                    "reflected": False,
                 }
             },
-            doc_utils._server_onupdate(expression.server_onupdate)
+            doc_utils._server_onupdate(expression.server_onupdate),
         )
 
         # example of no server default/onupdate
-        field = 'created_at1'
+        field = "created_at1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {'default': None},
-            doc_utils._server_default(
-                expression.server_default
-            )
+            {"default": None},
+            doc_utils._server_default(expression.server_default),
         )
 
         self.assertDictEqual(
-            {'default': None},
-            doc_utils._server_onupdate(expression.server_onupdate)
+            {"default": None},
+            doc_utils._server_onupdate(expression.server_onupdate),
         )
 
         # foreign key
@@ -610,7 +594,6 @@ class TestDocUtilities(DBBaseTestCase):
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                "name": "id",
                 "type": "integer",
                 "format": "int32",
                 "primary_key": True,
@@ -625,7 +608,6 @@ class TestDocUtilities(DBBaseTestCase):
         expression = tmp[field].expression
         self.assertDictEqual(
             {
-                "name": "name3",
                 "type": "text",
                 "nullable": False,
                 "default": {"for_update": False, "arg": "test"},
@@ -648,7 +630,6 @@ class TestDocUtilities(DBBaseTestCase):
                         "type": "object",
                         "properties": {
                             "id": {
-                                "name": "id",
                                 "type": "uuid",
                                 "primary_key": True,
                                 "nullable": False,
@@ -659,7 +640,6 @@ class TestDocUtilities(DBBaseTestCase):
                                 "info": {},
                             },
                             "example_array1": {
-                                "name": "example_array1",
                                 "type": "array",
                                 "zero-indexes": False,
                                 "items": {
@@ -672,7 +652,6 @@ class TestDocUtilities(DBBaseTestCase):
                                 "info": {},
                             },
                             "example_array2": {
-                                "name": "example_array2",
                                 "type": "array",
                                 "zero-indexes": False,
                                 "items": {
@@ -685,6 +664,7 @@ class TestDocUtilities(DBBaseTestCase):
                                 "info": {},
                             },
                         },
+                        "xml": "PostgresTable"
                     }
                 },
                 db.doc_table(self.PostgresTable),

@@ -568,7 +568,8 @@
         <span class="n">doc</span> <span class="o">=</span> <span class="p">{</span>
             <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'object'</span><span class="p">,</span>
-                <span class="s1">'properties'</span><span class="p">:</span> <span class="n">properties</span>
+                <span class="s1">'properties'</span><span class="p">:</span> <span class="n">properties</span><span class="p">,</span>
+                <span class="s1">'xml'</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">all_orm_descriptors</span>
@@ -619,7 +620,7 @@
               
           </div>
             Last updated on
-              May 13, 2020.
+              May 14, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

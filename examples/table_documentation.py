@@ -1,13 +1,19 @@
-# table_documentation.py
+# examples/table_documentation.py
 """
 This example mirrors the user guide example for documentation
 dictionaries.
 
-This is simply a table with different kinds of columns and parameter choices. The StatusCodes class is included as a method for illustrating a selection of choices that would be converted to a status code. There are several ways to do this, this is one of many.
+This is simply a table with different kinds of columns and parameter choices.
+The StatusCodes class is included as a method for illustrating a selection
+of choices that would be converted to a status code. There are several ways
+to do this, this is one of several.
 
-The class, BigTable, is created. The output of `db.doc_table` is printeed. For clarity, the output converted to JSON format.
+BigTable is the class is created. The function `db.doc_table` creates the
+output.
 
-print(json.dumps(db.doc_table(BigTable), indent=4))
+For clarity, the output converted to JSON format.
+
+`print(json.dumps(db.doc_table(BigTable), indent=4))`
 
 """
 import json
@@ -16,7 +22,7 @@ import sqlalchemy.types as types
 
 from dbbase import DB
 
-db = DB(config=':memory:')
+db = DB(config=":memory:")
 
 status_codes = [
     [0, "New"],
@@ -31,6 +37,7 @@ class StatusCodes(types.TypeDecorator):
     Status codes are entered as strings and converted to
     integers when saved to the database.
     """
+
     impl = types.Integer
 
     def __init__(self, status_codes, **kw):
@@ -39,11 +46,7 @@ class StatusCodes(types.TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         """called when saving to the database"""
-        return [
-            k
-            for k, v in self.choices.items()
-            if v == value
-        ][0]
+        return [k for k, v in self.choices.items() if v == value][0]
 
     def process_result_value(self, value, dialect):
         """called when pulling from database"""
@@ -52,6 +55,7 @@ class StatusCodes(types.TypeDecorator):
 
 class BigTable(db.Model):
     """Test class with a variety of column types"""
+
     __tablename__ = "big_table"
 
     id = db.Column(
@@ -85,9 +89,7 @@ class BigTable(db.Model):
         db.String(50), nullable=False, comment="This field is required"
     )
     name2 = db.Column(
-        db.String(50),
-        nullable=True,
-        comment="This field is not required",
+        db.String(50), nullable=True, comment="This field is not required",
     )
 
     # text default
@@ -149,8 +151,7 @@ class BigTable(db.Model):
     created_at2 = db.Column(
         db.DateTime,
         server_default=db.func.now(),
-        comment="This field defaults to now, created at the server"
-        "level",
+        comment="This field defaults to now, created at the server" "level",
     )
     update_time1 = db.Column(
         db.DateTime,
@@ -160,8 +161,7 @@ class BigTable(db.Model):
     update_time2 = db.Column(
         db.DateTime,
         server_onupdate=db.func.now(),
-        comment="This field defaults only on updates, but on the"
-        "server",
+        comment="This field defaults only on updates, but on the" "server",
     )
 
     unique_col = db.Column(
@@ -182,16 +182,17 @@ class BigTable(db.Model):
         comment="This field defaults to an integer on the server.",
     )
 
-    __table_args = (
-        db.Index("ix_name1_name2", "name1", "name2", unique=True),
-    )
+    __table_args = (db.Index("ix_name1_name2", "name1", "name2", unique=True),)
+
 
 class OtherTable(db.Model):
     """
     This table is used solely to enable an option for a foreign key.
     """
+
     __tablename__ = "other_table"
     id = db.Column(db.Integer, primary_key=True, nullable=True)
+
 
 # using JSON for a better output
 

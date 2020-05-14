@@ -919,12 +919,12 @@ used. However, with these variables, you can generate custom serializations on t
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
+            <span class="s2">"xml"</span><span class="p">:</span> <span class="s2">"Address"</span>
         <span class="p">},</span>
         <span class="nt">"User"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
             <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
                 <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
                     <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                     <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                     <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -932,20 +932,19 @@ used. However, with these variables, you can generate custom serializations on t
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="nt">"firstName"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"first_name"</span><span class="p">,</span>
                     <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                     <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
                     <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="nt">"lastName"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"last_name"</span><span class="p">,</span>
                     <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                     <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
                     <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"User"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1146,7 +1145,6 @@ used. However, with these variables, you can generate custom serializations on t
         <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
         <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"item_amount"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"item_amount"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"numeric(17, 6)"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
@@ -1156,7 +1154,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"name2"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name2"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                 <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1164,7 +1161,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"abc"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"abc"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                 <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1177,7 +1173,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"fk_id"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"fk_id"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
@@ -1186,7 +1181,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"some_small_int"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_small_int"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
@@ -1198,7 +1192,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"some_int"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_int"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
@@ -1210,7 +1203,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"update_time2"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_time2"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"server_onupdate"</span><span class="p">:</span> <span class="p">{</span>
@@ -1222,7 +1214,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"index_value"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"index_value"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1235,7 +1226,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"update_time1"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_time1"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"onupdate"</span><span class="p">:</span> <span class="p">{</span>
@@ -1246,7 +1236,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"today"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"today"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
@@ -1260,7 +1249,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1271,7 +1259,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="nt">"created_at1"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"created_at1"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
@@ -1282,7 +1269,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"name1"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name1"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                 <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
@@ -1290,7 +1276,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"created_at2"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"created_at2"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"server_default"</span><span class="p">:</span> <span class="p">{</span>
@@ -1302,7 +1287,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"some_big_int"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"some_big_int"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int64"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
@@ -1314,7 +1298,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"unique_col"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"unique_col"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                 <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1323,14 +1306,12 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"item_length"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"item_length"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field is a float value"</span><span class="p">,</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"status_id"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"status_id"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"choices"</span><span class="p">:</span> <span class="p">{</span>
@@ -1344,7 +1325,6 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"name3"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name3"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
@@ -1355,192 +1335,175 @@ used. However, with these variables, you can generate custom serializations on t
                 <span class="nt">"comment"</span><span class="p">:</span> <span class="s2">"This field has a default value"</span><span class="p">,</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"BigTable"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>This output illustrates a range of some of what is available and how the parameters are formatted.</p>
-<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span>Main:
-  type: object
-  properties:
-      abc:
-          comment: This field defaults to text but on the server.
-          info: {}
-          maxLength: 20
-          name: abc
-          nullable: true
-          server_default:
-              arg: abc
-              for_update: false
-              reflected: false
-          type: string
-      created_at1:
-          comment: This field defaults to now, created at model level
-          default:
-              arg: datetime.now
-              for_update: false
-          info: {}
-          name: created_at1
-          nullable: true
-          type: date-time
-      created_at2:
-          comment: This field defaults to now, created at the serverlevel
-          info: {}
-          name: created_at2
-          nullable: true
-          server_default:
-              arg: db.func.now()
-              for_update: false
-              reflected: false
-          type: date-time
-      fk_id:
-          comment: This field is constrained by a foreign key onanother table
-          foreign_key: other_table.id
-          format: int32
-          info: {}
-          name: fk_id
-          nullable: false
-          type: integer
-      id:
-          comment: Primary key with a value assigned by the database
-          format: int32
-          info:
-              extra: info here
-          name: id
-          nullable: true
-          primary_key: true
-          type: integer
-      index_value:
-          comment: This field defaults to an integer on the server.
-          format: int32
-          info: {}
-          name: index_value
-          nullable: true
-          server_default:
-              arg: db.text("0")
-              for_update: false
-              reflected: false
-          type: integer
-      item_amount:
-          default:
-              arg: 0.0
-              for_update: false
-          info: {}
-          name: item_amount
-          nullable: true
-          type: numeric(17, 6)
-      item_length:
-          comment: This field is a float value
-          info: {}
-          name: item_length
-          nullable: false
-          type: float
-      name1:
-          comment: This field is required
-          info: {}
-          maxLength: 50
-          name: name1
-          nullable: false
-          type: string
-      name2:
-          comment: This field is not required
-          info: {}
-          maxLength: 50
-          name: name2
-          nullable: true
-          type: string
-      name3:
-          comment: This field has a default value
-          default:
-              arg: test
-              for_update: false
-          index: true
-          info: {}
-          name: name3
-          nullable: false
-          type: text
-      some_big_int:
-          comment: This field is a big integer
-          default:
-              arg: 0
-              for_update: false
-          format: int64
-          info: {}
-          name: some_big_int
-          nullable: false
-          type: integer
-      some_int:
-          comment: This field is a 32 bit integer
-          default:
-              arg: 0
-              for_update: false
-          format: int32
-          info: {}
-          name: some_int
-          nullable: false
-          type: integer
-      some_small_int:
-          comment: This field is a small integer
-          default:
-              arg: 0
-              for_update: false
-          format: int8
-          info: {}
-          name: some_small_int
-          nullable: false
-          type: integer
-      status_id:
-          choices:
-              0: New
-              1: Active
-              2: Suspended
-              3: Inactive
-          comment: Choices from a list. String descriptors change to integer upon
-              saving. Enums without the headache.
-          format: int32
-          info: {}
-          name: status_id
-          nullable: false
-          type: integer
-      today:
-          comment: This field defaults to today, created at model level
-          default:
-              arg: date.today
-              for_update: false
-          doc: this is a test
-          info:
-              test: this is
-          name: today
-          nullable: true
-          type: date
-      unique_col:
-          comment: This must be a unique value in the database.
-          info: {}
-          maxLength: 20
-          name: unique_col
-          nullable: true
-          type: string
-          unique: true
-      update_time1:
-          comment: This field defaults only on updates
-          info: {}
-          name: update_time1
-          nullable: true
-          onupdate:
-              arg: datetime.now
-              for_update: true
-          type: date-time
-      update_time2:
-          comment: This field defaults only on updates, but on theserver
-          info: {}
-          name: update_time2
-          nullable: true
-          server_onupdate:
-              arg: db.func.now()
-              for_update: true
-              reflected: false
-          type: date-time
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">BigTable</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
+  <span class="nt">properties</span><span class="p">:</span>
+      <span class="nt">abc</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults to text but on the server.</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">maxLength</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">server_default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">abc</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+              <span class="nt">reflected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+      <span class="nt">created_at1</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults to now, created at model level</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">datetime.now</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date-time</span>
+      <span class="nt">created_at2</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults to now, created at the serverlevel</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">server_default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">db.func.now()</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+              <span class="nt">reflected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date-time</span>
+      <span class="nt">fk_id</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is constrained by a foreign key onanother table</span>
+          <span class="nt">foreign_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">other_table.id</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int32</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">id</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Primary key with a value assigned by the database</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int32</span>
+          <span class="nt">info</span><span class="p">:</span>
+              <span class="nt">extra</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">info here</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">primary_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">index_value</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults to an integer on the server.</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int32</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">server_default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">db.text("0")</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+              <span class="nt">reflected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">item_amount</span><span class="p">:</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.0</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">numeric(17, 6)</span>
+      <span class="nt">item_length</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is a float value</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+      <span class="nt">name1</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is required</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">maxLength</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+      <span class="nt">name2</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is not required</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">maxLength</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+      <span class="nt">name3</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field has a default value</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">index</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">text</span>
+      <span class="nt">some_big_int</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is a big integer</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int64</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">some_int</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is a 32 bit integer</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int32</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">some_small_int</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field is a small integer</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int8</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">status_id</span><span class="p">:</span>
+          <span class="nt">choices</span><span class="p">:</span>
+              <span class="nt">0</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">New</span>
+              <span class="nt">1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Active</span>
+              <span class="nt">2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Suspended</span>
+              <span class="nt">3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Inactive</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Choices from a list. String descriptors change to integer upon</span>
+              <span class="l l-Scalar l-Scalar-Plain">saving. Enums without the headache.</span>
+          <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int32</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">today</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults to today, created at model level</span>
+          <span class="nt">default</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date.today</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">doc</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">this is a test</span>
+          <span class="nt">info</span><span class="p">:</span>
+              <span class="nt">test</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">this is</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date</span>
+      <span class="nt">unique_col</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This must be a unique value in the database.</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">maxLength</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+          <span class="nt">unique</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">update_time1</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults only on updates</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">onupdate</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">datetime.now</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date-time</span>
+      <span class="nt">update_time2</span><span class="p">:</span>
+          <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This field defaults only on updates, but on theserver</span>
+          <span class="nt">info</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+          <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+          <span class="nt">server_onupdate</span><span class="p">:</span>
+              <span class="nt">arg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">db.func.now()</span>
+              <span class="nt">for_update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+              <span class="nt">reflected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date-time</span>
+  <span class="nt">xml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BigTable</span>
 </pre></div>
 </div>
 <p><strong>dbbase</strong> is compatible with Python &gt;=3.6 and is distributed under the
@@ -1597,7 +1560,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              May 13, 2020.
+              May 14, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -226,7 +226,18 @@
       
         
 <nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
   <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#examples--page-root" class="md-nav__link">Examples</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#serialization-and-relationships" class="md-nav__link">Serialization and Relationships</a>
+        </li>
+        <li class="md-nav__item"><a href="#serialization-and-self-referential-relationships" class="md-nav__link">Serialization and Self-Referential Relationships</a>
+        </li>
+        <li class="md-nav__item"><a href="#documentation-dictionaries" class="md-nav__link">Documentation Dictionaries</a>
+        </li></ul>
+            </nav>
+        </li>
     
 <li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/examples.rst.txt">Show Source</a> </li>
 
@@ -265,7 +276,18 @@
               <div class="md-sidebar__inner">
                 
 <nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
   <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#examples--page-root" class="md-nav__link">Examples</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#serialization-and-relationships" class="md-nav__link">Serialization and Relationships</a>
+        </li>
+        <li class="md-nav__item"><a href="#serialization-and-self-referential-relationships" class="md-nav__link">Serialization and Self-Referential Relationships</a>
+        </li>
+        <li class="md-nav__item"><a href="#documentation-dictionaries" class="md-nav__link">Documentation Dictionaries</a>
+        </li></ul>
+            </nav>
+        </li>
     
 <li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/examples.rst.txt">Show Source</a> </li>
 
@@ -283,6 +305,371 @@
   
 <h1 id="examples--page-root">Examples<a class="headerlink" href="#examples--page-root" title="Permalink to this headline">¶</a></h1>
 <p>Example files are included that provide working examples of descriptions in the User Guide. They are found in the <strong>examples</strong> directory on Github at <a class="reference external" href="https://github.com/sidorof/dbbase">https://github.com/sidorof/dbbase</a>.</p>
+<ul class="simple">
+<li><p>Serialization and Relationships</p></li>
+<li><p>Serialization and Self-Referential Relationships</p></li>
+<li><p>Documentation Dictionaries</p></li>
+</ul>
+
+<h2 id="serialization-and-relationships">Serialization and Relationships<a class="headerlink" href="#serialization-and-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/two_tables.py</span>
+<span class="sd">"""</span>
+<span class="sd">This example mirrors the user guide example for serialization with</span>
+<span class="sd">two tables.</span>
+<span class="sd">"""</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s2">":memory:"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"users"</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">"immediate"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"</span><span class="si">{first}</span><span class="s2"> </span><span class="si">{last}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">first</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"addresses"</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email_address</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"users.id"</span><span class="p">))</span>
+
+
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">first_name</span><span class="o">=</span><span class="s2">"Bob"</span><span class="p">,</span> <span class="n">last_name</span><span class="o">=</span><span class="s2">"Smith"</span><span class="p">)</span>
+<span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="n">address1</span> <span class="o">=</span> <span class="n">Address</span><span class="p">(</span><span class="n">email_address</span><span class="o">=</span><span class="s2">"email1@example.com"</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="n">address2</span> <span class="o">=</span> <span class="n">Address</span><span class="p">(</span><span class="n">email_address</span><span class="o">=</span><span class="s2">"email2@example.com"</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">address1</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">address2</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># ------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"default serialization for user"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"modified serialization: stop list for first/last names"</span><span class="p">)</span>
+<span class="n">User</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"now only the email_address portion of address shows"</span><span class="p">)</span>
+<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"email_address"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Now ad hoc variables"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"user serial_list is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="s2">"['id', 'first_name', 'last_name', 'addresses']"</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"user relation_serial_lists is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="s2">"{'Address': ['id', 'email_address'] "</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
+        <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">serial_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">,</span> <span class="s2">"addresses"</span><span class="p">],</span>
+        <span class="n">relation_serial_lists</span><span class="o">=</span><span class="p">{</span><span class="s2">"Address"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">]},</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"serialization of just an address"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">address1</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
+        <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">serial_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">],</span>
+        <span class="n">relation_serial_lists</span><span class="o">=</span><span class="p">{</span><span class="s2">"User"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"user_id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">]},</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+</pre></div>
+</div>
+
+
+<h2 id="serialization-and-self-referential-relationships">Serialization and Self-Referential Relationships<a class="headerlink" href="#serialization-and-self-referential-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/self_referential.py</span>
+<span class="sd">"""</span>
+<span class="sd">This example shows an example where serialization works with</span>
+<span class="sd">self-referential models.</span>
+<span class="sd">"""</span>
+<span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s2">":memory:"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">"""self-referential table"""</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"nodes"</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"nodes.id"</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"Node"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">"joined"</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">"Node.id"</span><span class="p">,</span> <span class="n">join_depth</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">)</span>
+
+    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"parent_id"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">,</span> <span class="s2">"children"</span><span class="p">]</span>
+
+
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+<span class="n">node1</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node1"</span><span class="p">)</span>
+<span class="n">node2</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node2"</span><span class="p">)</span>
+<span class="n">node3</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node3"</span><span class="p">)</span>
+<span class="n">node4</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node4"</span><span class="p">)</span>
+<span class="n">node5</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node5"</span><span class="p">)</span>
+<span class="n">node6</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">"this is node6"</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node1</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node2</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node2</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node3</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node2</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node4</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node5</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">node5</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node6</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Example of self-referential serialization"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">node1</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Example in compact form"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">node1</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span>
+</pre></div>
+</div>
+
+
+<h2 id="documentation-dictionaries">Documentation Dictionaries<a class="headerlink" href="#documentation-dictionaries" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/table_documentation.py</span>
+<span class="sd">"""</span>
+<span class="sd">This example mirrors the user guide example for documentation</span>
+<span class="sd">dictionaries.</span>
+
+<span class="sd">This is simply a table with different kinds of columns and parameter choices.</span>
+<span class="sd">The StatusCodes class is included as a method for illustrating a selection</span>
+<span class="sd">of choices that would be converted to a status code. There are several ways</span>
+<span class="sd">to do this, this is one of several.</span>
+
+<span class="sd">BigTable is the class is created. The function `db.doc_table` creates the</span>
+<span class="sd">output.</span>
+
+<span class="sd">For clarity, the output converted to JSON format.</span>
+
+<span class="sd">`print(json.dumps(db.doc_table(BigTable), indent=4))`</span>
+
+<span class="sd">"""</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy.types</span> <span class="k">as</span> <span class="nn">types</span>
+
+<span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s2">":memory:"</span><span class="p">)</span>
+
+<span class="n">status_codes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"New"</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Active"</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Suspended"</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Inactive"</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">StatusCodes</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">TypeDecorator</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Status codes are entered as strings and converted to</span>
+<span class="sd">    integers when saved to the database.</span>
+<span class="sd">    """</span>
+
+    <span class="n">impl</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">Integer</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_codes</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">status_codes</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StatusCodes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_bind_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
+        <span class="sd">"""called when saving to the database"""</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">value</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">process_result_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
+        <span class="sd">"""called when pulling from database"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">BigTable</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">"""Test class with a variety of column types"""</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"big_table"</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+        <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"Primary key with a value assigned by the database"</span><span class="p">,</span>
+        <span class="n">info</span><span class="o">=</span><span class="p">{</span><span class="s2">"extra"</span><span class="p">:</span> <span class="s2">"info here"</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">status_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">StatusCodes</span><span class="p">(</span><span class="n">status_codes</span><span class="p">),</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"Choices from a list. String descriptors "</span>
+        <span class="s2">"change to integer upon saving. Enums without the headache."</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nd">@db</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">validates</span><span class="p">(</span><span class="s2">"status_id"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">"""_validate_id</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id: (int) : id must be in cls.choices</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">status_codes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"</span><span class="si">{}</span><span class="s2"> is not valid"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="c1"># nullable / not nullable</span>
+    <span class="n">name1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is required"</span>
+    <span class="p">)</span>
+    <span class="n">name2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is not required"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># text default</span>
+    <span class="n">name3</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Text</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">"test"</span><span class="p">,</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field has a default value"</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">item_length</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Float</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a float value"</span>
+    <span class="p">)</span>
+
+    <span class="n">item_amount</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Numeric</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c1"># integer and default</span>
+    <span class="n">some_small_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">SmallInteger</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a small integer"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">some_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a 32 bit integer"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">some_big_int</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">BigInteger</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is a big integer"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fk_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"other_table.id"</span><span class="p">),</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field is constrained by a foreign key on"</span>
+        <span class="s2">"another table"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">today</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Date</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">"this is a test"</span><span class="p">,</span>
+        <span class="n">info</span><span class="o">=</span><span class="p">{</span><span class="s2">"test"</span><span class="p">:</span> <span class="s2">"this is"</span><span class="p">},</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to today, created at model level"</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">created_at1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to now, created at model level"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">created_at2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+        <span class="n">server_default</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to now, created at the server"</span> <span class="s2">"level"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">update_time1</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+        <span class="n">onupdate</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults only on updates"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">update_time2</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">,</span>
+        <span class="n">server_onupdate</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults only on updates, but on the"</span> <span class="s2">"server"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">unique_col</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+        <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This must be a unique value in the database."</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># adapted from sqlalchemy docs</span>
+    <span class="n">abc</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+        <span class="n">server_default</span><span class="o">=</span><span class="s2">"abc"</span><span class="p">,</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to text but on the server."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">index_value</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+        <span class="n">server_default</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">"0"</span><span class="p">),</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">"This field defaults to an integer on the server."</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">__table_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="s2">"ix_name1_name2"</span><span class="p">,</span> <span class="s2">"name1"</span><span class="p">,</span> <span class="s2">"name2"</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">),)</span>
+
+
+<span class="k">class</span> <span class="nc">OtherTable</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    This table is used solely to enable an option for a foreign key.</span>
+<span class="sd">    """</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"other_table"</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1"># using JSON for a better output</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span><span class="n">BigTable</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+
 
 
 
@@ -333,7 +720,7 @@
               
           </div>
             Last updated on
-              May 13, 2020.
+              May 14, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

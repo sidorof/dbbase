@@ -1,6 +1,6 @@
 ## Introduction
 
-This package implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts.
+**dbbase** implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts than web applications.
 
 The package focuses on three areas of interest.
 
@@ -8,7 +8,7 @@ The package focuses on three areas of interest.
 
 * Serialization functions enable expressing model data as both JSON and dictionary objects. This feature facilitates easy access to views. The views can be scaled up to include objects created by relationships with explicit control over the content, or show only the bare minimum. These functions can be used as part of an API.
 
-* Documentation functions introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.
+* Document dictionaries introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.
 
 
 ## Characteristics
@@ -22,9 +22,7 @@ Just as with Flask-SQLAlchemy, the `db` object carries a lot of the SQLAlchemy f
 ### Model Behavior
 #### Model Creation
 
-Below is typical example of a table class with `dbbase`. Like
-Flask-SQLAlchemy, the models are created with db.Model that is an enhanced
-version of SQLAlchemy's declarative base.
+Below is typical example of a table class with `dbbase`. Like Flask-SQLAlchemy, the models are created with db.Model that is an enhanced version of SQLAlchemy's declarative base.
 
 ```python
     class Job(db.Model):
@@ -62,8 +60,7 @@ Record creation uses the standard methods.
 
 The Model class also holds the query object.
 
-Using SQLAlchemy, you would have a session object and do something along the
-lines of:
+Using SQLAlchemy, you would have a session object and do something along the lines of:
 
 ```python
     session.query(Job).filter(Job.start_date > '2020-04-01').all()
@@ -106,7 +103,7 @@ job.serialize()
 }
 
 ```
-Or, `job.serialize(to_camel_case=False)` would output it without any conversion.
+Or, `job.serialize(to_camel_case=False)` would output it without any camel case conversion.
 
 Incoming data could also be formatted as serialized above, and deserialied
 via
@@ -126,9 +123,9 @@ Flask-Restful on the Flask side of things:
 
 Finally, the serialize / deserialize functions can always be subclassed for special requirements of that particular model.
 
-### Docs
+### Document Dictionaries
 
-The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions. Just as serialization mentioned above of objects can control what columns to include, the documentation function, `db.doc_table` enables control of what fields to include and what column properties to include.
+The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions, and foreign keys. Just as serialization mentioned above of objects can control what columns to include, the documentation function, `db.doc_table` enables control of what fields to include and what column properties to include.
 
 The following command
 ```python
@@ -143,7 +140,6 @@ produces this output.
         "type": "object",
         "properties": {
             "id": {
-                "name": "id",
                 "type": "integer",
                 "format": "int32",
                 "primary_key": true,
@@ -151,20 +147,17 @@ produces this output.
                 "info": {}
             },
             "name": {
-                "name": "name",
                 "type": "string",
                 "nullable": false,
                 "info": {}
             },
             "anotherId": {
-                "name": "another_id",
                 "type": "integer",
                 "format": "int8",
                 "nullable": true,
                 "info": {}
             },
             "startDate": {
-                "name": "start_date",
                 "type": "date",
                 "nullable": true,
                 "default": {
@@ -174,7 +167,6 @@ produces this output.
                 "info": {}
             },
             "updateAt": {
-                "name": "update_at",
                 "type": "date-time",
                 "nullable": true,
                 "onupdate": {
@@ -184,13 +176,11 @@ produces this output.
                 "info": {}
             },
             "completedAt": {
-                "name": "completed_at",
                 "type": "date-time",
                 "nullable": true,
                 "info": {}
             },
             "completionStatus": {
-                "name": "completion_status",
                 "type": "integer",
                 "format": "int8",
                 "nullable": true,
@@ -200,7 +190,8 @@ produces this output.
                 },
                 "info": {}
             }
-        }
+        },
+        "xml": "Job"
     }
 }
 ```

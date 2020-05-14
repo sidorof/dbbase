@@ -1,4 +1,4 @@
-# two_tables.py
+# examples/two_tables.py
 """
 This example mirrors the user guide example for serialization with
 two tables.
@@ -6,88 +6,89 @@ two tables.
 import json
 from dbbase import DB
 
-db = DB(config=':memory:')
+db = DB(config=":memory:")
+
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
-    last_name =  db.Column(db.String(50), nullable=False)
-    addresses = db.relationship(
-        "Address", backref="user", lazy='immediate')
+    last_name = db.Column(db.String(50), nullable=False)
+    addresses = db.relationship("Address", backref="user", lazy="immediate")
 
     def full_name(self):
-        return '{first} {last}'.format(
-            first=self.first_name, last=self.last_name)
+        return "{first} {last}".format(
+            first=self.first_name, last=self.last_name
+        )
+
 
 class Address(db.Model):
-    __tablename__ = 'addresses'
+    __tablename__ = "addresses"
     id = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
 
 db.create_all()
 
-user = User(id=3, first_name='Bob', last_name='Smith')
+user = User(id=3, first_name="Bob", last_name="Smith")
 user.save()
 
-address1 = Address(
-    email_address='email1@example.com',
-    user_id=user.id
-)
-address2 = Address(
-    email_address='email2@example.com',
-    user_id=user.id
-)
+address1 = Address(email_address="email1@example.com", user_id=user.id)
+address2 = Address(email_address="email2@example.com", user_id=user.id)
 
 db.session.add(address1)
 db.session.add(address2)
 db.session.commit()
 
 # ------------------------------------------------
-print('default serialization for user')
+print("default serialization for user")
 print(user.serialize(indent=2))
-input('ready')
+input("ready")
 
 # ------------------------------------------------
-print('modified serialization: stop list for first/last names')
-User.SERIAL_STOPLIST = ['first_name', 'last_name']
+print("modified serialization: stop list for first/last names")
+User.SERIAL_STOPLIST = ["first_name", "last_name"]
 print(user.serialize(indent=2))
-input('ready')
+input("ready")
 
 # ------------------------------------------------
-print('now only the email_address portion of address shows')
-Address.SERIAL_LIST = ['email_address']
+print("now only the email_address portion of address shows")
+Address.SERIAL_LIST = ["email_address"]
 print(user.serialize(indent=2))
-input('ready')
+input("ready")
 
 # ------------------------------------------------
 
-print('Now ad hoc variables')
-print('user serial_list is {}'.format("['id', 'first_name', 'last_name', 'addresses']"))
-print('user relation_serial_lists is {}'.format("{'Address': ['id', 'email_address'] "))
+print("Now ad hoc variables")
+print(
+    "user serial_list is {}".format(
+        "['id', 'first_name', 'last_name', 'addresses']"
+    )
+)
+print(
+    "user relation_serial_lists is {}".format(
+        "{'Address': ['id', 'email_address'] "
+    )
+)
 print(
     user.serialize(
         indent=2,
         sort=True,
-        serial_list=['id', 'first_name', 'last_name', 'addresses'],
-        relation_serial_lists={
-            'Address': ['id', 'email_address']
-        }
+        serial_list=["id", "first_name", "last_name", "addresses"],
+        relation_serial_lists={"Address": ["id", "email_address"]},
     )
 )
-input('ready')
+input("ready")
 print()
-print('serialization of just an address')
+print("serialization of just an address")
 print(
     address1.serialize(
         indent=2,
         sort=True,
-        serial_list=['id', 'email_address'],
-        relation_serial_lists={
-            'User': ['user_id', 'first_name', 'last_name']
-        }
+        serial_list=["id", "email_address"],
+        relation_serial_lists={"User": ["user_id", "first_name", "last_name"]},
     )
 )
 
-input('ready')
+input("ready")

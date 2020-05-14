@@ -9,8 +9,9 @@ DESCRIPTION = (
     "A base implementation of SQLAlchemy models that incorporates "
     "the query and session variables within the model objects."
 )
-with open('README.rst') as fobj:
+with open('README.md') as fobj:
     LONG_DESCRIPTION = fobj.read()
+
 PROJECT_URL = "https://sidorof.github.io/dbbase/"
 LICENSE = "MIT"
 AUTHOR = "Donald Smiley"
@@ -38,7 +39,7 @@ setup(
     version=__version__,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
-    long_description_content_type="text/x-rst",
+    long_description_content_type="text/markdown",
     url=PROJECT_URL,
     license=LICENSE,
     author=AUTHOR,

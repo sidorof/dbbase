@@ -4,7 +4,7 @@ dbbase documentation
 .. mdinclude:: ../../README.md
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: Contents:
 
    installation.rst

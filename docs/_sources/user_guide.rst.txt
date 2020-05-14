@@ -479,6 +479,7 @@ In the following code block we will see our tables created again, but with the u
     }
 
 ..
+
 When a field is found to be an instance of a class that is a key in the `RELATIONS_SERIAL_LIST` dictionary, the corresponding list is used for that class in place of the default class.
 
 
@@ -526,6 +527,7 @@ For this next section, let us start by first revoking the stop lists and serial 
       "firstName": "Bob"
     }
 ..
+
 As a note, if you change such class variables on the fly such as User.SERIAL_LIST, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change `user.SERIAL_LIST` rather than `User.SERIAL_LIST`.
 
 
@@ -677,6 +679,7 @@ Suppose we were to describe the two tables created above, User, and Address.
     >>> db.doc_tables(to_camel_case=True)
 
 ..
+
 This would yield the following output that details object models similarly to OpenApi. It details the column characteristics for each table. Note how the foreign key is annotated in Address. If defaults had been defined for the tables, it would detail the default type including server defaults.
 
 In the example shown, the column names have been converted to camel case. Front end developers, used to JavaScript notation may be more comfortable in this format.
@@ -712,12 +715,12 @@ In the example shown, the column names have been converted to camel case. Front 
                         "info": {}
                     }
                 }
+                "xml": "Address"
             },
             "User": {
                 "type": "object",
                 "properties": {
                     "id": {
-                        "name": "id",
                         "type": "integer",
                         "format": "int32",
                         "primary_key": true,
@@ -725,20 +728,19 @@ In the example shown, the column names have been converted to camel case. Front 
                         "info": {}
                     },
                     "firstName": {
-                        "name": "first_name",
                         "type": "string",
                         "maxLength": 50,
                         "nullable": false,
                         "info": {}
                     },
                     "lastName": {
-                        "name": "last_name",
                         "type": "string",
                         "maxLength": 50,
                         "nullable": false,
                         "info": {}
                     }
-                }
+                },
+                "xml": "User"
             }
         }
     }
@@ -762,7 +764,7 @@ The kind of characteristics necessary to process that data is already available 
 Using generated objects such as above can be wrapped into a parsing mechanism reducing the need for a duplication of effort. You have already done the work of carefully crafting your tables. Using the document dictionaries you can get more mileage out of it.
 
 A Larger Example of a Document Dictionary
-========================================
+=========================================
 
 To get an idea of the range of support it helps to see a more complicated table. The following table is basically a zoo of different combinations of column types and parameters.
 
@@ -949,7 +951,6 @@ From that table we can generation our document dictionary:
             "type": "object",
             "properties": {
                 "item_amount": {
-                    "name": "item_amount",
                     "type": "numeric(17, 6)",
                     "nullable": true,
                     "default": {
@@ -959,7 +960,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "name2": {
-                    "name": "name2",
                     "type": "string",
                     "maxLength": 50,
                     "nullable": true,
@@ -967,7 +967,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "abc": {
-                    "name": "abc",
                     "type": "string",
                     "maxLength": 20,
                     "nullable": true,
@@ -980,7 +979,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "fk_id": {
-                    "name": "fk_id",
                     "type": "integer",
                     "format": "int32",
                     "nullable": false,
@@ -989,7 +987,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "some_small_int": {
-                    "name": "some_small_int",
                     "type": "integer",
                     "format": "int8",
                     "nullable": false,
@@ -1001,7 +998,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "some_int": {
-                    "name": "some_int",
                     "type": "integer",
                     "format": "int32",
                     "nullable": false,
@@ -1013,7 +1009,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "update_time2": {
-                    "name": "update_time2",
                     "type": "date-time",
                     "nullable": true,
                     "server_onupdate": {
@@ -1025,7 +1020,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "index_value": {
-                    "name": "index_value",
                     "type": "integer",
                     "format": "int32",
                     "nullable": true,
@@ -1038,7 +1032,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "update_time1": {
-                    "name": "update_time1",
                     "type": "date-time",
                     "nullable": true,
                     "onupdate": {
@@ -1049,7 +1042,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "today": {
-                    "name": "today",
                     "type": "date",
                     "nullable": true,
                     "default": {
@@ -1063,7 +1055,6 @@ From that table we can generation our document dictionary:
                     }
                 },
                 "id": {
-                    "name": "id",
                     "type": "integer",
                     "format": "int32",
                     "primary_key": true,
@@ -1074,7 +1065,6 @@ From that table we can generation our document dictionary:
                     }
                 },
                 "created_at1": {
-                    "name": "created_at1",
                     "type": "date-time",
                     "nullable": true,
                     "default": {
@@ -1085,7 +1075,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "name1": {
-                    "name": "name1",
                     "type": "string",
                     "maxLength": 50,
                     "nullable": false,
@@ -1093,7 +1082,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "created_at2": {
-                    "name": "created_at2",
                     "type": "date-time",
                     "nullable": true,
                     "server_default": {
@@ -1105,7 +1093,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "some_big_int": {
-                    "name": "some_big_int",
                     "type": "integer",
                     "format": "int64",
                     "nullable": false,
@@ -1117,7 +1104,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "unique_col": {
-                    "name": "unique_col",
                     "type": "string",
                     "maxLength": 20,
                     "nullable": true,
@@ -1126,14 +1112,12 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "item_length": {
-                    "name": "item_length",
                     "type": "float",
                     "nullable": false,
                     "comment": "This field is a float value",
                     "info": {}
                 },
                 "status_id": {
-                    "name": "status_id",
                     "type": "integer",
                     "format": "int32",
                     "choices": {
@@ -1147,7 +1131,6 @@ From that table we can generation our document dictionary:
                     "info": {}
                 },
                 "name3": {
-                    "name": "name3",
                     "type": "text",
                     "nullable": false,
                     "default": {
@@ -1158,7 +1141,8 @@ From that table we can generation our document dictionary:
                     "comment": "This field has a default value",
                     "info": {}
                 }
-            }
+            },
+            "xml": "BigTable"
         }
     }
 
@@ -1166,16 +1150,15 @@ From that table we can generation our document dictionary:
 
 This output illustrates a range of some of what is available and how the parameters are formatted.
 
-.. code-block:: yml
+.. code-block:: yaml
 
-  Main:
+  BigTable:
     type: object
     properties:
         abc:
             comment: This field defaults to text but on the server.
             info: {}
             maxLength: 20
-            name: abc
             nullable: true
             server_default:
                 arg: abc
@@ -1188,13 +1171,11 @@ This output illustrates a range of some of what is available and how the paramet
                 arg: datetime.now
                 for_update: false
             info: {}
-            name: created_at1
             nullable: true
             type: date-time
         created_at2:
             comment: This field defaults to now, created at the serverlevel
             info: {}
-            name: created_at2
             nullable: true
             server_default:
                 arg: db.func.now()
@@ -1206,7 +1187,6 @@ This output illustrates a range of some of what is available and how the paramet
             foreign_key: other_table.id
             format: int32
             info: {}
-            name: fk_id
             nullable: false
             type: integer
         id:
@@ -1214,7 +1194,6 @@ This output illustrates a range of some of what is available and how the paramet
             format: int32
             info:
                 extra: info here
-            name: id
             nullable: true
             primary_key: true
             type: integer
@@ -1222,7 +1201,6 @@ This output illustrates a range of some of what is available and how the paramet
             comment: This field defaults to an integer on the server.
             format: int32
             info: {}
-            name: index_value
             nullable: true
             server_default:
                 arg: db.text("0")
@@ -1234,27 +1212,23 @@ This output illustrates a range of some of what is available and how the paramet
                 arg: 0.0
                 for_update: false
             info: {}
-            name: item_amount
             nullable: true
             type: numeric(17, 6)
         item_length:
             comment: This field is a float value
             info: {}
-            name: item_length
             nullable: false
             type: float
         name1:
             comment: This field is required
             info: {}
             maxLength: 50
-            name: name1
             nullable: false
             type: string
         name2:
             comment: This field is not required
             info: {}
             maxLength: 50
-            name: name2
             nullable: true
             type: string
         name3:
@@ -1264,7 +1238,6 @@ This output illustrates a range of some of what is available and how the paramet
                 for_update: false
             index: true
             info: {}
-            name: name3
             nullable: false
             type: text
         some_big_int:
@@ -1274,7 +1247,6 @@ This output illustrates a range of some of what is available and how the paramet
                 for_update: false
             format: int64
             info: {}
-            name: some_big_int
             nullable: false
             type: integer
         some_int:
@@ -1284,7 +1256,6 @@ This output illustrates a range of some of what is available and how the paramet
                 for_update: false
             format: int32
             info: {}
-            name: some_int
             nullable: false
             type: integer
         some_small_int:
@@ -1294,7 +1265,6 @@ This output illustrates a range of some of what is available and how the paramet
                 for_update: false
             format: int8
             info: {}
-            name: some_small_int
             nullable: false
             type: integer
         status_id:
@@ -1307,7 +1277,6 @@ This output illustrates a range of some of what is available and how the paramet
                 saving. Enums without the headache.
             format: int32
             info: {}
-            name: status_id
             nullable: false
             type: integer
         today:
@@ -1318,21 +1287,18 @@ This output illustrates a range of some of what is available and how the paramet
             doc: this is a test
             info:
                 test: this is
-            name: today
             nullable: true
             type: date
         unique_col:
             comment: This must be a unique value in the database.
             info: {}
             maxLength: 20
-            name: unique_col
             nullable: true
             type: string
             unique: true
         update_time1:
             comment: This field defaults only on updates
             info: {}
-            name: update_time1
             nullable: true
             onupdate:
                 arg: datetime.now
@@ -1341,13 +1307,13 @@ This output illustrates a range of some of what is available and how the paramet
         update_time2:
             comment: This field defaults only on updates, but on theserver
             info: {}
-            name: update_time2
             nullable: true
             server_onupdate:
                 arg: db.func.now()
                 for_update: true
                 reflected: false
             type: date-time
+    xml: BigTable
 
 ..
 

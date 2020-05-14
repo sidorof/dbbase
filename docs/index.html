@@ -275,7 +275,7 @@
         </li></ul>
             </nav>
         </li>
-        <li class="md-nav__item"><a href="#docs" class="md-nav__link">Docs</a>
+        <li class="md-nav__item"><a href="#document-dictionaries" class="md-nav__link">Document Dictionaries</a>
         </li></ul>
             </nav>
         </li>
@@ -303,12 +303,12 @@
 <h1 id="index--page-root">dbbase documentation<a class="headerlink" href="#index--page-root" title="Permalink to this headline">¶</a></h1>
 
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>This package implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts.</p>
+<p><strong>dbbase</strong> implements a light-weight wrapper around SQLAlchemy in the style of Flask-SQLAlchemy, but without the requirements of Flask. So the same models and classes used in a Flask project can be used in other contexts than web applications.</p>
 <p>The package focuses on three areas of interest.</p>
 <ul class="simple">
 <li><p>Convenience functions as part of the Model class with easy access to the session and query object, as well as simple functions for saving, etc. within the Model class.</p></li>
 <li><p>Serialization functions enable expressing model data as both JSON and dictionary objects. This feature facilitates easy access to views. The views can be scaled up to include objects created by relationships with explicit control over the content, or show only the bare minimum. These functions can be used as part of an API.</p></li>
-<li><p>Documentation functions introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.</p></li>
+<li><p>Document dictionaries introspect the model classes you have built and present the data objects in a format similar to Swagger / OpenAPI. This enables a method for communicating the details of the models. In addition, the functions could be wrapped into parsing functions that evaluate query strings and form data, directly from the table characteristics. This avoids the extra work of defining tables, and then coding a separate schema just to evaluate incoming and outgoing data. Finally, the doc functions could be used as a basis for unit/integration tests to ensure that all the requirements for the data have been met.</p></li>
 </ul>
 
 
@@ -322,9 +322,7 @@
 <h3 id="model-behavior">Model Behavior<a class="headerlink" href="#model-behavior" title="Permalink to this headline">¶</a></h3>
 
 <h4 id="model-creation">Model Creation<a class="headerlink" href="#model-creation" title="Permalink to this headline">¶</a></h4>
-<p>Below is typical example of a table class with <code class="docutils literal notranslate"><span class="pre">dbbase</span></code>. Like
-Flask-SQLAlchemy, the models are created with db.Model that is an enhanced
-version of SQLAlchemy’s declarative base.</p>
+<p>Below is typical example of a table class with <code class="docutils literal notranslate"><span class="pre">dbbase</span></code>. Like Flask-SQLAlchemy, the models are created with db.Model that is an enhanced version of SQLAlchemy’s declarative base.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'jobs'</span>
 
@@ -358,8 +356,7 @@ version of SQLAlchemy’s declarative base.</p>
 
 <h4 id="queries">Queries<a class="headerlink" href="#queries" title="Permalink to this headline">¶</a></h4>
 <p>The Model class also holds the query object.</p>
-<p>Using SQLAlchemy, you would have a session object and do something along the
-lines of:</p>
+<p>Using SQLAlchemy, you would have a session object and do something along the lines of:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Job</span><span class="o">.</span><span class="n">start_date</span> <span class="o">&gt;</span> <span class="s1">'2020-04-01'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -395,7 +392,7 @@ lines of:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Or, <code class="docutils literal notranslate"><span class="pre">job.serialize(to_camel_case=False)</span></code> would output it without any conversion.</p>
+<p>Or, <code class="docutils literal notranslate"><span class="pre">job.serialize(to_camel_case=False)</span></code> would output it without any camel case conversion.</p>
 <p>Incoming data could also be formatted as serialized above, and deserialied
 via</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Job</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">from_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -413,8 +410,8 @@ Flask-Restful on the Flask side of things:</p>
 
 
 
-<h3 id="docs">Docs<a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h3>
-<p>The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions. Just as serialization mentioned above of objects can control what columns to include, the documentation function, <code class="docutils literal notranslate"><span class="pre">db.doc_table</span></code> enables control of what fields to include and what column properties to include.</p>
+<h3 id="document-dictionaries">Document Dictionaries<a class="headerlink" href="#document-dictionaries" title="Permalink to this headline">¶</a></h3>
+<p>The same model, Job, can be expressed with details similarly to the OpenAPI specification for objects. It is a little different because SQLAlchemy has a more nuanced approach to defaults and onupdate functions, and foreign keys. Just as serialization mentioned above of objects can control what columns to include, the documentation function, <code class="docutils literal notranslate"><span class="pre">db.doc_table</span></code> enables control of what fields to include and what column properties to include.</p>
 <p>The following command</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
@@ -425,7 +422,6 @@ Flask-Restful on the Flask side of things:</p>
         <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
         <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                 <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -433,20 +429,17 @@ Flask-Restful on the Flask side of things:</p>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"name"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"name"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"anotherId"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"another_id"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"startDate"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"start_date"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
@@ -456,7 +449,6 @@ Flask-Restful on the Flask side of things:</p>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"updateAt"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"update_at"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"onupdate"</span><span class="p">:</span> <span class="p">{</span>
@@ -466,13 +458,11 @@ Flask-Restful on the Flask side of things:</p>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"completedAt"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"completed_at"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"date-time"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">},</span>
             <span class="nt">"completionStatus"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"completion_status"</span><span class="p">,</span>
                 <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                 <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int8"</span><span class="p">,</span>
                 <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -482,7 +472,8 @@ Flask-Restful on the Flask side of things:</p>
                 <span class="p">},</span>
                 <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
             <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"Job"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -517,7 +508,12 @@ Flask-Restful on the Flask side of things:</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#serialization-and-relationships">Serialization and Relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#serialization-and-self-referential-relationships">Serialization and Self-Referential Relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#documentation-dictionaries">Documentation Dictionaries</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Running Unit Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -617,7 +613,7 @@ Flask-Restful on the Flask side of things:</p>
               
           </div>
             Last updated on
-              May 13, 2020.
+              May 14, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
