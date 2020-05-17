@@ -1,6 +1,14 @@
 # Changelog
 
-## (0.2.00) -
+## (o.2.1) -
+### Added
+*   Added model documentation properties for functions, properties, and relationships. All of these are marked as readOnly: True. This additional feature gives a more complete picture of the characteristics of the model. Just as serialization is shaped by the function, `Model._get_serial_stop_list()`, only those items which pass that hurdle will be documented. That filter ensures that only meaningful items will be documented.
+*   Added model documentation properties for table constraints
+
+### Fixed
+*   Added `__repr__` and `__table__` to default stop lists
+
+## (0.2.0) -
 ### Added
 *   Added `db.doc_table()` and `db.doc_tables()` function to help build documentation for table
     objects in a way that is reminiscent of Swagger / OpenApi.

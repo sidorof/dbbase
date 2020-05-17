@@ -18,10 +18,17 @@ import importlib
 
 import sqlalchemy
 from sqlalchemy import create_engine, orm
+from sqlalchemy.sql.elements import BinaryExpression
 
 from . import model
 from .utils import xlate
-from .doc_utils import process_expression
+from .doc_utils import (
+    process_expression,
+    _property,
+    _function,
+    _binary_expression,
+    _foreign_keys
+)
 
 
 logger = logging.getLogger(__file__)
@@ -185,7 +192,7 @@ class DB(object):
         db has changed from the original creation of the Model.
         """
         for cls in self.Model._decl_class_registry.values():
-            if hasattr(cls, '__table__'):
+            if hasattr(cls, "__table__"):
                 if isinstance(cls.__table__, self.Table):
                     self.apply_db(cls)
 
@@ -202,7 +209,8 @@ class DB(object):
         cls.db = self
 
     def doc_tables(
-            self, class_list=None, to_camel_case=False, column_props=None):
+        self, class_list=None, to_camel_case=False, column_props=None
+    ):
         """ doc_tables
 
         This function creates a dictionary of all the table configuratons.
@@ -243,23 +251,25 @@ class DB(object):
 
         classes = [
             self.Model._decl_class_registry[class_name]
-            for class_name in sorted(class_names)]
+            for class_name in sorted(class_names)
+        ]
 
         doc_list = [
             self.doc_table(
-                cls, to_camel_case=to_camel_case, column_props=column_props)
+                cls, to_camel_case=to_camel_case, column_props=column_props
+            )
             for cls in classes
             if isinstance(cls, type) and issubclass(cls, self.Model)
         ]
-        doc = {'definitions': {}}
+        doc = {"definitions": {}}
         for doc_cls in doc_list:
-            doc['definitions'].update(doc_cls)
+            doc["definitions"].update(doc_cls)
 
         return doc
 
     def doc_table(
-            self, cls, to_camel_case=False, serial_list=None,
-            column_props=None):
+        self, cls, to_camel_case=False, serial_list=None, column_props=None
+    ):
         """ doc_table
 
         This function creates a dictionary of a table configuraton to aid in
@@ -294,34 +304,126 @@ class DB(object):
         foreign_keys, and unique.
         """
 
+        def _post_value(key, item_dict):
+
+            if to_camel_case:
+                key = xlate(key)
+            properties[key] = item_dict
+
         properties = {}
         doc = {
             cls.__name__: {
-                'type': 'object',
-                'properties': properties,
-                'xml': cls.__name__
+                "type": "object",
+                "properties": properties,
+                "xml": cls.__name__,
             }
         }
-        tmp = self.inspect(cls).all_orm_descriptors
+
         if serial_list is not None:
             columns = serial_list
         else:
-            columns = tmp.keys()
+            columns = [
+                key
+                for key in cls.__dict__.keys()
+                if key not in cls._get_serial_stop_list(cls)
+            ]
 
         for key in columns:
-            value = tmp[key]
-            # weed out relations
-            if isinstance(value.expression, self.Column):
-                item_dict = process_expression(value.expression)
-                # done afterwards because keys in expression can change
-                if column_props is not None:
-                    for prop_key in list(item_dict.keys()):
-                        if prop_key not in column_props:
-                            del item_dict[prop_key]
+            value = cls.__dict__[key]
 
-                if to_camel_case:
-                    key = xlate(key)
+            if hasattr(value, "expression"):
+                if isinstance(value.expression, self.Column):
+                    # it is a column
+                    item_dict = process_expression(value.expression)
+                    # done afterwards because keys in expression can change
 
-                properties[key] = item_dict
+                elif isinstance(value.expression, BinaryExpression):
+                    item_dict = _binary_expression(value)
+                else:
+                    item_dict = {
+                        "readOnly": True,
+                        "unknown": str(value.expression),
+                    }
+                self._filter_column_props(column_props, item_dict)
+                _post_value(key, item_dict)
+
+            elif isinstance(value, property):
+
+                item_dict = _property(cls, key, value)
+                self._filter_column_props(column_props, item_dict)
+                _post_value(key, item_dict)
+
+            elif callable(value):
+
+                item_dict = _function(value)
+                if item_dict is not None:
+                    self._filter_column_props(column_props, item_dict)
+                    _post_value(key, item_dict)
+
+            else:
+                # skip as unnecessary
+                pass
+
+        table_constraints = self._process_table_args(cls)
+        if table_constraints is not None:
+            doc.update(table_constraints)
 
         return doc
+
+    @staticmethod
+    def _filter_column_props(column_props, item_dict):
+        """ _filter_column_props
+
+        This function removes unneeded column properties.
+
+        Args:
+            column_props: (dict) : Only props to return
+            item_dict: (dict) : the dict set to processes
+
+        Returns:
+            dict
+        """
+        if column_props is not None:
+            for prop_key in list(item_dict.keys()):
+                if prop_key not in column_props:
+                    del item_dict[prop_key]
+
+    def _process_table_args(self, cls):
+
+        table_args = cls.__dict__.get('__table_args__')
+        key = "constraints"
+        constraints = []
+
+        if table_args:
+            # skipping if table_args is a dict
+            #   probably param about schemas, so out of scope
+            if isinstance(table_args, tuple):
+                for item in table_args:
+                    if isinstance(item, self.CheckConstraint):
+                        ddict = {'check_constraint': item.sqltext.text}
+                        constraints.append(ddict)
+
+                    elif isinstance(item, self.ForeignKeyConstraint):
+                        fk_key = 'foreign_key_constraint'
+                        ddict = {fk_key: {}}
+                        ddict[fk_key].update(_foreign_keys(item.elements))
+                        ddict[fk_key].update({'column_keys': item.column_keys})
+
+                        constraints.append(ddict)
+
+                    elif isinstance(item, self.UniqueConstraint):
+                        ddict = {'unique_contraint': {'columns': []}}
+                        for uniq_col in item.columns:
+                            ddict['unique_contraint']['columns'].append(
+                                uniq_col.expression.name)
+                        constraints.append(ddict)
+        if constraints:
+            return {key: constraints}
+
+        return None
+
+
+
+
+
+

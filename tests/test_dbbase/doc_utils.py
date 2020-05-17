@@ -47,7 +47,7 @@ class TestDocUtilities(DBBaseTestCase):
                 """called when pulling from database"""
                 return self.choices[value]
 
-        class Main(db.Model):
+        class BigTable(db.Model):
             """Test class with a variety of column types"""
 
             __tablename__ = "main"
@@ -59,6 +59,22 @@ class TestDocUtilities(DBBaseTestCase):
                 comment="Primary key with a value assigned by the database",
                 info={"extra": "info here"},
             )
+
+            @property
+            def i_am_property(self):
+                return "I am a property"
+
+            @property
+            def annotated_property(self) -> str:
+                return "I am an annotated property"
+
+            def a_function(self) -> str:
+
+                return 'a function that will be included in docs'
+
+            def a_function_filtered(self, param1, param2) -> str:
+                """excluded due to having multiple parameters"""
+                return 'a function that will be excluded from docs'
 
             status_id = db.Column(
                 StatusCodes(status_codes),
@@ -210,18 +226,18 @@ class TestDocUtilities(DBBaseTestCase):
 
             self.PostgresTable = PostgresTable
 
-        self.Main = Main
+        self.BigTable = BigTable
         self.OtherTable = OtherTable
         self.db.create_all()
 
     def test_doc_util_types(self):
-        """ Test the conversion of generic fields in Main.
+        """ Test the conversion of generic fields in BigTable.
 
         """
         db = self.db
         doc_utils = self.dbbase.doc_utils
 
-        tmp = db.inspect(self.Main).all_orm_descriptors
+        tmp = db.inspect(self.BigTable).all_orm_descriptors
 
         field = "id"
         expression = tmp[field].expression
@@ -679,9 +695,9 @@ class TestDocUtilities(DBBaseTestCase):
         """
         serial_list = ["id", "name1", "name2", "name3"]
 
-        doc = self.db.doc_table(self.Main, serial_list=serial_list)
+        doc = self.db.doc_table(self.BigTable, serial_list=serial_list)
 
-        properties = doc[self.Main.__name__]["properties"]
+        properties = doc[self.BigTable.__name__]["properties"]
 
         self.assertListEqual(serial_list, list(properties.keys()))
 
@@ -695,10 +711,10 @@ class TestDocUtilities(DBBaseTestCase):
         Depending on the property, a specific column might not have
         it. However, there should not be a prop outside of the list.
         """
-        selected_properties = ["name", "default", "nullable"]
-        doc = self.db.doc_table(self.Main, column_props=selected_properties)
+        selected_properties = ["default", "nullable"]
+        doc = self.db.doc_table(self.BigTable, column_props=selected_properties)
 
-        data = doc[self.Main.__name__]["properties"]
+        data = doc[self.BigTable.__name__]["properties"]
 
         for column_props in data.values():
 
@@ -712,14 +728,14 @@ class TestDocUtilities(DBBaseTestCase):
         This test evaluates whether the table column names
         can be converted properly to camel case.
         """
-        doc = self.db.doc_table(self.Main)
+        doc = self.db.doc_table(self.BigTable)
         xlate = self.dbbase.utils.xlate
 
-        snake_case_cols = list(doc[self.Main.__name__]["properties"].keys())
+        snake_case_cols = list(doc[self.BigTable.__name__]["properties"].keys())
         camel_case_cols = [xlate(col) for col in snake_case_cols]
 
-        test_doc = self.db.doc_table(self.Main, to_camel_case=True)
+        test_doc = self.db.doc_table(self.BigTable, to_camel_case=True)
 
-        test_cols = list(test_doc[self.Main.__name__]["properties"].keys())
+        test_cols = list(test_doc[self.BigTable.__name__]["properties"].keys())
 
         self.assertListEqual(camel_case_cols, test_cols)

@@ -3,6 +3,8 @@
 This module supports documenting tables with helper functions.
 """
 from copy import deepcopy
+from inspect import getattr_static, signature, _empty
+
 from sqlalchemy.sql import functions
 from sqlalchemy.sql import elements
 
@@ -34,7 +36,7 @@ def _default(value):
         # hopefully just server functions
         # trying to get to ex: db.func.now()
         name = str(ddict["arg"].__class__)
-        name = name[name.find("<class '") + 8: name.find('>') - 1]
+        name = name[name.find("<class '") + 8 : name.find(">") - 1]
 
         ddict["arg"] = f"db.func.{name.split('.')[-1]}()"
 
@@ -51,7 +53,7 @@ def _onupdate(value):
     This function marks the default as on update.
     """
     res = _default(value)
-    if res['default'] is not None:
+    if res["default"] is not None:
         return {"onupdate": res["default"]}
 
     return res
@@ -64,7 +66,7 @@ def _server_default(value):
 
     """
     res = _default(value)
-    if res['default'] is not None:
+    if res["default"] is not None:
         return {"server_default": res["default"]}
 
     return res
@@ -77,7 +79,7 @@ def _server_onupdate(value):
 
     """
     res = _default(value)
-    if res['default'] is not None:
+    if res["default"] is not None:
         return {"server_onupdate": res["default"]}
 
     return res
@@ -103,6 +105,74 @@ def _foreign_keys(value):
     return None
 
 
+def _binary_expression(value):
+    """ _binary_expression
+
+    it is probably a relationship
+    NOTE: Not used here,
+            but prop.entity.all_orm_descriptors
+            is access to related column
+    """
+    if hasattr(value, "prop"):
+        return {
+            "readOnly": True,
+            "relationship": {
+                "type": "list" if value.prop.uselist else "single",
+                "entity": value.prop.entity.class_._class(),
+            }
+        }
+
+    # here for thoroughness for now
+    return {"readOnly": True, "unknown": str(value.expression)}
+
+
+def _property(cls, key, value):
+    """_property
+
+    This function returns prop
+    """
+    item_dict = {"readOnly": True, "property": True}
+
+    # does it have return return_annotation
+    ret_ann = signature(getattr_static(cls, key).fget).return_annotation
+
+    if str(ret_ann).startswith('typing'):
+        item_dict["type"] = _parse_type_name(ret_ann)
+
+    elif issubclass(ret_ann, _empty):
+        # no annotation
+        pass
+    else:
+        item_dict["type"] = _parse_class_name(ret_ann)
+    # not used for now, long descriptions unnecessary clutter
+    # if value.__doc__:
+    #    item_dict['description'] = value.__doc__
+
+    return item_dict
+
+
+def _function(value):
+    """
+    Returns properties if <= 1 parameter
+
+    """
+    vlist = signature(value)
+    if len(vlist.parameters) <= 1:
+        item_dict = {
+            "readOnly": True,
+        }
+
+        # not used for now, long descriptions unnecessary clutter
+        # if value.__doc__:
+        #    item_dict['description'] = value.__doc__
+
+        ret_ann = vlist.return_annotation
+        if not issubclass(ret_ann, _empty):
+            item_dict["type"] = _parse_class_name(ret_ann)
+
+        return item_dict
+
+
 def _only_if_true(value):
     """ _only_if_true
 
@@ -111,6 +181,33 @@ def _only_if_true(value):
     if value is False:
         value = None
     return None, value
+
+
+def _parse_type_name(value):
+    """ _parse_type_name
+
+    This is to handle something like 'typing.List'
+
+    """
+    return str(value).split('.')[-1]
+
+def _parse_class_name(value):
+    """_parse_class_name
+
+    There's got to be a better way to do this.
+    """
+    def _extract_name(name):
+        return name[+8 : name.find(">") - 1]
+
+    name = str(value)
+    tmp = name.find("<class '")
+    if tmp > -1:
+        # it is a type
+        name = _extract_name(name)
+    else:
+        name = _extract_name(name.__class__)
+
+    return name
 
 
 def _type(value):
@@ -163,7 +260,7 @@ def _type(value):
         if val_str == "VARCHAR":
             res = {"type": "string"}
         elif pos1 > -1:
-            res = {"type": "string", "maxLength": int(val_str[pos1 + 1: -1])}
+            res = {"type": "string", "maxLength": int(val_str[pos1 + 1 : -1])}
         else:
             res = {"type": val_str}
     else:

@@ -79,6 +79,13 @@ class TestDBBaseClass(DBBaseTestCase):
                             "primary_key": True,
                             "nullable": False,
                             "info": {},
+                        },
+                        "table2": {
+                            "readOnly": True,
+                            "relationship": {
+                                "type": "list",
+                                "entity": "Table2"
+                            }
                         }
                     },
                     "xml": "Table1",
@@ -107,6 +114,13 @@ class TestDBBaseClass(DBBaseTestCase):
                             "foreign_key": "table1.id",
                             "info": {},
                         },
+                        "table1": {
+                            "readOnly": True,
+                            "relationship": {
+                                "type": "single",
+                                "entity": "Table1"
+                            }
+                        }
                     },
                     "xml": "Table2",
                 }
@@ -149,6 +163,13 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "nullable": False,
                                 "info": {},
                             },
+                            "table2": {
+                                "readOnly": True,
+                                "relationship": {
+                                    "type": "list",
+                                    "entity": "Table2"
+                                }
+                            }
                         },
                         "xml": "Table1",
                     },
@@ -169,6 +190,13 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "nullable": False,
                                 "info": {},
                             },
+                            "table1": {
+                                "readOnly": True,
+                                "relationship": {
+                                    "type": "single",
+                                    "entity": "Table1"
+                                }
+                            }
                         },
                         "xml": "Table2",
                     },
@@ -202,6 +230,64 @@ class TestDBBaseClass(DBBaseTestCase):
 
         self.assertNotIn(
             "type", list(doc["definitions"]["Table2"]["properties"].keys())
+        )
+
+    def test__process_table_args(self):
+        """test__process_table_args
+
+        Does it process constraints in Table Args for docs
+
+        Test
+            Unique
+            ForeignKeys
+            CheckConstraints
+
+        """
+        db = self.db
+
+        class NewModel(db.Model):
+
+            __tablename__ = 'new_model'
+            id = db.Column(db.Integer, primary_key=True)
+            uniq_fld = db.Column(db.String)
+            value = db.Column(db.Integer)
+            __table_args__ = (
+                db.ForeignKeyConstraint(['id'], ['related.id']),
+                db.UniqueConstraint('uniq_fld'),
+                db.CheckConstraint('value > 10', name='chk_value')
+            )
+
+        class RelatedModel(db.Model):
+
+            __tablename__ = 'related'
+            id = db.Column(db.Integer, primary_key=True)
+
+        db.create_all()
+
+        self.assertDictEqual(
+            {
+                "constraints": [
+                    {
+                        "foreign_key_constraint": {
+                            "foreign_key": "related.id",
+                            "column_keys": [
+                                "id"
+                            ]
+                        }
+                    },
+                    {
+                        "unique_contraint": {
+                            "columns": [
+                                "uniq_fld"
+                            ]
+                        }
+                    },
+                    {
+                        "check_constraint": "value > 10"
+                    }
+                ]
+            },
+            db._process_table_args(NewModel)
         )
 
     def test_create_engine(self):

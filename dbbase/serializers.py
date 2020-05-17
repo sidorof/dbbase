@@ -18,6 +18,8 @@ SERIAL_STOPLIST = [
     "_decl_class_registry",
     "_sa_class_manager",
     "_sa_instance_state",
+    "__repr__",
+    "__table__",
     "db",
     "delete",
     "deserialize",
