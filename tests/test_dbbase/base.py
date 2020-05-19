@@ -232,6 +232,18 @@ class TestDBBaseClass(DBBaseTestCase):
             "type", list(doc["definitions"]["Table2"]["properties"].keys())
         )
 
+        # test doc_column - no need to create new tables for this.
+        self.assertDictEqual(
+            {
+                'type': 'integer',
+                'format': 'int32',
+                'nullable': True,
+                'foreign_key': 'table1.id',
+                'info': {}
+            },
+            db.doc_column(Table2, 'table1_id')
+        )
+
     def test__process_table_args(self):
         """test__process_table_args
 

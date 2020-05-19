@@ -422,8 +422,16 @@ class DB(object):
 
         return None
 
+    def doc_column(self, cls, column_name):
+        """ doc_column
 
+        This function extracts the documentation dictionary for a column.
 
+        Args:
+            cls : (class) : the class that the column belongs to.
+            column_name : (str) : the name of the column to be documented.
 
-
-
+        Returns:
+            dict
+        """
+        return process_expression(getattr(cls, column_name).expression)

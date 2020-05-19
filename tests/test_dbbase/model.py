@@ -115,6 +115,20 @@ class TestModelClass(DBBaseTestCase):
             abc = db.Column(db.String(20), server_default="abc")
             index_value = db.Column(db.Integer, server_default=db.text("0"))
 
+            fk_id = db.Column(
+                db.Integer, db.ForeignKey('table2.id'), nullable=False)
+
+            fk_name = db.Column(
+                db.String, db.ForeignKey('table3.name'), nullable=False)
+
+        class Table2(db.Model):
+            __tablename__ = 'table2'
+            id = db.Column(db.Integer, primary_key=True)
+
+        class Table3(db.Model):
+            __tablename__ = 'table3'
+            name = db.Column(db.String, primary_key=True)
+
         db.create_all()
 
         table1_rec = Table1(
@@ -126,22 +140,58 @@ class TestModelClass(DBBaseTestCase):
             # created_at2 has server default
             # update_time1 has local default, but only on update
             # update_time2 has server default, but only on update
+            fk_name='test'
+        )
+
+        table3_rec = Table3(name='test').save()
+
+        self.assertDictEqual(
+            {
+                'fk_id': {'foreign_key': 'table2.id'},
+                'fk_name': {'foreign_key': 'table3.name'}
+             },
+            table1_rec._extract_foreign_keys()
         )
 
         # default
         status, errors = table1_rec.validate_record()
 
         self.assertFalse(status)
-        self.assertDictEqual({"missing_values": ["last_name"]}, errors)
+        self.assertDictEqual(
+            {"missing_values": ["last_name", "fk_id"]},
+            errors
+        )
 
         # camel_case
         status, errors = table1_rec.validate_record(camel_case=True)
 
         self.assertFalse(status)
-        self.assertDictEqual({"missingValues": ["lastName"]}, errors)
+        self.assertDictEqual(
+            {"missingValues": ["lastName", "fkId"]},
+            errors
+        )
 
         table1_rec.last_name = "name is filled in"
+        table1_rec.fk_id = 3    # not a valid fk
+
+        status, errors = table1_rec._validate_foreignkeys()
+
+        self.assertFalse(status)
+        self.assertListEqual(
+            [{'fk_id': '3 is not a valid foreign key'}],
+            errors
+        )
+
         status, errors = table1_rec.validate_record()
+
+        self.assertFalse(status)
+        self.assertDictEqual(
+            {'ForeignKeys': [{'fk_id': '3 is not a valid foreign key'}]},
+            errors
+        )
+        table2_rec = Table2(id=3).save()
+        status, errors = table1_rec.validate_record()
+
         self.assertTrue(status)
         self.assertIsNone(errors)
 

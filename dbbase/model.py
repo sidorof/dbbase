@@ -463,4 +463,58 @@ class Model(object):
                 msg = {key: errors}
             return False, msg
 
+        status, errors = self._validate_foreignkeys()
+        if errors:
+            new_errors = []
+            if camel_case:
+                for key, error in errors.items():
+                    new_errors.append(dict([xlate(key), error]))
+                errors = new_errors
+            return False, {'ForeignKeys': errors}
+
         return True, None
+
+    def _validate_foreignkeys(self):
+        """_validate_foreignkeys
+
+        This function returns an error message if there is an issue with
+        foreign keys.
+
+        If foreign key field cannot be null and no default
+        If foreign key is not found in related table
+        """
+        errors = []
+        for key, value in self._extract_foreign_keys().items():
+            column_params = self.db.doc_column(self.__class__, key)
+            key_value =  getattr(self, key)
+            if key_value is not None:
+                if column_params['nullable'] is False:
+                    # foreign key
+                    table, id_ = value['foreign_key'].split('.')
+                    select = f'select {id_} from {table} where {id_} = {id_}'
+                    res = self.db.session.execute(select).first()
+                    if res is None:
+                        errors.append(
+                            {key: f"{key_value} is not a valid foreign key"}
+                        )
+        if errors:
+            return False, errors
+        else:
+            return True, None
+
+    def _extract_foreign_keys(self):
+        """_extract_foreign_keys
+
+        This function walks the document dictionary and returns the
+        foreign keys.
+
+        ex. return [('author_id', {'foreign_key': 'authors.id'})]
+        """
+        return dict(
+            [
+                (key, value)
+                for key, value in self.db.doc_table(
+                    self.__class__, column_props=['foreign_key'])[self._class()]['properties'].items()
+                if value
+            ]
+        )
