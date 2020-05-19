@@ -1,6 +1,10 @@
 # Changelog
+## (0.2.2) -
+### Added
+* Added `db.doc_column` function that returns the documentation dictionary for a specific column.
+* Added checking for valid foreign keys in `Model.validate_record. Prior to attempting a save, the columns that require foreign key validation cannot be null are verified against the foreign table.
 
-## (o.2.1) -
+## (0.2.1) -
 ### Added
 *   Added model documentation properties for functions, properties, and relationships. All of these are marked as readOnly: True. This additional feature gives a more complete picture of the characteristics of the model. Just as serialization is shaped by the function, `Model._get_serial_stop_list()`, only those items which pass that hurdle will be documented. That filter ensures that only meaningful items will be documented.
 *   Added model documentation properties for table constraints

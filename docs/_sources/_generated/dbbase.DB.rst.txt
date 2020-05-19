@@ -20,6 +20,8 @@ DB
       
          ~DB.create_session
       
+         ~DB.doc_column
+      
          ~DB.doc_table
       
          ~DB.doc_tables
