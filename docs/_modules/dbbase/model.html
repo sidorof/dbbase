@@ -694,8 +694,9 @@
 <span class="sd">        are no defaults, local or server, that will be filled in for that</span>
 <span class="sd">        column that triggers a report.</span>
 
-<span class="sd">        The response is a dict with a key of "missing_values". There may</span>
-<span class="sd">        be other keys added later to further evaluate the record.</span>
+<span class="sd">        One response is a dict with a key of "missing_values".</span>
+<span class="sd">        Another response is a dict foreign keys that have no corresponding</span>
+<span class="sd">        id found in the foreign table.</span>
 
 <span class="sd">        Default:</span>
 <span class="sd">            validate_record(camel_case=False)</span>

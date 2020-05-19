@@ -279,8 +279,9 @@ the database.</p>
 <p>The function walks the record for required fields. If there
 are no defaults, local or server, that will be filled in for that
 column that triggers a report.</p>
-<p>The response is a dict with a key of “missing_values”. There may
-be other keys added later to further evaluate the record.</p>
+<p>One response is a dict with a key of “missing_values”.
+Another response is a dict foreign keys that have no corresponding
+id found in the foreign table.</p>
 <dl class="simple">
 <dt>Default:</dt><dd><p>validate_record(camel_case=False)</p>
 </dd>
