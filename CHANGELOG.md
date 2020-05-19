@@ -2,7 +2,7 @@
 ## (0.2.2) -
 ### Added
 * Added `db.doc_column` function that returns the documentation dictionary for a specific column.
-* Added checking for valid foreign keys in `Model.validate_record. Prior to attempting a save, the columns that require foreign key validation cannot be null are verified against the foreign table.
+* Added checking for valid foreign keys in `Model.validate_record`. Prior to attempting a save, the columns  that cannot be null, and require foreign key validation are verified against the foreign table.
 
 ## (0.2.1) -
 ### Added
