@@ -424,8 +424,9 @@ class Model(object):
         are no defaults, local or server, that will be filled in for that
         column that triggers a report.
 
-        The response is a dict with a key of "missing_values". There may
-        be other keys added later to further evaluate the record.
+        One response is a dict with a key of "missing_values".
+        Another response is a dict foreign keys that have no corresponding
+        id found in the foreign table.
 
         Default:
             validate_record(camel_case=False)
