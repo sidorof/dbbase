@@ -231,7 +231,7 @@ class DB(object):
         Args:
             #class_list: (None : list) : if left as None, returns all classes
             to_camel_case: (bool) : converts the column names to camel case
-            serial_list: (None : list) : specify a limited list of columns
+            serial_fields: (None : list) : specify a limited list of columns
             column_props: (None : list) : filter column details to specific
                                           items
 
@@ -268,7 +268,7 @@ class DB(object):
         return doc
 
     def doc_table(
-        self, cls, to_camel_case=False, serial_list=None, column_props=None
+        self, cls, to_camel_case=False, serial_fields=None, column_props=None
     ):
         """ doc_table
 
@@ -285,14 +285,14 @@ class DB(object):
             doc_table(
                 cls,
                 to_camel_case=False,
-                serial_list=None,
+                serial_fields=None,
                 column_props=None
             )
 
         Args:
             cls: (class) : the table to be documented
             to_camel_case: (bool) : converts the column names to camel case
-            serial_list: (None : list) : specify a limited list of columns
+            serial_fields: (None : list) : specify a limited list of columns
             column_props: (None : list) : filter column details to specific
                                           items
 
@@ -319,8 +319,8 @@ class DB(object):
             }
         }
 
-        if serial_list is not None:
-            columns = serial_list
+        if serial_fields is not None:
+            columns = serial_fields
         else:
             columns = [
                 key

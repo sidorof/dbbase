@@ -129,7 +129,7 @@ The same model, Job, can be expressed with details similarly to the OpenAPI spec
 
 The following command
 ```python
-    db.doc_table(Job, to_camel_case=True, serial_list=None, column_props=None)
+    db.doc_table(Job, to_camel_case=True, serial_fields=None, column_props=None)
 
 ```
 produces this output.

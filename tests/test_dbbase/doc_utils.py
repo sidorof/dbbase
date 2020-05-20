@@ -686,20 +686,20 @@ class TestDocUtilities(DBBaseTestCase):
                 db.doc_table(self.PostgresTable),
             )
 
-    def test_serial_list_param(self):
-        """ test_serial_list_param
+    def test_serial_fields_param(self):
+        """ test_serial_fields_param
 
         This test evaluates selecting specific columns.
         A successful test has keys only for those specific
         fields.
         """
-        serial_list = ["id", "name1", "name2", "name3"]
+        serial_fields = ["id", "name1", "name2", "name3"]
 
-        doc = self.db.doc_table(self.BigTable, serial_list=serial_list)
+        doc = self.db.doc_table(self.BigTable, serial_fields=serial_fields)
 
         properties = doc[self.BigTable.__name__]["properties"]
 
-        self.assertListEqual(serial_list, list(properties.keys()))
+        self.assertListEqual(serial_fields, list(properties.keys()))
 
     def test_column_prop_param(self):
         """ test_column_prop_param

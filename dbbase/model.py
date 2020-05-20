@@ -39,18 +39,18 @@ class Model(object):
 
     * `SERIAL_STOPLIST = None`
 
-    * `SERIAL_LIST = None`
+    * `SERIAL_FIELDS = None`
 
-    * `RELATION_SERIAL_LISTS = None`
+    * `SERIAL_FIELD_RELATIONS = None`
 
     If SERIAL_STOPLIST is a list of column names, those names will be
     excluded from serialization.
 
-    If SERIAL_LIST is a list, serialization will return ONLY those
+    If SERIAL_FIELDS is a list, serialization will return ONLY those
     names in the list and in that order.
 
-    If RELATION_SERIAL_LISTS is a dict of related fields and a list
-    of fields that would be used as `SERIAL_LIST` when serializing
+    If SERIAL_FIELD_RELATIONS is a dict of related fields and a list
+    of fields that would be used as `SERIAL_FIELDS` when serializing
     this class.
 
     """
@@ -61,8 +61,8 @@ class Model(object):
     # constants
     _DEFAULT_SERIAL_STOPLIST = SERIAL_STOPLIST
     SERIAL_STOPLIST = None
-    SERIAL_LIST = None
-    RELATION_SERIAL_LISTS = None
+    SERIAL_FIELDS = None
+    SERIAL_FIELD_RELATIONS = None
 
     query = None
 
@@ -143,7 +143,7 @@ class Model(object):
         This function returns True if one or more relationships are self-
         referential.
         """
-        for field in self.get_serial_field_list():
+        for field in self.get_serial_fields():
             rel_info = self._relations_info(field)
             if rel_info is not None:
                 if rel_info["self-referential"]:
@@ -151,8 +151,8 @@ class Model(object):
 
         return False
 
-    def get_serial_field_list(self):
-        """get_serial_field_list
+    def get_serial_fields(self):
+        """get_serial_fields
 
         This function returns a list of table properties that will be used in
         serialization. To accommodate several entirely reasonable scenarios,
@@ -161,19 +161,19 @@ class Model(object):
         specific list of fields to include, whichever is most convenient.
 
         Default:
-            get_serial_field_list()
+            get_serial_fields()
 
         Returns:
             serial_fields (list) : current list of fields
         """
-        if self.SERIAL_LIST is not None:
-            if not isinstance(self.SERIAL_LIST, list):
+        if self.SERIAL_FIELDS is not None:
+            if not isinstance(self.SERIAL_FIELDS, list):
                 raise ValueError(
-                    "SERIAL_LIST must be in the form of a list: {}".format(
-                        self.SERIAL_LIST
+                    "SERIAL_FIELDS must be in the form of a list: {}".format(
+                        self.SERIAL_FIELDS
                     )
                 )
-            return self.SERIAL_LIST
+            return self.SERIAL_FIELDS
 
         fields = [field for field in dir(self) if not field.startswith("_")]
 
@@ -181,7 +181,7 @@ class Model(object):
 
     def to_dict(
             self, to_camel_case=True, level_limits=None, sort=False,
-            serial_list=None, relation_serial_lists=None):
+            serial_fields=None, serial_field_relations=None):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
@@ -195,7 +195,7 @@ class Model(object):
         Default:
             to_dict(to_camel_case=True, level_limits=None, sort=False)
 
-        paramaters:
+        Args:
             to_camel_case (boolean) : dict keys will be converted to camel
                 case.
             level_limits: (set : None) : This is more of a technical parameter
@@ -203,22 +203,24 @@ class Model(object):
                 listed in the set, `to_dict` will not process that class.
             sort: (bool) : This flag determines whether the keys will be
                 sorted.
-            serial_list (list) : a list of fields to be substituted for
-                `cls.SERIAL_LIST`
-            relation_serial_lists (dict) : To enable a more nuanced control of
+            serial_fields (list) : a list of fields to be substituted for
+                `cls.SERIAL_FIELDS`
+            serial_field_relations (dict) : To enable a more nuanced control of
                 relations objects, the name of a downstream class and a
                 list of fields to be typically included with the related
                 object.
 
+        Returns:
+            (dict) | a dictionary of fields and values
         """
         self.db.session.flush()
         if level_limits is None:
             level_limits = set()
 
-        if relation_serial_lists is None:
-            relation_serial_lists = {}
-            if self.RELATION_SERIAL_LISTS is not None:
-                relation_serial_lists = self.RELATION_SERIAL_LISTS
+        if serial_field_relations is None:
+            serial_field_relations = {}
+            if self.SERIAL_FIELD_RELATIONS is not None:
+                serial_field_relations = self.SERIAL_FIELD_RELATIONS
 
         if self._class() in level_limits:
             # it has already been done
@@ -226,13 +228,13 @@ class Model(object):
                 return STOP_VALUE
         result = {}
 
-        if serial_list is None:
-            serial_list = self.get_serial_field_list()
+        if serial_fields is None:
+            serial_fields = self.get_serial_fields()
 
         if sort:
-            serial_list = sorted(serial_list)
+            serial_fields = sorted(serial_fields)
 
-        for key in serial_list:
+        for key in serial_fields:
             # special treatment for relationships
             rel_info = self._relations_info(key)
             if rel_info is not None:
@@ -253,7 +255,7 @@ class Model(object):
                 to_camel_case,
                 level_limits,
                 source_class=self._class(),
-                relation_serial_lists=relation_serial_lists,
+                serial_field_relations=serial_field_relations,
             )
 
             if to_camel_case:
@@ -273,8 +275,8 @@ class Model(object):
         level_limits=None,
         sort=False,
         indent=None,
-        serial_list=None,
-        relation_serial_lists=None,
+        serial_fields=None,
+        serial_field_relations=None,
     ):
         """serialize
 
@@ -283,7 +285,7 @@ class Model(object):
         Default:
             serialize(
                 to_camel_case=True, level_limits=None, sort=False,
-                indent=None, serial_list=None, relation_serial_lists=None
+                indent=None, serial_fields=None, serial_field_relations=None
             )
 
         Args:
@@ -295,9 +297,9 @@ class Model(object):
                 sorted.
             indent: (integer : None) The number of spaces to indent to improve
                 readability.
-            serial_list (None | list) : a list of fields to be substituted for
-                `cls.SERIAL_LIST`
-            relation_serial_lists (None | dict) : To enable a more nuanced
+            serial_fields (None | list) : a list of fields to be substituted for
+                `cls.SERIAL_FIELDS`
+            serial_field_relations (None | dict) : To enable a more nuanced
                 control of relations objects, the name of a downstream class
                 and a list of fields to be typically included with the related
                 object.
@@ -310,8 +312,8 @@ class Model(object):
                 to_camel_case=to_camel_case,
                 level_limits=level_limits,
                 sort=sort,
-                serial_list=serial_list,
-                relation_serial_lists=relation_serial_lists,
+                serial_fields=serial_fields,
+                serial_field_relations=serial_field_relations,
             ),
             indent=indent,
         )

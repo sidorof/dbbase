@@ -54,7 +54,7 @@ input("ready")
 
 # ------------------------------------------------
 print("now only the email_address portion of address shows")
-Address.SERIAL_LIST = ["email_address"]
+Address.SERIAL_FIELDS = ["email_address"]
 print(user.serialize(indent=2))
 input("ready")
 
@@ -62,12 +62,12 @@ input("ready")
 
 print("Now ad hoc variables")
 print(
-    "user serial_list is {}".format(
+    "user serial_fields is {}".format(
         "['id', 'first_name', 'last_name', 'addresses']"
     )
 )
 print(
-    "user relation_serial_lists is {}".format(
+    "user serial_field_relations is {}".format(
         "{'Address': ['id', 'email_address'] "
     )
 )
@@ -75,8 +75,8 @@ print(
     user.serialize(
         indent=2,
         sort=True,
-        serial_list=["id", "first_name", "last_name", "addresses"],
-        relation_serial_lists={"Address": ["id", "email_address"]},
+        serial_fields=["id", "first_name", "last_name", "addresses"],
+        serial_field_relations={"Address": ["id", "email_address"]},
     )
 )
 input("ready")
@@ -86,8 +86,8 @@ print(
     address1.serialize(
         indent=2,
         sort=True,
-        serial_list=["id", "email_address"],
-        relation_serial_lists={"User": ["user_id", "first_name", "last_name"]},
+        serial_fields=["id", "email_address"],
+        serial_field_relations={"User": ["user_id", "first_name", "last_name"]},
     )
 )
 

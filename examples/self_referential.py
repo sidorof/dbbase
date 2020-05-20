@@ -19,7 +19,7 @@ class Node(db.Model):
         "Node", lazy="joined", order_by="Node.id", join_depth=10
     )
 
-    SERIAL_LIST = ["id", "parent_id", "data", "children"]
+    SERIAL_FIELDS = ["id", "parent_id", "data", "children"]
 
 
 db.create_all()

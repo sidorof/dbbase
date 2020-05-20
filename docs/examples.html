@@ -45,7 +45,7 @@
   
   
   
-    <title>Examples &#8212; dbbase 0.2.2 documentation</title>
+    <title>Examples &#8212; dbbase 0.2.3 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.2.2 documentation"
+        <a href="index.html" title="dbbase 0.2.3 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.2</span>
+          <span class="md-header-nav__topic">dbbase 0.2.3</span>
           <span class="md-header-nav__topic"> Examples </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.2 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.3 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.2.2 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.2.3 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.2.2 documentation">dbbase 0.2.2</a>
+       title="dbbase 0.2.3 documentation">dbbase 0.2.3</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -368,7 +368,7 @@
 
 <span class="c1"># ------------------------------------------------</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"now only the email_address portion of address shows"</span><span class="p">)</span>
-<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"email_address"</span><span class="p">]</span>
+<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"email_address"</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
 
@@ -376,12 +376,12 @@
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Now ad hoc variables"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span>
-    <span class="s2">"user serial_list is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="s2">"user serial_fields is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="s2">"['id', 'first_name', 'last_name', 'addresses']"</span>
     <span class="p">)</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span>
-    <span class="s2">"user relation_serial_lists is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="s2">"user serial_field_relations is </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="s2">"{'Address': ['id', 'email_address'] "</span>
     <span class="p">)</span>
 <span class="p">)</span>
@@ -389,8 +389,8 @@
     <span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
         <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">serial_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">,</span> <span class="s2">"addresses"</span><span class="p">],</span>
-        <span class="n">relation_serial_lists</span><span class="o">=</span><span class="p">{</span><span class="s2">"Address"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">]},</span>
+        <span class="n">serial_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">,</span> <span class="s2">"addresses"</span><span class="p">],</span>
+        <span class="n">serial_field_relations</span><span class="o">=</span><span class="p">{</span><span class="s2">"Address"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">]},</span>
     <span class="p">)</span>
 <span class="p">)</span>
 <span class="nb">input</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">)</span>
@@ -400,8 +400,8 @@
     <span class="n">address1</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
         <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">serial_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">],</span>
-        <span class="n">relation_serial_lists</span><span class="o">=</span><span class="p">{</span><span class="s2">"User"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"user_id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">]},</span>
+        <span class="n">serial_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">],</span>
+        <span class="n">serial_field_relations</span><span class="o">=</span><span class="p">{</span><span class="s2">"User"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"user_id"</span><span class="p">,</span> <span class="s2">"first_name"</span><span class="p">,</span> <span class="s2">"last_name"</span><span class="p">]},</span>
     <span class="p">)</span>
 <span class="p">)</span>
 
@@ -432,7 +432,7 @@
         <span class="s2">"Node"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">"joined"</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">"Node.id"</span><span class="p">,</span> <span class="n">join_depth</span><span class="o">=</span><span class="mi">10</span>
     <span class="p">)</span>
 
-    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"parent_id"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">,</span> <span class="s2">"children"</span><span class="p">]</span>
+    <span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"parent_id"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">,</span> <span class="s2">"children"</span><span class="p">]</span>
 
 
 <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
@@ -720,7 +720,7 @@
               
           </div>
             Last updated on
-              May 18, 2020.
+              May 20, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

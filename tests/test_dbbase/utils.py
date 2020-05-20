@@ -98,3 +98,7 @@ class TestUtilities(BaseTestCase):
 
         key = "startDate"
         self.assertEqual(_xlate_from_camel_case(key), "start_date")
+
+        # shoehorned in
+        key = "StartDate"
+        self.assertEqual(_xlate_from_camel_case(key), "start_date")

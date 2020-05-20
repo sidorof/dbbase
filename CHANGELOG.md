@@ -1,4 +1,8 @@
 # Changelog
+## (0.2.3) -
+### Changed
+*   Changed the name of SERIAL_LIST to SERIAL_FIELDS, and RELATION_SERIAL_LISTS to SERIAL_FIELD_RELATIONS to better describe what they are. The parameters associated with using these variables are changed as well.
+
 ## (0.2.2) -
 ### Added
 * Added `db.doc_column` function that returns the documentation dictionary for a specific column.

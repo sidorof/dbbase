@@ -23,7 +23,7 @@ SERIAL_STOPLIST = [
     "db",
     "delete",
     "deserialize",
-    "get_serial_field_list",
+    "get_serial_fields",
     "metadata",
     "query",
     "save",
@@ -31,14 +31,14 @@ SERIAL_STOPLIST = [
     "to_dict",
     "validate_record",
     "SERIAL_STOPLIST",
-    "SERIAL_LIST",
-    "RELATION_SERIAL_LISTS"
+    "SERIAL_FIELDS",
+    "SERIAL_FIELD_RELATIONS"
 ]
 
 
 def _eval_value(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists):
+        serial_field_relations):
     """ _eval_value
 
     This function converts some of the standard values as needed based
@@ -75,7 +75,7 @@ def _eval_value(
                 to_camel_case,
                 level_limits,
                 source_class,
-                relation_serial_lists,
+                serial_field_relations,
             )
         else:
             result = []
@@ -85,7 +85,7 @@ def _eval_value(
             to_camel_case,
             level_limits,
             source_class,
-            relation_serial_lists,
+            serial_field_relations,
         )
     else:
         result = value
@@ -95,7 +95,7 @@ def _eval_value(
 
 def _eval_value_model(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists):
+        serial_field_relations):
     """_eval_value_model
 
     if any class within level_limits i self-referential it gets
@@ -107,10 +107,10 @@ def _eval_value_model(
         # already done
         return result
 
-    serial_list = value.SERIAL_LIST
+    serial_fields = value.SERIAL_FIELDS
 
-    if class_name in relation_serial_lists:
-        serial_list = relation_serial_lists[class_name]
+    if class_name in serial_field_relations:
+        serial_fields = serial_field_relations[class_name]
 
     if source_class is not None:
         level_limits.add(source_class)
@@ -118,8 +118,8 @@ def _eval_value_model(
     result = value.to_dict(
         to_camel_case,
         level_limits=level_limits,
-        serial_list=serial_list,
-        relation_serial_lists=relation_serial_lists)
+        serial_fields=serial_fields,
+        serial_field_relations=serial_field_relations)
 
     level_limits.add(class_name)
 
@@ -128,7 +128,7 @@ def _eval_value_model(
 
 def _eval_value_list(
         value, to_camel_case, level_limits, source_class,
-        relation_serial_lists):
+        serial_field_relations):
     """_eval_value_list
 
     This function handles values that are lists. While a list that is not
@@ -162,7 +162,7 @@ def _eval_value_list(
                     to_camel_case,
                     tmp_limits,
                     source_class,
-                    relation_serial_lists,
+                    serial_field_relations,
                 )
         else:
             result = _eval_value(
@@ -170,7 +170,7 @@ def _eval_value_list(
                 to_camel_case,
                 tmp_limits,
                 source_class,
-                relation_serial_lists,
+                serial_field_relations,
             )
 
         tmp_list.append(result)

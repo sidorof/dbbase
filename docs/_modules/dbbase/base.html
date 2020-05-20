@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.base &#8212; dbbase 0.2.2 documentation</title>
+    <title>dbbase.base &#8212; dbbase 0.2.3 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.2.2 documentation"
+        <a href="../../index.html" title="dbbase 0.2.3 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.2</span>
+          <span class="md-header-nav__topic">dbbase 0.2.3</span>
           <span class="md-header-nav__topic"> dbbase.base </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.2 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.3 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.2.2 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.2.3 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.2.2 documentation">dbbase 0.2.2</a>
+       title="dbbase 0.2.3 documentation">dbbase 0.2.3</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -501,7 +501,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            #class_list: (None : list) : if left as None, returns all classes</span>
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
-<span class="sd">            serial_list: (None : list) : specify a limited list of columns</span>
+<span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
 <span class="sd">            column_props: (None : list) : filter column details to specific</span>
 <span class="sd">                                          items</span>
 
@@ -538,7 +538,7 @@
         <span class="k">return</span> <span class="n">doc</span></div>
 
 <div class="viewcode-block" id="DB.doc_table"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_table.html#dbbase.DB.doc_table">[docs]</a>    <span class="k">def</span> <span class="nf">doc_table</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">""" doc_table</span>
 
@@ -555,14 +555,14 @@
 <span class="sd">            doc_table(</span>
 <span class="sd">                cls,</span>
 <span class="sd">                to_camel_case=False,</span>
-<span class="sd">                serial_list=None,</span>
+<span class="sd">                serial_fields=None,</span>
 <span class="sd">                column_props=None</span>
 <span class="sd">            )</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            cls: (class) : the table to be documented</span>
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
-<span class="sd">            serial_list: (None : list) : specify a limited list of columns</span>
+<span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
 <span class="sd">            column_props: (None : list) : filter column details to specific</span>
 <span class="sd">                                          items</span>
 
@@ -589,8 +589,8 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">serial_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="n">serial_list</span>
+        <span class="k">if</span> <span class="n">serial_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">serial_fields</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">key</span>
@@ -730,7 +730,7 @@
               
           </div>
             Last updated on
-              May 18, 2020.
+              May 20, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

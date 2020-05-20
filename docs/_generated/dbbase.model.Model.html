@@ -45,7 +45,7 @@
   
   
   
-    <title>Model &#8212; dbbase 0.2.2 documentation</title>
+    <title>Model &#8212; dbbase 0.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="dbbase 0.2.2 documentation"
+        <a href="../index.html" title="dbbase 0.2.3 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.2</span>
+          <span class="md-header-nav__topic">dbbase 0.2.3</span>
           <span class="md-header-nav__topic"> Model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.2.2 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">dbbase 0.2.3 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="dbbase 0.2.2 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="dbbase 0.2.3 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="dbbase 0.2.2 documentation">dbbase 0.2.2</a>
+       title="dbbase 0.2.3 documentation">dbbase 0.2.3</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -294,15 +294,15 @@ the database columns plus any methods that have been created. To
 automatically exclude a method, name it with a starting _.</p>
 <ul class="simple">
 <li><p><cite>SERIAL_STOPLIST = None</cite></p></li>
-<li><p><cite>SERIAL_LIST = None</cite></p></li>
-<li><p><cite>RELATION_SERIAL_LISTS = None</cite></p></li>
+<li><p><cite>SERIAL_FIELDS = None</cite></p></li>
+<li><p><cite>SERIAL_FIELD_RELATIONS = None</cite></p></li>
 </ul>
 <p>If SERIAL_STOPLIST is a list of column names, those names will be
 excluded from serialization.</p>
-<p>If SERIAL_LIST is a list, serialization will return ONLY those
+<p>If SERIAL_FIELDS is a list, serialization will return ONLY those
 names in the list and in that order.</p>
-<p>If RELATION_SERIAL_LISTS is a dict of related fields and a list
-of fields that would be used as <cite>SERIAL_LIST</cite> when serializing
+<p>If SERIAL_FIELD_RELATIONS is a dict of related fields and a list
+of fields that would be used as <cite>SERIAL_FIELDS</cite> when serializing
 this class.</p>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
@@ -317,7 +317,7 @@ this class.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize" title="dbbase.model.Model.deserialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize</span></code></a>(data[, from_camel_case])</p></td>
 <td><p>Convert back to column names that are more pythonic.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_field_list.html#dbbase.model.Model.get_serial_field_list" title="dbbase.model.Model.get_serial_field_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_field_list</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_fields.html#dbbase.model.Model.get_serial_fields" title="dbbase.model.Model.get_serial_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_fields</span></code></a>()</p></td>
 <td><p>This function returns a list of table properties that will be used in serialization.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.save.html#dbbase.model.Model.save" title="dbbase.model.Model.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
@@ -341,10 +341,10 @@ this class.</p>
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RELATION_SERIAL_LISTS</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SERIAL_FIELDS</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SERIAL_LIST</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SERIAL_FIELD_RELATIONS</span></code></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SERIAL_STOPLIST</span></code></p></td>
@@ -388,7 +388,7 @@ this class.</p>
               
           </div>
             Last updated on
-              May 18, 2020.
+              May 20, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

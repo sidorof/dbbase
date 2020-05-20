@@ -16,7 +16,7 @@ Model
       
          ~Model.deserialize
       
-         ~Model.get_serial_field_list
+         ~Model.get_serial_fields
       
          ~Model.save
       
@@ -35,8 +35,8 @@ Model
 
    .. autosummary::
    
-      ~Model.RELATION_SERIAL_LISTS
-      ~Model.SERIAL_LIST
+      ~Model.SERIAL_FIELDS
+      ~Model.SERIAL_FIELD_RELATIONS
       ~Model.SERIAL_STOPLIST
       ~Model.db
       ~Model.metadata

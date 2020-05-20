@@ -272,7 +272,7 @@ class TestModelClass(DBBaseTestCase):
         db.session.commit()
 
         self.assertSetEqual(
-            set(["id", "name"]), set(user.get_serial_field_list())
+            set(["id", "name"]), set(user.get_serial_fields())
         )
 
         self.assertFalse(user._has_self_ref())
@@ -313,7 +313,7 @@ class TestModelClass(DBBaseTestCase):
         db.session.commit()
 
         self.assertSetEqual(
-            set(["id", "name", "addresses"]), set(user.get_serial_field_list())
+            set(["id", "name", "addresses"]), set(user.get_serial_fields())
         )
 
         # specific to fields
@@ -357,7 +357,7 @@ class TestModelClass(DBBaseTestCase):
 
         self.assertSetEqual(
             set(["id", "parent_id", "data", "children"]),
-            set(node2.get_serial_field_list()),
+            set(node2.get_serial_fields()),
         )
 
         # specific to fields
@@ -544,7 +544,7 @@ class TestModelClass(DBBaseTestCase):
         self.assertFalse(user1._has_self_ref())
         self.assertTrue(node1._has_self_ref())
 
-    def test_get_serial_field_list(self):
+    def test_get_serial_fields(self):
         db = self.db
 
         class Node(db.Model):
@@ -564,7 +564,7 @@ class TestModelClass(DBBaseTestCase):
         # since don't care about order, use set
         self.assertSetEqual(
             set(["id", "parent_id", "data", "children"]),
-            set(node1.get_serial_field_list()),
+            set(node1.get_serial_fields()),
         )
 
     def test_to_dict(self):
@@ -676,8 +676,8 @@ class TestModelClass(DBBaseTestCase):
             node1.to_dict(to_camel_case=True, sort=True),
         )
 
-        # sorted in the order of Serial list
-        Node.SERIAL_LIST = ["id", "parent_id", "data", "children"]
+        # sorted in the order of serial fields
+        Node.SERIAL_FIELDS = ["id", "parent_id", "data", "children"]
 
         self.assertEqual(
             str(
@@ -709,7 +709,7 @@ class TestModelClass(DBBaseTestCase):
 
         # test ad hoc serial list
         self.assertDictEqual(
-            {"parentId": None}, node1.to_dict(serial_list=["parent_id"])
+            {"parentId": None}, node1.to_dict(serial_fields=["parent_id"])
         )
 
         # test ad hoc serial list with children
@@ -734,7 +734,7 @@ class TestModelClass(DBBaseTestCase):
                     }
                 ],
             },
-            node1.to_dict(serial_list=["id", "children"]),
+            node1.to_dict(serial_fields=["id", "children"]),
         )
 
         # test serial list for relations not the parent
@@ -748,10 +748,10 @@ class TestModelClass(DBBaseTestCase):
                     {"id": 2, "children": [{"id": 3, "children": []}]}
                 ],
             },
-            node1.to_dict(relation_serial_lists={"Node": ["id", "children"]}),
+            node1.to_dict(serial_field_relations={"Node": ["id", "children"]}),
         )
-        # test both serial list and relation_serial_lists
-        # this is equivalent to having set the class SERIAL_LIST
+        # test both serial list and serial_field_relations
+        # this is equivalent to having set the class SERIAL_FIELDS
         #   in the first place.
         self.assertDictEqual(
             {
@@ -761,8 +761,8 @@ class TestModelClass(DBBaseTestCase):
                 ],
             },
             node1.to_dict(
-                serial_list=["id", "children"],
-                relation_serial_lists={"Node": ["id", "children"]},
+                serial_fields=["id", "children"],
+                serial_field_relations={"Node": ["id", "children"]},
             ),
         )
 

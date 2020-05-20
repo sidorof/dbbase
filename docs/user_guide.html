@@ -45,7 +45,7 @@
   
   
   
-    <title>User Guide &#8212; dbbase 0.2.2 documentation</title>
+    <title>User Guide &#8212; dbbase 0.2.3 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.2.2 documentation"
+        <a href="index.html" title="dbbase 0.2.3 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.2</span>
+          <span class="md-header-nav__topic">dbbase 0.2.3</span>
           <span class="md-header-nav__topic"> User Guide </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.2 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.3 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.2.2 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.2.3 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.2.2 documentation">dbbase 0.2.2</a>
+       title="dbbase 0.2.3 documentation">dbbase 0.2.3</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -578,11 +578,11 @@ The users table has a relationship with addresses where the user_id entered into
 <p>You have the ability to limit or expand the items that are included.</p>
 <ul class="simple">
 <li><p><strong>SERIAL_STOPLIST</strong> is a Model class variable that is a list of fields to ignore</p></li>
-<li><p><strong>SERIAL_LIST</strong> is a Model class variable that is a list of fields that would be included. Additional methods can be included in this list to enable fields like <strong>fullname</strong> in place of <strong>first_name</strong> and <strong>last_name</strong>.</p></li>
-<li><p><strong>RELATIONS_SERIAL_LIST</strong> is a Model class variable that is a dictionary. With this variable you can specify what fields a relation will show. While you could go to the table definition for that relation and specify it directly, using the RELATIONS_SERIAL_LIST variable enables you to show the specific fields appropriate for when that relationship is included with the current table, but have a standard method when show the relation table directly. An example below will help explain that further.</p></li>
+<li><p><strong>SERIAL_FIELDS</strong> is a Model class variable that is a list of fields that would be included. Additional methods can be included in this list to enable fields like <strong>fullname</strong> in place of <strong>first_name</strong> and <strong>last_name</strong>.</p></li>
+<li><p><strong>SERIAL_FIELD_RELATIONS</strong> is a Model class variable that is a dictionary. With this variable you can specify what fields a relation will show. While you could go to the table definition for that relation and specify it directly, using the SERIAL_FIELD_RELATIONS variable enables you to show the specific fields appropriate for when that relationship is included with the current table, but have a standard method when show the relation table directly. An example below will help explain that further.</p></li>
 <li><p><strong>serialize</strong> of course can be overwritten in your class model so if either method is not right for your situation it is easy enough to set right for that particular class yet use the defaults for other tables.</p></li>
 </ul>
-<p>To reduce ambiguity, if <strong>SERIAL_LIST</strong> is used, serialization
+<p>To reduce ambiguity, if <strong>SERIAL_FIELDS</strong> is used, serialization
 assumes that the list is explicitly what you want, and ignores the <strong>SERIAL_STOPLIST</strong>.</p>
 <p>From examining the output that we have above, suppose we decide that we will just present the full name and not <strong>first_name</strong> and <strong>last_name</strong>.</p>
 <p>In that case would do the following:</p>
@@ -627,10 +627,10 @@ this by adding both to a stop list by:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'user_id'</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>But instead, we can minimize our typing by instead adding just the email address to <strong>SERIAL_LIST</strong>. As in the following:</p>
+<p>But instead, we can minimize our typing by instead adding just the email address to <strong>SERIAL_FIELDS</strong>. As in the following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'addresses'</span>
-    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'email_address'</span><span class="p">]</span>
+    <span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'email_address'</span><span class="p">]</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">email_address</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -656,8 +656,8 @@ this by adding both to a stop list by:</p>
 <p>Dictionary keys have not been guaranteed to print in a particular
 order, although that is changing. If the order of the keys in
 serialization are important in your application, you can control
-that by putting those variables in <strong>SERIAL_LIST</strong>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">,</span> <span class="s1">'addresses'</span><span class="p">]</span>
+that by putting those variables in <strong>SERIAL_FIELDS</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">,</span> <span class="s1">'addresses'</span><span class="p">]</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="p">{</span>
@@ -679,13 +679,13 @@ that by putting those variables in <strong>SERIAL_LIST</strong>.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Example of RELATIONS_SERIAL_LIST</p>
-<p>In the example above we controlled the output for Address by using <cite>Address.SERIAL_LIST = [‘email_address’]</cite>. That means that any time an API would call for an addres only the email address would be returned. If it is <strong>only</strong> going to be returned in conjunction with a user, that may be acceptable. However, there are many secondary relationships where more control would be helpful.</p>
-<p>In the following code block we will see our tables created again, but with the use of the RELATIONS_SERIAL_LIST variable to help us to a more refined output.</p>
+<p>Example of SERIAL_FIELD_RELATIONS</p>
+<p>In the example above we controlled the output for Address by using <cite>Address.SERIAL_FIELDS = [‘email_address’]</cite>. That means that any time an API would call for an addres only the email address would be returned. If it is <strong>only</strong> going to be returned in conjunction with a user, that may be acceptable. However, there are many secondary relationships where more control would be helpful.</p>
+<p>In the following code block we will see our tables created again, but with the use of the SERIAL_FIELD_RELATIONS variable to help us to a more refined output.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
     <span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">]</span>
-    <span class="n">RELATIONS_SERIAL_LIST</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">SERIAL_FIELD_RELATIONS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">"Address"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"email_address"</span><span class="p">]</span>
     <span class="p">}</span>
 
@@ -726,9 +726,9 @@ that by putting those variables in <strong>SERIAL_LIST</strong>.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>When a field is found to be an instance of a class that is a key in the <cite>RELATIONS_SERIAL_LIST</cite> dictionary, the corresponding list is used for that class in place of the default class.</p>
+<p>When a field is found to be an instance of a class that is a key in the <cite>SERIAL_FIELD_RELATIONS</cite> dictionary, the corresponding list is used for that class in place of the default class.</p>
 <p>Ad Hoc Variables</p>
-<p>Both the <cite>serialize</cite> and <cite>to_dict</cite> functions have parameters of <cite>serial_list</cite> and <cite>relation_serial_lists</cite>. If not used, the default class variables are
+<p>Both the <cite>serialize</cite> and <cite>to_dict</cite> functions have parameters of <cite>serial_fields</cite> and <cite>serial_field_relations</cite>. If not used, the default class variables are
 used. However, with these variables, you can generate custom serializations on the fly to better match specific requirements.</p>
 <p>A natural fall-out of this approach means also that such things as views can be easily created for different audiences.</p>
 
@@ -736,13 +736,13 @@ used. However, with these variables, you can generate custom serializations on t
 <h3 id="recursive-serialization">Recursive Serialization<a class="headerlink" href="#recursive-serialization" title="Permalink to this headline">¶</a></h3>
 <p>For this next section, let us start by first revoking the stop lists and serial lists that we have and take a look at the process in a different way.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># assume the class variables are set on the defaults in their class definitions.</span>
-<span class="n">User</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">User</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">User</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">User</span><span class="o">.</span><span class="n">RELATIONS_SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">User</span><span class="o">.</span><span class="n">SERIAL_FIELD_RELATIONS</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">Address</span><span class="o">.</span><span class="n">RELATIONS_SERIAL_LIST</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">Address</span><span class="o">.</span><span class="n">SERIAL_FIELD_RELATIONS</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="p">{</span>
@@ -765,7 +765,7 @@ used. However, with these variables, you can generate custom serializations on t
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>As a note, if you change such class variables on the fly such as User.SERIAL_LIST, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change <cite>user.SERIAL_LIST</cite> rather than <cite>User.SERIAL_LIST</cite>.</p>
+<p>As a note, if you change such class variables on the fly such as User.SERIAL_FIELDS, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change <cite>user.SERIAL_FIELDS</cite> rather than <cite>User.SERIAL_FIELDS</cite>.</p>
 <p>So we can see that it is back to the original form. But let’s choose <strong>address1.serialize()</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">address1</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span>
 <span class="go">{</span>
@@ -805,7 +805,7 @@ used. However, with these variables, you can generate custom serializations on t
         <span class="n">order_by</span><span class="o">=</span><span class="s2">"Node.id"</span><span class="p">,</span>
         <span class="n">join_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="n">SERIAL_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'parent_id'</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">,</span> <span class="s1">'children'</span><span class="p">]</span>
+    <span class="n">SERIAL_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'parent_id'</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">,</span> <span class="s1">'children'</span><span class="p">]</span>
 
 <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
 
@@ -1560,7 +1560,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              May 18, 2020.
+              May 20, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
