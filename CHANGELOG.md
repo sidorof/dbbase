@@ -1,9 +1,9 @@
 # Changelog
 ## (0.2.4) -
 ### Added
-*   Added an option of a write-only column. With the ability to document fields of tables, it is useful to be able identify fields that are write-only, such as password fields. The `Model.to_dict()` function outputs the contents of a record. If the output provides the basis for forms in the front-end, including the password field is natural and desirable. Once, the password has been added, however, encrypted or not, it should be excluded. 
+*   Added an option of a write-only column. With the ability to document fields of tables, it is useful to be able identify fields that are write-only, such as password fields. The `Model.to_dict()` function outputs the contents of a record. If the output provides the basis for forms in the front-end, including the password field is natural and desirable. Once, the password has been added, however, encrypted or not, it should be excluded.
 
-... python
+```python
 
     class Table1(db.Model):
         __tablename__ = "table1"
@@ -13,11 +13,11 @@
 
     db.create_all()
 
-...
+```
 
 When use the documentation dictionary featuure, we now get:
 
-... json
+``` json
 
     {
         "Table1": {
@@ -42,24 +42,24 @@ When use the documentation dictionary featuure, we now get:
         }
     }
 
-...
+```
 
 Using this we create two records, with and without a password.
-    
-... python 
+
+``` python
 
     table1 = Table1(id=1)
     table2 = Table1(id=2, password="some encrypted value")
 
     >>> print(table1.to_dict())
-    
+
         {'id': 1, 'password': None},
-    
+
     >>> print(table2.to_dict())
-    
+
         {'id': 2}
 
-...
+```
 
 The write-only field is thereby excluded. The basis for this functionality stems from the use of the info field.
 

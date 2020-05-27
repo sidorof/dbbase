@@ -511,7 +511,7 @@ keys to camelCase style to correspond to JavaScript conventions.</p>
 <p>To illustrate some of the features, we will look at two examples: The first will be two tables, one for users and one for addresses</p>
 <p>After the initial import and <strong>db</strong> creation, we create two tables.
 The users table has a relationship with addresses where the user_id entered into the address table must be found in the users table.</p>
-<p>As an aside, note that the password column is a WriteOnlyColumn, for discussion later.</p>
+<p>As an aside, note that the password column is a <cite>WriteOnlyColumn</cite> for discussion later.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create db that is sqlite in memory</span>
 <span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
 <span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s1">':memory:'</span><span class="p">)</span>
@@ -581,7 +581,7 @@ The users table has a relationship with addresses where the user_id entered into
 <p>The default serialization opts for the keys to be put into camelCase. In addition, it walks the object dictionary and recursively evaluates any relationships as well, under the assumption that it would minimize the number of trips to the API from the front end.</p>
 
 <h3 id="writeonlycolumn">WriteOnlyColumn<a class="headerlink" href="#writeonlycolumn" title="Permalink to this headline">¶</a></h3>
-<p>The user table above includes a password column using a WriteOnlyColumn. By using this type of column, a table can automatically exclude that column from serialization once the value has been filled in. This avoids an awkward mistake accidentally outputting even an encrypted password, yet including the field for forms to a front-end application adding a new user.</p>
+<p>The user table above includes a password column using a <cite>db.WriteOnlyColumn</cite>. By using this type of column, a table can automatically exclude that column from serialization once the value has been filled in. This avoids an awkward mistake accidentally outputting even an encrypted password, yet including the field when None for forms to a front-end application adding a new user.</p>
 
 
 <h3 id="controlling-serialization">Controlling Serialization<a class="headerlink" href="#controlling-serialization" title="Permalink to this headline">¶</a></h3>

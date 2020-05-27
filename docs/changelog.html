@@ -490,75 +490,53 @@
 <ul class="simple">
 <li><p>Added an option of a write-only column. With the ability to document fields of tables, it is useful to be able identify fields that are write-only, such as password fields. The <code class="docutils literal notranslate"><span class="pre">Model.to_dict()</span></code> function outputs the contents of a record. If the output provides the basis for forms in the front-end, including the password field is natural and desirable. Once, the password has been added, however, encrypted or not, it should be excluded.</p></li>
 </ul>
-<p>… python</p>
-<blockquote>
-<div><dl>
-<dt>class Table1(db.Model):</dt><dd><p>__tablename__ = “table1”</p>
-<p>id = db.Column(db.Integer, primary_key=True)
-password = db.WriteOnlyColumn(db.String, nullable=False)</p>
-</dd>
-</dl>
-<p>db.create_all()</p>
-</div></blockquote>
-<p>…</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Table1</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"table1"</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">WriteOnlyColumn</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>When use the documentation dictionary featuure, we now get:</p>
-<p>… json</p>
-<blockquote>
-<div><dl>
-<dt>{</dt><dd><dl>
-<dt>“Table1”: {</dt><dd><p>“type”: “object”,
-“properties”: {</p>
-<blockquote>
-<div><dl class="simple">
-<dt>“id”: {</dt><dd><p>“type”: “integer”,
-“format”: “int32”,
-“primary_key”: true,
-“nullable”: false,
-“info”: {}</p>
-</dd>
-</dl>
-<p>},
-“password”: {</p>
-<blockquote>
-<div><p>“type”: “string”,
-“nullable”: false,
-“info”: {</p>
-<blockquote>
-<div><p>“writeOnly”: true</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>},
-“xml”: “Table1”</p>
-</dd>
-</dl>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>…</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">"Table1"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+        <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="nt">"password"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"writeOnly"</span><span class="p">:</span> <span class="kc">true</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"Table1"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>Using this we create two records, with and without a password.</p>
-<p>… python</p>
-<blockquote>
-<div><p>table1 = Table1(id=1)
-table2 = Table1(id=2, password=”some encrypted value”)</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">table1</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span> <span class="o">=</span> <span class="n">Table1</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">table2</span> <span class="o">=</span> <span class="n">Table1</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s2">"some encrypted value"</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">table1</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">table2</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>{‘id’: 1, ‘password’: None},</p>
-</div></blockquote>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">table2</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
-</pre></div>
-</div>
-<blockquote>
-<div><p>{‘id’: 2}</p>
-</div></blockquote>
-</div></blockquote>
-<p>…</p>
 <p>The write-only field is thereby excluded. The basis for this functionality stems from the use of the info field.</p>
 
 
