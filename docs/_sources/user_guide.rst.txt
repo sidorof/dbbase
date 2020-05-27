@@ -223,7 +223,9 @@ keys to camelCase style to correspond to JavaScript conventions.
 To illustrate some of the features, we will look at two examples: The first will be two tables, one for users and one for addresses
 
 After the initial import and **db** creation, we create two tables.
-The users table has a relationship with addresses where the user_id entered into the address table must be found in the users table.
+The users table has a relationship with addresses where the user_id entered into the address table must be found in the users table. 
+
+As an aside, note that the password column is a WriteOnlyColumn, for discussion later.
 
 .. code-block:: python
 
@@ -236,6 +238,7 @@ The users table has a relationship with addresses where the user_id entered into
         id = db.Column(db.Integer, primary_key=True)
         first_name = db.Column(db.String(50), nullable=False)
         last_name =  db.Column(db.String(50), nullable=False)
+        password = db.WriteOnlyColumn(db.String, nullable=False)
         addresses = db.relationship(
             "Address", backref="user", lazy='immediate')
 
@@ -296,6 +299,11 @@ Accordingly, it makes sense that when the user data is to be pulled from an API 
 ..
 
 The default serialization opts for the keys to be put into camelCase. In addition, it walks the object dictionary and recursively evaluates any relationships as well, under the assumption that it would minimize the number of trips to the API from the front end.
+
+WriteOnlyColumn
+===============
+
+The user table above includes a password column using a WriteOnlyColumn. By using this type of column, a table can automatically exclude that column from serialization once the value has been filled in. This avoids an awkward mistake accidentally outputting even an encrypted password, yet including the field for forms to a front-end application adding a new user.
 
 Controlling Serialization
 =========================

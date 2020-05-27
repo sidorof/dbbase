@@ -33,6 +33,16 @@ This section is a reference for classes and functions of **dbbase**.
    drop_database
 
 
+.. rubric:: Column Types
+
+.. currentmodule:: dbbase.column_types
+.. autosummary::
+    :toctree: _generated/
+    :nosignatures:
+    :template: class.rst
+
+   WriteOnlyColumn
+
 .. rubric:: Utilities
 
 .. currentmodule:: dbbase.utils

@@ -45,7 +45,7 @@
   
   
   
-    <title>User Guide &#8212; dbbase 0.2.3 documentation</title>
+    <title>User Guide &#8212; dbbase 0.2.4 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.2.3 documentation"
+        <a href="index.html" title="dbbase 0.2.4 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.3</span>
+          <span class="md-header-nav__topic">dbbase 0.2.4</span>
           <span class="md-header-nav__topic"> User Guide </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.3 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.4 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.2.3 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.2.4 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.2.3 documentation">dbbase 0.2.3</a>
+       title="dbbase 0.2.4 documentation">dbbase 0.2.4</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -235,6 +235,8 @@
         </li>
         <li class="md-nav__item"><a href="#serialization" class="md-nav__link">Serialization</a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#writeonlycolumn" class="md-nav__link">WriteOnlyColumn</a>
+        </li>
         <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
         </li>
         <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
@@ -310,6 +312,8 @@
         </li>
         <li class="md-nav__item"><a href="#serialization" class="md-nav__link">Serialization</a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#writeonlycolumn" class="md-nav__link">WriteOnlyColumn</a>
+        </li>
         <li class="md-nav__item"><a href="#controlling-serialization" class="md-nav__link">Controlling Serialization</a>
         </li>
         <li class="md-nav__item"><a href="#recursive-serialization" class="md-nav__link">Recursive Serialization</a>
@@ -507,6 +511,7 @@ keys to camelCase style to correspond to JavaScript conventions.</p>
 <p>To illustrate some of the features, we will look at two examples: The first will be two tables, one for users and one for addresses</p>
 <p>After the initial import and <strong>db</strong> creation, we create two tables.
 The users table has a relationship with addresses where the user_id entered into the address table must be found in the users table.</p>
+<p>As an aside, note that the password column is a WriteOnlyColumn, for discussion later.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create db that is sqlite in memory</span>
 <span class="kn">from</span> <span class="nn">dbbase</span> <span class="kn">import</span> <span class="n">DB</span>
 <span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s1">':memory:'</span><span class="p">)</span>
@@ -516,6 +521,7 @@ The users table has a relationship with addresses where the user_id entered into
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">first_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">last_name</span> <span class="o">=</span>  <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">WriteOnlyColumn</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
         <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
 
@@ -573,6 +579,10 @@ The users table has a relationship with addresses where the user_id entered into
 </pre></div>
 </div>
 <p>The default serialization opts for the keys to be put into camelCase. In addition, it walks the object dictionary and recursively evaluates any relationships as well, under the assumption that it would minimize the number of trips to the API from the front end.</p>
+
+<h3 id="writeonlycolumn">WriteOnlyColumn<a class="headerlink" href="#writeonlycolumn" title="Permalink to this headline">¶</a></h3>
+<p>The user table above includes a password column using a WriteOnlyColumn. By using this type of column, a table can automatically exclude that column from serialization once the value has been filled in. This avoids an awkward mistake accidentally outputting even an encrypted password, yet including the field for forms to a front-end application adding a new user.</p>
+
 
 <h3 id="controlling-serialization">Controlling Serialization<a class="headerlink" href="#controlling-serialization" title="Permalink to this headline">¶</a></h3>
 <p>You have the ability to limit or expand the items that are included.</p>
@@ -1560,7 +1570,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              May 20, 2020.
+              May 27, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
