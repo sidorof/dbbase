@@ -113,6 +113,6 @@ def _xlate_from_camel_case(key):
             new_key += "_" + char.lower()
         else:
             new_key += char
-    if new_key.startswith('_'):
+    if new_key.startswith("_"):
         new_key = new_key[1:]
     return new_key

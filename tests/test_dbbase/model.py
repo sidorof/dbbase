@@ -116,17 +116,19 @@ class TestModelClass(DBBaseTestCase):
             index_value = db.Column(db.Integer, server_default=db.text("0"))
 
             fk_id = db.Column(
-                db.Integer, db.ForeignKey('table2.id'), nullable=False)
+                db.Integer, db.ForeignKey("table2.id"), nullable=False
+            )
 
             fk_name = db.Column(
-                db.String, db.ForeignKey('table3.name'), nullable=False)
+                db.String, db.ForeignKey("table3.name"), nullable=False
+            )
 
         class Table2(db.Model):
-            __tablename__ = 'table2'
+            __tablename__ = "table2"
             id = db.Column(db.Integer, primary_key=True)
 
         class Table3(db.Model):
-            __tablename__ = 'table3'
+            __tablename__ = "table3"
             name = db.Column(db.String, primary_key=True)
 
         db.create_all()
@@ -140,17 +142,17 @@ class TestModelClass(DBBaseTestCase):
             # created_at2 has server default
             # update_time1 has local default, but only on update
             # update_time2 has server default, but only on update
-            fk_name='test'
+            fk_name="test",
         )
 
-        table3_rec = Table3(name='test').save()
+        table3_rec = Table3(name="test").save()
 
         self.assertDictEqual(
             {
-                'fk_id': {'foreign_key': 'table2.id'},
-                'fk_name': {'foreign_key': 'table3.name'}
-             },
-            table1_rec._extract_foreign_keys()
+                "fk_id": {"foreign_key": "table2.id"},
+                "fk_name": {"foreign_key": "table3.name"},
+            },
+            table1_rec._extract_foreign_keys(),
         )
 
         # default
@@ -158,36 +160,31 @@ class TestModelClass(DBBaseTestCase):
 
         self.assertFalse(status)
         self.assertDictEqual(
-            {"missing_values": ["last_name", "fk_id"]},
-            errors
+            {"missing_values": ["last_name", "fk_id"]}, errors
         )
 
         # camel_case
         status, errors = table1_rec.validate_record(camel_case=True)
 
         self.assertFalse(status)
-        self.assertDictEqual(
-            {"missingValues": ["lastName", "fkId"]},
-            errors
-        )
+        self.assertDictEqual({"missingValues": ["lastName", "fkId"]}, errors)
 
         table1_rec.last_name = "name is filled in"
-        table1_rec.fk_id = 3    # not a valid fk
+        table1_rec.fk_id = 3  # not a valid fk
 
         status, errors = table1_rec._validate_foreignkeys()
 
         self.assertFalse(status)
         self.assertListEqual(
-            [{'fk_id': '3 is not a valid foreign key'}],
-            errors
+            [{"fk_id": "3 is not a valid foreign key"}], errors
         )
 
         status, errors = table1_rec.validate_record()
 
         self.assertFalse(status)
         self.assertDictEqual(
-            {'ForeignKeys': [{'fk_id': '3 is not a valid foreign key'}]},
-            errors
+            {"ForeignKeys": [{"fk_id": "3 is not a valid foreign key"}]},
+            errors,
         )
         table2_rec = Table2(id=3).save()
         status, errors = table1_rec.validate_record()
@@ -271,9 +268,7 @@ class TestModelClass(DBBaseTestCase):
         db.session.add(user)
         db.session.commit()
 
-        self.assertSetEqual(
-            set(["id", "name"]), set(user.get_serial_fields())
-        )
+        self.assertSetEqual(set(["id", "name"]), set(user.get_serial_fields()))
 
         self.assertFalse(user._has_self_ref())
 
@@ -907,3 +902,31 @@ class TestModelClass(DBBaseTestCase):
         table1.delete()
 
         self.assertIsNone(Table1.query.get(table_id))
+
+    def test__write_only_columns(self):
+        """test__write_only_columns
+        
+        A write only column should appear in the serial list of fields 
+        if there is None. Otherwise, it should be excluded.
+        
+        The point of this is to never show a password field that 
+        has any information filled in, but be available if a password 
+        is needed.
+        
+        """
+        db = self.db
+
+        class Table1(db.Model):
+            __tablename__ = "table1"
+
+            id = db.Column(db.Integer, primary_key=True)
+            password = db.WriteOnlyColumn(db.String, nullable=False)
+
+        db.create_all()
+
+        table1 = Table1()
+        table2 = Table1(password="some encrypted value")
+
+        self.assertDictEqual({"id": None, "password": None}, table1.to_dict())
+
+        self.assertDictEqual({"id": None}, table2.to_dict())

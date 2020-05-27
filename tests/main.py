@@ -10,7 +10,7 @@ everything works as expected.
 """
 import json
 import unittest
-
+from .test_dbbase.column_types import TestColumnTypes
 from .test_dbbase.doc_utils import TestDocUtilities
 from .test_dbbase.utils import TestUtilities
 from .test_dbbase.base import TestDBBaseClass

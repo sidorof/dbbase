@@ -21,13 +21,14 @@ from sqlalchemy import create_engine, orm
 from sqlalchemy.sql.elements import BinaryExpression
 
 from . import model
+from .column_types import WriteOnlyColumn
 from .utils import xlate
 from .doc_utils import (
     process_expression,
     _property,
     _function,
     _binary_expression,
-    _foreign_keys
+    _foreign_keys,
 )
 
 
@@ -52,7 +53,15 @@ class DB(object):
         echo: (bool) : log actions in database engine
     """
 
-    def __init__(self, config, model_class=None, checkfirst=True, echo=False):
+    def __init__(
+        self,
+        config,
+        model_class=None,
+        checkfirst=True,
+        echo=False,
+        *args,
+        **kwargs
+    ):
 
         # not a fan of this
         if config != ":memory:":
@@ -62,6 +71,9 @@ class DB(object):
 
         for key in sqlalchemy.__all__:
             self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
+
+        # column types
+        self.__setattr__("WriteOnlyColumn", WriteOnlyColumn)
 
         # these are being added on an as-needed basis
         orm_functions = ["relationship", "aliased", "lazyload"]
@@ -75,7 +87,9 @@ class DB(object):
         self.Model.db = self
 
         # now create_session is done after importing models
-        self.session = self.create_session(checkfirst=checkfirst, echo=echo)
+        self.session = self.create_session(
+            checkfirst=checkfirst, echo=echo, *args, **kwargs
+        )
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -117,7 +131,7 @@ class DB(object):
         self.engine = create_engine(self.config, echo=echo)
         return self.engine
 
-    def create_session(self, checkfirst=True, echo=False):
+    def create_session(self, checkfirst=True, echo=False, *args, **kwargs):
         """create_session
 
         This function instantiates an engine, and connects to the database.
@@ -136,7 +150,7 @@ class DB(object):
         Returns:
             session (obj)
         """
-        engine = create_engine(self.config, echo=echo)
+        engine = create_engine(self.config, echo=echo, *args, **kwargs)
         engine.connect()
 
         session = orm.sessionmaker(bind=engine)()
@@ -390,7 +404,7 @@ class DB(object):
 
     def _process_table_args(self, cls):
 
-        table_args = cls.__dict__.get('__table_args__')
+        table_args = cls.__dict__.get("__table_args__")
         key = "constraints"
         constraints = []
 
@@ -400,22 +414,23 @@ class DB(object):
             if isinstance(table_args, tuple):
                 for item in table_args:
                     if isinstance(item, self.CheckConstraint):
-                        ddict = {'check_constraint': item.sqltext.text}
+                        ddict = {"check_constraint": item.sqltext.text}
                         constraints.append(ddict)
 
                     elif isinstance(item, self.ForeignKeyConstraint):
-                        fk_key = 'foreign_key_constraint'
+                        fk_key = "foreign_key_constraint"
                         ddict = {fk_key: {}}
                         ddict[fk_key].update(_foreign_keys(item.elements))
-                        ddict[fk_key].update({'column_keys': item.column_keys})
+                        ddict[fk_key].update({"column_keys": item.column_keys})
 
                         constraints.append(ddict)
 
                     elif isinstance(item, self.UniqueConstraint):
-                        ddict = {'unique_contraint': {'columns': []}}
+                        ddict = {"unique_contraint": {"columns": []}}
                         for uniq_col in item.columns:
-                            ddict['unique_contraint']['columns'].append(
-                                uniq_col.expression.name)
+                            ddict["unique_contraint"]["columns"].append(
+                                uniq_col.expression.name
+                            )
                         constraints.append(ddict)
         if constraints:
             return {key: constraints}

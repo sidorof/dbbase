@@ -63,7 +63,7 @@ def drop_database(config, dbname):
     if _is_sqlite(config):
         # sqlite does not use drop database
         if config.find("memory") == -1:
-            filename = config[config.find("///") + 3:]
+            filename = config[config.find("///") + 3 :]
             if os.path.exists(filename):
                 os.remove(filename)
     else:

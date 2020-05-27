@@ -180,8 +180,13 @@ class Model(object):
         return list(set(fields) - set(self._get_serial_stop_list()))
 
     def to_dict(
-            self, to_camel_case=True, level_limits=None, sort=False,
-            serial_fields=None, serial_field_relations=None):
+        self,
+        to_camel_case=True,
+        level_limits=None,
+        sort=False,
+        serial_fields=None,
+        serial_field_relations=None,
+    ):
         """
         Returns columns in a dict. The point of this is to make a useful
         default. However, this can't be expected to cover every possibility,
@@ -247,22 +252,28 @@ class Model(object):
 
             value = self.__getattribute__(key)
 
-            if callable(value):
-                value = value()
+            status = True
+            if self._is_write_only(key):
+                if value is not None:
+                    status = False
 
-            res = _eval_value(
-                value,
-                to_camel_case,
-                level_limits,
-                source_class=self._class(),
-                serial_field_relations=serial_field_relations,
-            )
+            if status:
+                if callable(value):
+                    value = value()
 
-            if to_camel_case:
-                key = xlate(key, camel_case=True)
+                res = _eval_value(
+                    value,
+                    to_camel_case,
+                    level_limits,
+                    source_class=self._class(),
+                    serial_field_relations=serial_field_relations,
+                )
 
-            if res != STOP_VALUE:
-                result[key] = res
+                if to_camel_case:
+                    key = xlate(key, camel_case=True)
+
+                if res != STOP_VALUE:
+                    result[key] = res
 
         if self._class() not in level_limits:
             level_limits.add(self._class())
@@ -297,8 +308,8 @@ class Model(object):
                 sorted.
             indent: (integer : None) The number of spaces to indent to improve
                 readability.
-            serial_fields (None | list) : a list of fields to be substituted for
-                `cls.SERIAL_FIELDS`
+            serial_fields (None | list) : a list of fields to be substituted
+                for `cls.SERIAL_FIELDS`
             serial_field_relations (None | dict) : To enable a more nuanced
                 control of relations objects, the name of a downstream class
                 and a list of fields to be typically included with the related
@@ -473,7 +484,7 @@ class Model(object):
                 for key, error in errors.items():
                     new_errors.append(dict([xlate(key), error]))
                 errors = new_errors
-            return False, {'ForeignKeys': errors}
+            return False, {"ForeignKeys": errors}
 
         return True, None
 
@@ -489,12 +500,12 @@ class Model(object):
         errors = []
         for key, value in self._extract_foreign_keys().items():
             column_params = self.db.doc_column(self.__class__, key)
-            key_value =  getattr(self, key)
+            key_value = getattr(self, key)
             if key_value is not None:
-                if column_params['nullable'] is False:
+                if column_params["nullable"] is False:
                     # foreign key
-                    table, id_ = value['foreign_key'].split('.')
-                    select = f'select {id_} from {table} where {id_} = {id_}'
+                    table, id_ = value["foreign_key"].split(".")
+                    select = f"select {id_} from {table} where {id_} = {id_}"
                     res = self.db.session.execute(select).first()
                     if res is None:
                         errors.append(
@@ -517,7 +528,22 @@ class Model(object):
             [
                 (key, value)
                 for key, value in self.db.doc_table(
-                    self.__class__, column_props=['foreign_key'])[self._class()]['properties'].items()
+                    self.__class__, column_props=["foreign_key"]
+                )[self._class()]["properties"].items()
                 if value
             ]
         )
+
+    def _is_write_only(self, column_name):
+        """ _is_write_only
+
+        This function returns True if the column has 'writeOnly' True
+        in the info field.
+        """
+        tmp = self.__class__.__dict__[column_name]
+        if isinstance(tmp, self.db.orm.attributes.InstrumentedAttribute):
+            if isinstance(tmp.expression, self.db.Column):
+                if "writeOnly" in tmp.expression.info:
+                    value = tmp.expression.info["writeOnly"]
+                    return value
+        return False

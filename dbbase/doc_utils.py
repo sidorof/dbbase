@@ -119,7 +119,7 @@ def _binary_expression(value):
             "relationship": {
                 "type": "list" if value.prop.uselist else "single",
                 "entity": value.prop.entity.class_._class(),
-            }
+            },
         }
 
     # here for thoroughness for now
@@ -136,7 +136,7 @@ def _property(cls, key, value):
     # does it have return return_annotation
     ret_ann = signature(getattr_static(cls, key).fget).return_annotation
 
-    if str(ret_ann).startswith('typing'):
+    if str(ret_ann).startswith("typing"):
         item_dict["type"] = _parse_type_name(ret_ann)
 
     elif issubclass(ret_ann, _empty):
@@ -189,15 +189,17 @@ def _parse_type_name(value):
     This is to handle something like 'typing.List'
 
     """
-    return str(value).split('.')[-1]
+    return str(value).split(".")[-1]
+
 
 def _parse_class_name(value):
     """_parse_class_name
 
     There's got to be a better way to do this.
     """
+
     def _extract_name(name):
-        return name[+8 : name.find(">") - 1]
+        return name[8 : name.find(">") - 1]
 
     name = str(value)
     tmp = name.find("<class '")
