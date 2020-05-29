@@ -319,7 +319,12 @@ class TestModelClass(DBBaseTestCase):
         )
 
         self.assertDictEqual(
-            {"self-referential": False, "uselist": True, "join_depth": None},
+            {
+                "self-referential": False,
+                "uselist": True,
+                "join_depth": None,
+                "lazy": "immediate"
+            },
             user._relations_info("addresses"),
         )
 
@@ -361,7 +366,12 @@ class TestModelClass(DBBaseTestCase):
         self.assertIsNone(node2._get_relationship("data"))
 
         self.assertDictEqual(
-            {"self-referential": True, "uselist": True, "join_depth": 10},
+            {
+                "self-referential": True,
+                "uselist": True,
+                "join_depth": 10,
+                "lazy": "joined"
+                },
             node2._relations_info("children"),
         )
 
@@ -504,7 +514,12 @@ class TestModelClass(DBBaseTestCase):
 
         # really only care if 'self-referential' True or False
         self.assertDictEqual(
-            {"self-referential": False, "uselist": True, "join_depth": None},
+            {
+                "self-referential": False,
+                "uselist": True,
+                "join_depth": None,
+                "lazy": "immediate"
+            },
             user._relations_info("addresses"),
         )
 
@@ -761,6 +776,100 @@ class TestModelClass(DBBaseTestCase):
             ),
         )
 
+    def test_to_dict_relationtype(self):
+        """ test_to_dict_relationtype
+
+        This function tests the ability to recognize the impact of
+        dynamic relations on to_dict.
+
+        The issue here is lazy dynamic
+        """
+        db = self.db
+
+        class Table(db.Model):
+
+            __tablename__ = 'table'
+
+            id = db.Column(db.Integer, primary_key=True)
+            item_ones = db.relationship(
+                "Table1", backref="table0", lazy="immediate"
+            )
+
+            item_twos = db.relationship(
+                "Table2", backref="table0", lazy="dynamic"
+            )
+
+            item_threes = db.relationship(
+                "Table3", backref="table0"
+            )
+
+            item_fours = db.relationship(
+                "Table4", backref="table0"
+            )
+
+        class Table1(db.Model):
+
+            __tablename__ = 'table1'
+
+            id = db.Column(db.Integer, primary_key=True)
+            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+        class Table2(db.Model):
+
+            __tablename__ = 'table2'
+
+            id = db.Column(db.Integer, primary_key=True)
+            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+        class Table3(db.Model):
+
+            __tablename__ = 'table3'
+
+            id = db.Column(db.Integer, primary_key=True)
+            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+        class Table4(db.Model):
+
+            __tablename__ = 'table4'
+
+            id = db.Column(db.Integer, primary_key=True)
+            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+        db.create_all()
+
+        table = Table(id=0).save()
+        table1 = Table1(id=1, table_id=0).save()
+        table2 = Table2(id=2, table_id=0).save()
+        table3 = Table3(id=3, table_id=0).save()
+        table4 = Table4(id=4).save()
+        # table 4 is skipped, so empty
+
+        self.assertDictEqual(
+            {
+                "id": 0,
+                "itemOnes": [
+                    {
+                        "tableId": 0,
+                        "id": 1
+                    }
+                ],
+                "itemTwos": [
+                    {
+                        "tableId": 0,
+                        "id": 2
+                    }
+                ],
+                "itemThrees": [
+                    {
+                        "tableId": 0,
+                        "id": 3
+                    }
+                ],
+                "itemFours": [],
+            },
+            table.to_dict()
+        )
+
     def test_serialize(self):
         """test_serialize"""
 
@@ -905,14 +1014,14 @@ class TestModelClass(DBBaseTestCase):
 
     def test__write_only_columns(self):
         """test__write_only_columns
-        
-        A write only column should appear in the serial list of fields 
+
+        A write only column should appear in the serial list of fields
         if there is None. Otherwise, it should be excluded.
-        
-        The point of this is to never show a password field that 
-        has any information filled in, but be available if a password 
+
+        The point of this is to never show a password field that
+        has any information filled in, but be available if a password
         is needed.
-        
+
         """
         db = self.db
 

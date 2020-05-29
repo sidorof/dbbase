@@ -4,7 +4,9 @@ This module implements a base model to be used for table creation.
 
 """
 import json
+from sqlalchemy import inspect
 from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 from .utils import xlate
 from .serializers import _eval_value, STOP_VALUE, SERIAL_STOPLIST
@@ -107,7 +109,7 @@ class Model(object):
             if a relationship is found, returns the relationship
             otherwise None
         """
-        tmp = self.db.inspect(self.__class__).relationships
+        tmp = inspect(self.__class__).relationships
 
         if field in tmp.keys():
             return tmp[field]
@@ -129,12 +131,9 @@ class Model(object):
 
         return {
             "self-referential": relation.target.name == self.__tablename__,
-            # these are not currently used.
-            # intuitively, it seems like a good idea, but I am not sure why.
-            # Accordingly, these may be removed without warning, since
-            # program structure and testing does not seem to require them.
             "uselist": relation.uselist,
             "join_depth": relation.join_depth,
+            "lazy": relation.lazy
         }
 
     def _has_self_ref(self):
@@ -218,7 +217,6 @@ class Model(object):
         Returns:
             (dict) | a dictionary of fields and values
         """
-        self.db.session.flush()
         if level_limits is None:
             level_limits = set()
 
@@ -251,6 +249,9 @@ class Model(object):
                     res = STOP_VALUE
 
             value = self.__getattribute__(key)
+
+            if rel_info and rel_info['lazy'] == 'dynamic':
+                value = [item for item in value.all()]
 
             status = True
             if self._is_write_only(key):
@@ -452,7 +453,7 @@ class Model(object):
             error_dict (None : dict ) | a dict that contains an error list
         """
         errors = []
-        tmp = self.db.inspect(self.__class__).all_orm_descriptors
+        tmp = inspect(self.__class__).all_orm_descriptors
         null_cols = self._null_columns()
         for column in null_cols:
             expr = tmp[column].expression
@@ -541,7 +542,7 @@ class Model(object):
         in the info field.
         """
         tmp = self.__class__.__dict__[column_name]
-        if isinstance(tmp, self.db.orm.attributes.InstrumentedAttribute):
+        if isinstance(tmp, InstrumentedAttribute):
             if isinstance(tmp.expression, self.db.Column):
                 if "writeOnly" in tmp.expression.info:
                     value = tmp.expression.info["writeOnly"]
