@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; dbbase 0.2.4 documentation</title>
+    <title>dbbase.model &#8212; dbbase 0.2.5 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.2.4 documentation"
+        <a href="../../index.html" title="dbbase 0.2.5 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.4</span>
+          <span class="md-header-nav__topic">dbbase 0.2.5</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.4 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.5 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.2.4 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.2.5 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.2.4 documentation">dbbase 0.2.4</a>
+       title="dbbase 0.2.5 documentation">dbbase 0.2.5</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -274,7 +274,9 @@
 
 <span class="sd">"""</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">inspect</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">as_declarative</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm.attributes</span> <span class="kn">import</span> <span class="n">InstrumentedAttribute</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">xlate</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">_eval_value</span><span class="p">,</span> <span class="n">STOP_VALUE</span><span class="p">,</span> <span class="n">SERIAL_STOPLIST</span>
@@ -377,7 +379,7 @@
 <span class="sd">            if a relationship is found, returns the relationship</span>
 <span class="sd">            otherwise None</span>
 <span class="sd">        """</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">relationships</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">relationships</span>
 
         <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">tmp</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
@@ -399,12 +401,9 @@
 
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"self-referential"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tablename__</span><span class="p">,</span>
-            <span class="c1"># these are not currently used.</span>
-            <span class="c1"># intuitively, it seems like a good idea, but I am not sure why.</span>
-            <span class="c1"># Accordingly, these may be removed without warning, since</span>
-            <span class="c1"># program structure and testing does not seem to require them.</span>
             <span class="s2">"uselist"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">uselist</span><span class="p">,</span>
             <span class="s2">"join_depth"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">join_depth</span><span class="p">,</span>
+            <span class="s2">"lazy"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">lazy</span>
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">_has_self_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -488,7 +487,6 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            (dict) | a dictionary of fields and values</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">level_limits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">level_limits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
@@ -521,6 +519,9 @@
                     <span class="n">res</span> <span class="o">=</span> <span class="n">STOP_VALUE</span>
 
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">rel_info</span> <span class="ow">and</span> <span class="n">rel_info</span><span class="p">[</span><span class="s1">'lazy'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'dynamic'</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
 
             <span class="n">status</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_write_only</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
@@ -722,7 +723,7 @@
 <span class="sd">            error_dict (None : dict ) | a dict that contains an error list</span>
 <span class="sd">        """</span>
         <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">all_orm_descriptors</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">all_orm_descriptors</span>
         <span class="n">null_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_null_columns</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">null_cols</span><span class="p">:</span>
             <span class="n">expr</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">expression</span>
@@ -811,7 +812,7 @@
 <span class="sd">        in the info field.</span>
 <span class="sd">        """</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">InstrumentedAttribute</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">InstrumentedAttribute</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">):</span>
                 <span class="k">if</span> <span class="s2">"writeOnly"</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">"writeOnly"</span><span class="p">]</span>
@@ -842,7 +843,7 @@
               
           </div>
             Last updated on
-              May 27, 2020.
+              May 29, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
