@@ -1,9 +1,19 @@
 # Changelog
+
 ## (0.2.4) -
 ### Added
-*   Added an option of a write-only column. With the ability to document fields of tables, it is useful to be able identify fields that are write-only, such as password fields. The `Model.to_dict()` function outputs the contents of a record. If the output provides the basis for forms in the front-end, including the password field is natural and desirable. Once, the password has been added, however, encrypted or not, it should be excluded.
+*   Added args and kwargs to passthrough functions to SQLAlchemy in base.py.
+*   Added provision for evaluating dynamic relationships for `Model.to_dict()`. This was necessary due to the need to trigger a resolve on the relationship query.
 
-```python
+### Changed
+* Changed the way some utility functions such as inspect are pulled in to `Model`. Importing them directly instead of using the functions on `db` enables the `Model` class to be used separately from the `DB` class. This comes into play when integrating with Flask-SQLAlchemy.
+
+
+## (0.2.4) -
+### Added
+*   Added an option of a write-only column. With the ability to document fields of tables, it is useful to be able to identify fields that are write-only, such as password fields. The `Model.to_dict()` function outputs the contents of a record. If the output provides the basis for forms in the front-end, including the password field is natural and desirable. Once, the password has been added, however, encrypted or not, it should be excluded.
+
+... python
 
     class Table1(db.Model):
         __tablename__ = "table1"
@@ -13,11 +23,11 @@
 
     db.create_all()
 
-```
+...
 
 When use the documentation dictionary featuure, we now get:
 
-``` json
+... json
 
     {
         "Table1": {
@@ -42,11 +52,11 @@ When use the documentation dictionary featuure, we now get:
         }
     }
 
-```
+...
 
 Using this we create two records, with and without a password.
 
-``` python
+... python
 
     table1 = Table1(id=1)
     table2 = Table1(id=2, password="some encrypted value")
@@ -59,7 +69,7 @@ Using this we create two records, with and without a password.
 
         {'id': 2}
 
-```
+...
 
 The write-only field is thereby excluded. The basis for this functionality stems from the use of the info field.
 
