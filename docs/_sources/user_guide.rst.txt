@@ -536,27 +536,7 @@ For this next section, let us start by first revoking the stop lists and serial 
     }
 ..
 
-As a note, if you change such class variables on the fly such as User.SERIAL_FIELDS, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change `user.SERIAL_FIELDS` rather than `User.SERIAL_FIELDS`.
-
-
-So we can see that it is back to the original form. But let's choose **address1.serialize()**.
-
-.. code-block:: python
-
-    >>> print(address1.serialize())
-    {
-      "emailAddress": "email1@example.com",
-      "id": 1,
-      "user": {
-        "lastName": "Smith",
-        "fullName": "Bob Smith",
-        "id": 3,
-        "firstName": "Bob"
-      },
-      "userId": 3
-    }
-
-..
+As a note, if you change such class variables on the fly such as User.SERIAL_FIELDS, you might well have unintended effects.
 
 See how the address serialization digs back into the user object. This is due to the relationship that Address has with User. But, serializatin does not go back to User once again when you run **user.serialize()**. The reason is that are there are limits in place to avoid going into an endless loop.
 

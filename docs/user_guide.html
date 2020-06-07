@@ -45,7 +45,7 @@
   
   
   
-    <title>User Guide &#8212; dbbase 0.2.5 documentation</title>
+    <title>User Guide &#8212; dbbase 0.2.6 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="dbbase 0.2.5 documentation"
+        <a href="index.html" title="dbbase 0.2.6 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.5</span>
+          <span class="md-header-nav__topic">dbbase 0.2.6</span>
           <span class="md-header-nav__topic"> User Guide </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.5 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">dbbase 0.2.6 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="dbbase 0.2.5 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="dbbase 0.2.6 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="dbbase 0.2.5 documentation">dbbase 0.2.5</a>
+       title="dbbase 0.2.6 documentation">dbbase 0.2.6</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -775,22 +775,7 @@ used. However, with these variables, you can generate custom serializations on t
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>As a note, if you change such class variables on the fly such as User.SERIAL_FIELDS, you might well have unintended effects. This is due to the difference between class and instance variables. It would be better to change <cite>user.SERIAL_FIELDS</cite> rather than <cite>User.SERIAL_FIELDS</cite>.</p>
-<p>So we can see that it is back to the original form. But let’s choose <strong>address1.serialize()</strong>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">address1</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span>
-<span class="go">{</span>
-<span class="go">  "emailAddress": "email1@example.com",</span>
-<span class="go">  "id": 1,</span>
-<span class="go">  "user": {</span>
-<span class="go">    "lastName": "Smith",</span>
-<span class="go">    "fullName": "Bob Smith",</span>
-<span class="go">    "id": 3,</span>
-<span class="go">    "firstName": "Bob"</span>
-<span class="go">  },</span>
-<span class="go">  "userId": 3</span>
-<span class="go">}</span>
-</pre></div>
-</div>
+<p>As a note, if you change such class variables on the fly such as User.SERIAL_FIELDS, you might well have unintended effects.</p>
 <p>See how the address serialization digs back into the user object. This is due to the relationship that Address has with User. But, serializatin does not go back to User once again when you run <strong>user.serialize()</strong>. The reason is that are there are limits in place to avoid going into an endless loop.</p>
 <p>However, there are situations where it is entirely desirable.</p>
 <p>We now create a table for holding network nodes. A node can be connected to other nodes in a relationship to form tree structures for example. Because of that, the relationships are self-referential. Where in the example above, we needed to stop serialization before it turns back in on itself, now we want to follow the relationships all the way down.</p>
@@ -1570,7 +1555,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              May 29, 2020.
+              Jun 07, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

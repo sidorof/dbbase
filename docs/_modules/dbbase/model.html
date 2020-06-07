@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; dbbase 0.2.5 documentation</title>
+    <title>dbbase.model &#8212; dbbase 0.2.6 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.2.5 documentation"
+        <a href="../../index.html" title="dbbase 0.2.6 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.5</span>
+          <span class="md-header-nav__topic">dbbase 0.2.6</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.5 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.6 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.2.5 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="dbbase 0.2.6 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.2.5 documentation">dbbase 0.2.5</a>
+       title="dbbase 0.2.6 documentation">dbbase 0.2.6</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -350,28 +350,30 @@
 
 <span class="sd">            then this function returns 'User'</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">class_</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
 
-    <span class="k">def</span> <span class="nf">_get_serial_stop_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_serial_stop_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">"""Return default stop list, class stop list."""</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span>
+            <span class="n">serial_stoplist</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_STOPLIST</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">serial_stoplist</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">"SERIAL_STOPLIST must be a list of one or more fields that"</span>
                 <span class="s2">"would not be included in a serialization."</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_relationship</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_relationship</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="sd">"""_get_relationship</span>
 
 <span class="sd">        Usage:</span>
-<span class="sd">            self,_get_relationship(field)</span>
+<span class="sd">            _get_relationship(field)</span>
 <span class="sd">        Used for iterating through relationships to determine how deep to go</span>
 <span class="sd">        with serialization.</span>
 
@@ -379,14 +381,15 @@
 <span class="sd">            if a relationship is found, returns the relationship</span>
 <span class="sd">            otherwise None</span>
 <span class="sd">        """</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">relationships</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">relationships</span>
 
         <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">tmp</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_relations_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_relations_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        This function provides info to help determine how far down</span>
 <span class="sd">        the path to go on serialization of a relationship field.</span>
@@ -395,32 +398,34 @@
 <span class="sd">        One to many</span>
 <span class="sd">        join_depth</span>
 <span class="sd">        """</span>
-        <span class="n">relation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_relationship</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">relation</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_relationship</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">relation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">"self-referential"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tablename__</span><span class="p">,</span>
+            <span class="s2">"self-referential"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__tablename__</span><span class="p">,</span>
             <span class="s2">"uselist"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">uselist</span><span class="p">,</span>
             <span class="s2">"join_depth"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">join_depth</span><span class="p">,</span>
             <span class="s2">"lazy"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">lazy</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">_has_self_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_has_self_ref</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">"""_has_self_ref</span>
 
 <span class="sd">        This function returns True if one or more relationships are self-</span>
 <span class="sd">        referential.</span>
 <span class="sd">        """</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serial_fields</span><span class="p">():</span>
-            <span class="n">rel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relations_info</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_serial_fields</span><span class="p">():</span>
+            <span class="n">rel_info</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_relations_info</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rel_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">rel_info</span><span class="p">[</span><span class="s2">"self-referential"</span><span class="p">]:</span>
                     <span class="k">return</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="Model.get_serial_fields"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.get_serial_fields.html#dbbase.model.Model.get_serial_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_serial_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.get_serial_fields"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.get_serial_fields.html#dbbase.model.Model.get_serial_fields">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_serial_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">"""get_serial_fields</span>
 
 <span class="sd">        This function returns a list of table properties that will be used in</span>
@@ -435,18 +440,18 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            serial_fields (list) : current list of fields</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">"SERIAL_FIELDS must be in the form of a list: </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SERIAL_FIELDS</span>
 
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)]</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)]</span>
 
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_serial_stop_list</span><span class="p">()))</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_serial_stop_list</span><span class="p">()))</span></div>
 
 <div class="viewcode-block" id="Model.to_dict"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -787,7 +792,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_extract_foreign_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_foreign_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">"""_extract_foreign_keys</span>
 
 <span class="sd">        This function walks the document dictionary and returns the</span>
@@ -798,22 +804,23 @@
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">]</span>
-                <span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span><span class="s2">"properties"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">]</span>
+                <span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span><span class="s2">"properties"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">value</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_is_write_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_is_write_only</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
         <span class="sd">""" _is_write_only</span>
 
 <span class="sd">        This function returns True if the column has 'writeOnly' True</span>
 <span class="sd">        in the info field.</span>
 <span class="sd">        """</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">InstrumentedAttribute</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">):</span>
                 <span class="k">if</span> <span class="s2">"writeOnly"</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">expression</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">"writeOnly"</span><span class="p">]</span>
                     <span class="k">return</span> <span class="n">value</span>
@@ -843,7 +850,7 @@
               
           </div>
             Last updated on
-              May 29, 2020.
+              Jun 07, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
