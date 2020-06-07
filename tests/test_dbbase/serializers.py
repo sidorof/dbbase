@@ -451,12 +451,12 @@ class TestSerializers(DBBaseTestCase):
 
         # test modifications via serial stop lists
         # do it wrong first
-        address1.SERIAL_STOPLIST = "user_id"
+        Address.SERIAL_STOPLIST = "user_id"
         self.assertRaises(ValueError, address1._get_serial_stop_list)
 
         # now remove user_id from via the stop list
         reset_serial_variables(Address, [address1, address2])
-        address1.SERIAL_STOPLIST = ["user_id"]
+        Address.SERIAL_STOPLIST = ["user_id"]
         self.assertSetEqual(
             set(["id", "email_address", "user"]),
             set(address1.get_serial_fields()),
@@ -465,18 +465,17 @@ class TestSerializers(DBBaseTestCase):
         # now add email_address to the include list
         # do it wrong first
         reset_serial_variables(Address, [address1, address2])
-        address1.SERIAL_FIELDS = "email_address"
+        Address.SERIAL_FIELDS = "email_address"
         self.assertRaises(ValueError, address1.get_serial_fields)
 
         # now add email_address to the include list
         reset_serial_variables(Address, [address1, address2])
 
-        # see how this is changed now at the instance level
+        # see how this is NOT changed at the instance level
         address1.SERIAL_FIELDS = ["email_address"]
         address2.SERIAL_FIELDS = ["email_address"]
-        self.assertSetEqual(
-            set(["email_address"]), set(address1.get_serial_fields())
-        )
+        class_serial_fields = Address.get_serial_fields()
+        self.assertListEqual(class_serial_fields, address1.get_serial_fields())
 
         # prove it works with _eval_value_model
         value = address1

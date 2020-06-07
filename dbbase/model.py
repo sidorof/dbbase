@@ -80,28 +80,30 @@ class Model(object):
 
             then this function returns 'User'
         """
-        return cls.db.inspect(cls).class_.__name__
+        return cls.__name__
 
-    def _get_serial_stop_list(self):
+    @classmethod
+    def _get_serial_stop_list(cls):
         """Return default stop list, class stop list."""
-        if self.SERIAL_STOPLIST is None:
+        if cls.SERIAL_STOPLIST is None:
             serial_stoplist = []
         else:
-            serial_stoplist = self.SERIAL_STOPLIST
+            serial_stoplist = cls.SERIAL_STOPLIST
         if not isinstance(serial_stoplist, list):
             raise ValueError(
                 "SERIAL_STOPLIST must be a list of one or more fields that"
                 "would not be included in a serialization."
             )
         return (
-            self._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
+            cls._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
         )
 
-    def _get_relationship(self, field):
+    @classmethod
+    def _get_relationship(cls, field):
         """_get_relationship
 
         Usage:
-            self,_get_relationship(field)
+            _get_relationship(field)
         Used for iterating through relationships to determine how deep to go
         with serialization.
 
@@ -109,14 +111,15 @@ class Model(object):
             if a relationship is found, returns the relationship
             otherwise None
         """
-        tmp = inspect(self.__class__).relationships
+        tmp = inspect(cls).relationships
 
         if field in tmp.keys():
             return tmp[field]
 
         return None
 
-    def _relations_info(self, field):
+    @classmethod
+    def _relations_info(cls, field):
         """
         This function provides info to help determine how far down
         the path to go on serialization of a relationship field.
@@ -125,32 +128,34 @@ class Model(object):
         One to many
         join_depth
         """
-        relation = self._get_relationship(field)
+        relation = cls._get_relationship(field)
         if relation is None:
             return None
 
         return {
-            "self-referential": relation.target.name == self.__tablename__,
+            "self-referential": relation.target.name == cls.__tablename__,
             "uselist": relation.uselist,
             "join_depth": relation.join_depth,
             "lazy": relation.lazy
         }
 
-    def _has_self_ref(self):
+    @classmethod
+    def _has_self_ref(cls):
         """_has_self_ref
 
         This function returns True if one or more relationships are self-
         referential.
         """
-        for field in self.get_serial_fields():
-            rel_info = self._relations_info(field)
+        for field in cls.get_serial_fields():
+            rel_info = cls._relations_info(field)
             if rel_info is not None:
                 if rel_info["self-referential"]:
                     return True
 
         return False
 
-    def get_serial_fields(self):
+    @classmethod
+    def get_serial_fields(cls):
         """get_serial_fields
 
         This function returns a list of table properties that will be used in
@@ -165,18 +170,18 @@ class Model(object):
         Returns:
             serial_fields (list) : current list of fields
         """
-        if self.SERIAL_FIELDS is not None:
-            if not isinstance(self.SERIAL_FIELDS, list):
+        if cls.SERIAL_FIELDS is not None:
+            if not isinstance(cls.SERIAL_FIELDS, list):
                 raise ValueError(
                     "SERIAL_FIELDS must be in the form of a list: {}".format(
-                        self.SERIAL_FIELDS
+                        cls.SERIAL_FIELDS
                     )
                 )
-            return self.SERIAL_FIELDS
+            return cls.SERIAL_FIELDS
 
-        fields = [field for field in dir(self) if not field.startswith("_")]
+        fields = [field for field in dir(cls) if not field.startswith("_")]
 
-        return list(set(fields) - set(self._get_serial_stop_list()))
+        return list(set(fields) - set(cls._get_serial_stop_list()))
 
     def to_dict(
         self,
@@ -517,7 +522,8 @@ class Model(object):
         else:
             return True, None
 
-    def _extract_foreign_keys(self):
+    @classmethod
+    def _extract_foreign_keys(cls):
         """_extract_foreign_keys
 
         This function walks the document dictionary and returns the
@@ -528,22 +534,23 @@ class Model(object):
         return dict(
             [
                 (key, value)
-                for key, value in self.db.doc_table(
-                    self.__class__, column_props=["foreign_key"]
-                )[self._class()]["properties"].items()
+                for key, value in cls.db.doc_table(
+                    cls, column_props=["foreign_key"]
+                )[cls._class()]["properties"].items()
                 if value
             ]
         )
 
-    def _is_write_only(self, column_name):
+    @classmethod
+    def _is_write_only(cls, column_name):
         """ _is_write_only
 
         This function returns True if the column has 'writeOnly' True
         in the info field.
         """
-        tmp = self.__class__.__dict__[column_name]
+        tmp = cls.__dict__[column_name]
         if isinstance(tmp, InstrumentedAttribute):
-            if isinstance(tmp.expression, self.db.Column):
+            if isinstance(tmp.expression, cls.db.Column):
                 if "writeOnly" in tmp.expression.info:
                     value = tmp.expression.info["writeOnly"]
                     return value

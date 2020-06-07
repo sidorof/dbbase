@@ -7,3 +7,5 @@ from ._version import __version__
 from .utils import db_config
 from .base import DB
 from . import maint
+from . column_types import WriteOnlyColumn
+

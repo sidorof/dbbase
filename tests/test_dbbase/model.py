@@ -431,12 +431,12 @@ class TestModelClass(DBBaseTestCase):
 
         Table1.SERIAL_STOPLIST = "potato"
 
-        self.assertRaises(ValueError, Table1._get_serial_stop_list, Table1)
+        self.assertRaises(ValueError, Table1._get_serial_stop_list)
 
         # does SERIAL_STOPLIST get screened?
         Table1.SERIAL_STOPLIST = ["potato"]
 
-        self.assertIn("potato", Table1._get_serial_stop_list(Table1))
+        self.assertIn("potato", Table1._get_serial_stop_list())
 
     def test__get_relationship_none(self):
         """test__get_relationship_none"""
