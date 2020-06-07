@@ -1,4 +1,11 @@
 # Changelog
+## (0.2.6) -
+### Changed
+* Changed treatment of column_filtering in base, no change in usage.
+
+## (0.2.5) -
+### Changed
+* Changed treatment of serial fields and serial field relations to class methods solely to reduce ambiguity.
 
 ## (0.2.4) -
 ### Added
