@@ -1,11 +1,17 @@
 # Changelog
 ## (0.2.6) -
+### Add
+*   Added `Model.filter_columns` to better address filtering columns for various characteristics. This function ties in with the documentation functions found in `DB`. Also, the column property to be selected can also be a negative. ex: !nullable would return all the required fields.
+
 ### Changed
-* Changed treatment of column_filtering in base, no change in usage.
+*   Changed test formatting.
+
+### Removed
+*   Removed column_props from `DB.doc_table` as unhelpful.
 
 ## (0.2.5) -
 ### Changed
-* Changed treatment of serial fields and serial field relations to class methods solely to reduce ambiguity.
+*   Changed treatment of serial fields and serial field relations to class methods solely to reduce ambiguity.
 
 ## (0.2.4) -
 ### Added

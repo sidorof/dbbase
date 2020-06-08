@@ -523,8 +523,66 @@ class Model(object):
             return True, None
 
     @classmethod
+    def filter_columns(
+            cls, column_props, only_props=False, to_camel_case=False):
+        """ filter_columns
+
+        This function accepts a model class, a list of column properties to
+        of interest. Depending upon the needs, all of the properties for the
+        column can be returned once the desired column property is detected,
+        it can return columns with only those properties.
+
+        Usage:
+            filter_columns(
+                column_props,
+                only_props=False,
+                to_camel_case=False
+            )
+
+        Args:
+            column_props: (list) : A list of column properties to search for.
+                Also, the negative can be found, such as `!readOnly`
+            only_props: (bool) : If True, each selected column will contain
+                only those column_props selected. If False, column_props act
+                as detection system and will return the entire column.
+            to_camel_case: (bool) : converts the column names to camel case
+
+        """
+        doc = cls.db.doc_table(
+            cls, to_camel_case=to_camel_case)[cls._class()]['properties']
+
+        new_doc = {}
+        for column, col_properties in doc.items():
+            new_properties = {}
+            keys = list(col_properties.keys())
+            for prop in column_props:
+                if prop.startswith("!"):
+                    prop = prop[1:]
+                    if prop in keys:
+                        if col_properties[prop] is False:
+                            if only_props:
+                                new_properties[prop] = col_properties[prop]
+                            else:
+                                new_properties = col_properties
+                                break
+                    else:
+                        new_properties = col_properties
+                else:
+                    if prop in keys:
+                        if col_properties[prop] is not False:
+                            if only_props:
+                                new_properties[prop] = col_properties[prop]
+                            else:
+                                new_properties = col_properties
+                                break
+            if new_properties:
+                new_doc[column] = new_properties
+
+        return new_doc
+
+    @classmethod
     def _extract_foreign_keys(cls):
-        """_extract_foreign_keys
+        """ _extract_foreign_keys
 
         This function walks the document dictionary and returns the
         foreign keys.
@@ -534,9 +592,10 @@ class Model(object):
         return dict(
             [
                 (key, value)
-                for key, value in cls.db.doc_table(
-                    cls, column_props=["foreign_key"]
-                )[cls._class()]["properties"].items()
+                for key, value in cls.filter_columns(
+                    column_props=["foreign_key"],
+                    only_props=True
+                ).items()
                 if value
             ]
         )

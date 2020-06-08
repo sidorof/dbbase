@@ -216,8 +216,7 @@ class DB(object):
         cls.db = self
 
     def doc_tables(
-        self, class_list=None, to_camel_case=False, column_props=None
-    ):
+        self, class_list=None, to_camel_case=False):
         """ doc_tables
 
         This function creates a dictionary of all the table configuratons.
@@ -231,16 +230,13 @@ class DB(object):
         Usage:
             doc_tables(
                 class_list=None
-                to_camel_case=False,
-                column_props=None
+                to_camel_case=False
             )
 
         Args:
             #class_list: (None : list) : if left as None, returns all classes
             to_camel_case: (bool) : converts the column names to camel case
             serial_fields: (None : list) : specify a limited list of columns
-            column_props: (None : list) : filter column details to specific
-                                          items
 
         Return:
 
@@ -263,8 +259,7 @@ class DB(object):
 
         doc_list = [
             self.doc_table(
-                cls, to_camel_case=to_camel_case, column_props=column_props
-            )
+                cls, to_camel_case=to_camel_case)
             for cls in classes
             if isinstance(cls, type) and issubclass(cls, self.Model)
         ]
@@ -275,8 +270,7 @@ class DB(object):
         return doc
 
     def doc_table(
-        self, cls, to_camel_case=False, serial_fields=None, column_props=None
-    ):
+        self, cls, to_camel_case=False, serial_fields=None):
         """ doc_table
 
         This function creates a dictionary of a table configuraton to aid in
@@ -292,23 +286,18 @@ class DB(object):
             doc_table(
                 cls,
                 to_camel_case=False,
-                serial_fields=None,
-                column_props=None
+                serial_fields=None
             )
 
         Args:
             cls: (class) : the table to be documented
             to_camel_case: (bool) : converts the column names to camel case
             serial_fields: (None : list) : specify a limited list of columns
-            column_props: (None : list) : filter column details to specific
-                                          items
 
         Return:
 
             doc (dict) : a dict of the column values
 
-        The column props included are name, type, required, default detail,
-        foreign_keys, and unique.
         """
 
         def _post_value(key, item_dict):
@@ -351,20 +340,17 @@ class DB(object):
                         "readOnly": True,
                         "unknown": str(value.expression),
                     }
-                _filter_column_props(column_props, item_dict)
                 _post_value(key, item_dict)
 
             elif isinstance(value, property):
 
                 item_dict = _property(cls, key, value)
-                _filter_column_props(column_props, item_dict)
                 _post_value(key, item_dict)
 
             elif callable(value):
 
                 item_dict = _function(value)
                 if item_dict is not None:
-                    _filter_column_props(column_props, item_dict)
                     _post_value(key, item_dict)
 
             else:
@@ -424,21 +410,3 @@ class DB(object):
             dict
         """
         return process_expression(getattr(cls, column_name).expression)
-
-
-def _filter_column_props(column_props, item_dict):
-    """ _filter_column_props
-
-    This function removes unneeded column properties.
-
-    Args:
-        column_props: (dict) : Only props to return
-        item_dict: (dict) : the dict set to processes
-
-    Returns:
-        dict
-    """
-    if column_props is not None:
-        for prop_key in list(item_dict.keys()):
-            if prop_key not in column_props:
-                del item_dict[prop_key]

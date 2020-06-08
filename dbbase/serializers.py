@@ -23,6 +23,7 @@ SERIAL_STOPLIST = [
     "db",
     "delete",
     "deserialize",
+    "filter_columns",
     "get_serial_fields",
     "metadata",
     "query",
