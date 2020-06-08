@@ -70,11 +70,11 @@ class TestDocUtilities(DBBaseTestCase):
 
             def a_function(self) -> str:
 
-                return 'a function that will be included in docs'
+                return "a function that will be included in docs"
 
             def a_function_filtered(self, param1, param2) -> str:
                 """excluded due to having multiple parameters"""
-                return 'a function that will be excluded from docs'
+                return "a function that will be excluded from docs"
 
             status_id = db.Column(
                 StatusCodes(status_codes),
@@ -242,13 +242,14 @@ class TestDocUtilities(DBBaseTestCase):
         field = "id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int32"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int32"},
         )
 
         field = "status_id"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils._type(expression.type),
             {
                 "type": "integer",
                 "format": "int32",
@@ -259,254 +260,254 @@ class TestDocUtilities(DBBaseTestCase):
                     3: "Inactive",
                 },
             },
-            doc_utils._type(expression.type),
         )
 
         field = "name1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "string", "maxLength": 50},
             doc_utils._type(expression.type),
+            {"type": "string", "maxLength": 50},
         )
 
         field = "name2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "string", "maxLength": 50},
             doc_utils._type(expression.type),
+            {"type": "string", "maxLength": 50},
         )
 
         field = "name3"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "text"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "text"}
         )
 
         field = "item_length"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "float"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "float"},
         )
 
         field = "item_amount"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "numeric(17, 6)"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "numeric(17, 6)"},
         )
 
         field = "some_small_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int8"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int8"},
         )
 
         field = "some_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int32"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int32"},
         )
 
         field = "some_big_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int64"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int64"},
         )
 
         field = "fk_id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int32"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int32"},
         )
 
         field = "today"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "date"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "date"}
         )
 
         field = "created_at1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "date-time"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "date-time"}
         )
 
         field = "created_at2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "date-time"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "date-time"},
         )
 
         field = "update_time1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "date-time"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "date-time"},
         )
 
         field = "update_time2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "date-time"}, doc_utils._type(expression.type)
+            doc_utils._type(expression.type), {"type": "date-time"},
         )
 
         field = "unique_col"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "string", "maxLength": 20},
             doc_utils._type(expression.type),
+            {"type": "string", "maxLength": 20},
         )
 
         field = "abc"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "string", "maxLength": 20},
             doc_utils._type(expression.type),
+            {"type": "string", "maxLength": 20},
         )
 
         field = "index_value"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"type": "integer", "format": "int32"},
             doc_utils._type(expression.type),
+            {"type": "integer", "format": "int32"},
         )
 
         # defaults
         field = "id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "status_id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "name1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "name2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "name3"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": "test"}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": "test"}},
         )
 
         field = "item_length"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "item_amount"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": 0.0}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": 0.0}},
         )
 
         field = "some_small_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": 0}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": 0}},
         )
 
         field = "some_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": 0}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": 0}},
         )
 
         field = "some_big_int"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": 0}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": 0}},
         )
 
         field = "fk_id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "today"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": "date.today"}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": "date.today"}},
         )
 
         field = "created_at1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": {"for_update": False, "arg": "datetime.now"}},
             doc_utils._default(expression.default),
+            {"default": {"for_update": False, "arg": "datetime.now"}},
         )
 
         field = "created_at2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "update_time1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "update_time2"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "unique_col"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "abc"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         field = "index_value"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None}, doc_utils._default(expression.default)
+            doc_utils._default(expression.default), {"default": None},
         )
 
         # onupdate
         field = "update_time1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"onupdate": {"for_update": True, "arg": "datetime.now"}},
             doc_utils._onupdate(expression.onupdate),
+            {"onupdate": {"for_update": True, "arg": "datetime.now"}},
         )
 
         # server_default - function
         field = "created_at2"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils._server_default(expression.server_default),
             {
                 "server_default": {
                     "for_update": False,
@@ -514,13 +515,13 @@ class TestDocUtilities(DBBaseTestCase):
                     "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default),
         )
 
         # server_default - value -- text in this case
         field = "abc"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils._server_default(expression.server_default),
             {
                 "server_default": {
                     "for_update": False,
@@ -528,13 +529,13 @@ class TestDocUtilities(DBBaseTestCase):
                     "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default),
         )
 
         # server_default - value -- text in this case
         field = "index_value"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils._server_default(expression.server_default),
             {
                 "server_default": {
                     "for_update": False,
@@ -542,13 +543,13 @@ class TestDocUtilities(DBBaseTestCase):
                     "reflected": False,
                 }
             },
-            doc_utils._server_default(expression.server_default),
         )
 
         # server_onupdate
         field = "update_time2"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils._server_onupdate(expression.server_onupdate),
             {
                 "server_onupdate": {
                     "for_update": True,
@@ -556,20 +557,19 @@ class TestDocUtilities(DBBaseTestCase):
                     "reflected": False,
                 }
             },
-            doc_utils._server_onupdate(expression.server_onupdate),
         )
 
         # example of no server default/onupdate
         field = "created_at1"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"default": None},
             doc_utils._server_default(expression.server_default),
+            {"default": None},
         )
 
         self.assertDictEqual(
-            {"default": None},
             doc_utils._server_onupdate(expression.server_onupdate),
+            {"default": None},
         )
 
         # foreign key
@@ -580,8 +580,8 @@ class TestDocUtilities(DBBaseTestCase):
         field = "fk_id"
         expression = tmp[field].expression
         self.assertDictEqual(
-            {"foreign_key": "other_table.id"},
             doc_utils._foreign_keys(expression.foreign_keys),
+            {"foreign_key": "other_table.id"},
         )
 
         field = "today"
@@ -592,16 +592,16 @@ class TestDocUtilities(DBBaseTestCase):
         field = "id"
         expression = tmp[field].expression
         self.assertTupleEqual(
-            (None, None), doc_utils._only_if_true(expression.unique)
+            doc_utils._only_if_true(expression.unique), (None, None),
         )
         self.assertTupleEqual(
-            (None, True), doc_utils._only_if_true(expression.primary_key)
+            doc_utils._only_if_true(expression.primary_key), (None, True),
         )
 
         field = "unique_col"
         expression = tmp[field].expression
         self.assertTupleEqual(
-            (None, True), doc_utils._only_if_true(expression.unique)
+            doc_utils._only_if_true(expression.unique), (None, True),
         )
 
         # pass throughs -- easist to test by passing through everything
@@ -609,6 +609,7 @@ class TestDocUtilities(DBBaseTestCase):
         field = "id"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils.process_expression(expression),
             {
                 "type": "integer",
                 "format": "int32",
@@ -617,12 +618,12 @@ class TestDocUtilities(DBBaseTestCase):
                 "comment": "Primary key with a value assigned by the database",
                 "info": {"extra": "info here"},
             },
-            doc_utils.process_expression(expression),
         )
 
         field = "name3"
         expression = tmp[field].expression
         self.assertDictEqual(
+            doc_utils.process_expression(expression),
             {
                 "type": "text",
                 "nullable": False,
@@ -631,7 +632,6 @@ class TestDocUtilities(DBBaseTestCase):
                 "info": {},
                 "index": True,
             },
-            doc_utils.process_expression(expression),
         )
 
     def test_doc_postgres(self):
@@ -639,8 +639,8 @@ class TestDocUtilities(DBBaseTestCase):
         db = self.db
 
         if self.PostgresTable is not None:
-
             self.assertDictEqual(
+                db.doc_table(self.PostgresTable),
                 {
                     "PostgresTable": {
                         "type": "object",
@@ -675,15 +675,14 @@ class TestDocUtilities(DBBaseTestCase):
                                     "format": "int32",
                                 },
                                 "nullable": True,
-                                "comment": "this is an array of integers"
+                                "comment": "this is an array of integers "
                                 "with two dimensions.",
                                 "info": {},
                             },
                         },
-                        "xml": "PostgresTable"
+                        "xml": "PostgresTable",
                     }
                 },
-                db.doc_table(self.PostgresTable),
             )
 
     def test_serial_fields_param(self):
@@ -699,28 +698,7 @@ class TestDocUtilities(DBBaseTestCase):
 
         properties = doc[self.BigTable.__name__]["properties"]
 
-        self.assertListEqual(serial_fields, list(properties.keys()))
-
-    def test_column_prop_param(self):
-        """ test_column_prop_param
-
-        This test evaluates whether specific properties for columns
-        can be pulled. A successful test has keys only for those
-        properties.
-
-        Depending on the property, a specific column might not have
-        it. However, there should not be a prop outside of the list.
-        """
-        selected_properties = ["default", "nullable"]
-        doc = self.db.doc_table(self.BigTable, column_props=selected_properties)
-
-        data = doc[self.BigTable.__name__]["properties"]
-
-        for column_props in data.values():
-
-            for key in column_props.keys():
-                with self.subTest(key=key):
-                    self.assertIn(key, selected_properties)
+        self.assertListEqual(list(properties.keys()), serial_fields)
 
     def test_camel_case(self):
         """ test_camel_case
@@ -731,7 +709,9 @@ class TestDocUtilities(DBBaseTestCase):
         doc = self.db.doc_table(self.BigTable)
         xlate = self.dbbase.utils.xlate
 
-        snake_case_cols = list(doc[self.BigTable.__name__]["properties"].keys())
+        snake_case_cols = list(
+            doc[self.BigTable.__name__]["properties"].keys()
+        )
         camel_case_cols = [xlate(col) for col in snake_case_cols]
 
         test_doc = self.db.doc_table(self.BigTable, to_camel_case=True)

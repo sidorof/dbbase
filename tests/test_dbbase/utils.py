@@ -15,22 +15,22 @@ class TestUtilities(BaseTestCase):
         """
         # no config_vars
         base = "test"
-        self.assertEqual(base, self.dbbase.utils.db_config(base))
+        self.assertEqual(self.dbbase.utils.db_config(base), base)
 
         # with config_vars
         base = "sqlite:///{db_file}.db"
         config_vars = {"db_file": "testdb"}
         self.assertEqual(
-            "sqlite:///testdb.db",
             self.dbbase.utils.db_config(base, config_vars),
+            "sqlite:///testdb.db",
         )
 
         # with config_vars that are not to included in the uri
         base = "sqlite:///{db_file}.db"
         config_vars = {"db_file": "testdb", "superuser": "unnecessary"}
         self.assertEqual(
-            "sqlite:///testdb.db",
             self.dbbase.utils.db_config(base, config_vars),
+            "sqlite:///testdb.db",
         )
 
         # if config_vars that are in the form of JSON taken directly
@@ -40,8 +40,8 @@ class TestUtilities(BaseTestCase):
             {"db_file": "testdb", "superuser": "unnecessary"}
         )
         self.assertEqual(
-            "sqlite:///testdb.db",
             self.dbbase.utils.db_config(base, config_vars),
+            "sqlite:///testdb.db",
         )
 
         # if config_vars that are in the form of JSON taken directly

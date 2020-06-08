@@ -84,9 +84,9 @@ class TestDBBaseClass(DBBaseTestCase):
                             "readOnly": True,
                             "relationship": {
                                 "type": "list",
-                                "entity": "Table2"
-                            }
-                        }
+                                "entity": "Table2",
+                            },
+                        },
                     },
                     "xml": "Table1",
                 }
@@ -118,9 +118,9 @@ class TestDBBaseClass(DBBaseTestCase):
                             "readOnly": True,
                             "relationship": {
                                 "type": "single",
-                                "entity": "Table1"
-                            }
-                        }
+                                "entity": "Table1",
+                            },
+                        },
                     },
                     "xml": "Table2",
                 }
@@ -167,9 +167,9 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "readOnly": True,
                                 "relationship": {
                                     "type": "list",
-                                    "entity": "Table2"
-                                }
-                            }
+                                    "entity": "Table2",
+                                },
+                            },
                         },
                         "xml": "Table1",
                     },
@@ -194,9 +194,9 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "readOnly": True,
                                 "relationship": {
                                     "type": "single",
-                                    "entity": "Table1"
-                                }
-                            }
+                                    "entity": "Table1",
+                                },
+                            },
                         },
                         "xml": "Table2",
                     },
@@ -225,23 +225,16 @@ class TestDBBaseClass(DBBaseTestCase):
             "table1Id", list(doc["definitions"]["Table2"]["properties"].keys())
         )
 
-        # does it pass through column props filter
-        doc = db.doc_tables(column_props=["nullable", "primary_key"])
-
-        self.assertNotIn(
-            "type", list(doc["definitions"]["Table2"]["properties"].keys())
-        )
-
         # test doc_column - no need to create new tables for this.
         self.assertDictEqual(
             {
-                'type': 'integer',
-                'format': 'int32',
-                'nullable': True,
-                'foreign_key': 'table1.id',
-                'info': {}
+                "type": "integer",
+                "format": "int32",
+                "nullable": True,
+                "foreign_key": "table1.id",
+                "info": {},
             },
-            db.doc_column(Table2, 'table1_id')
+            db.doc_column(Table2, "table1_id"),
         )
 
     def test__process_table_args(self):
@@ -259,19 +252,19 @@ class TestDBBaseClass(DBBaseTestCase):
 
         class NewModel(db.Model):
 
-            __tablename__ = 'new_model'
+            __tablename__ = "new_model"
             id = db.Column(db.Integer, primary_key=True)
             uniq_fld = db.Column(db.String)
             value = db.Column(db.Integer)
             __table_args__ = (
-                db.ForeignKeyConstraint(['id'], ['related.id']),
-                db.UniqueConstraint('uniq_fld'),
-                db.CheckConstraint('value > 10', name='chk_value')
+                db.ForeignKeyConstraint(["id"], ["related.id"]),
+                db.UniqueConstraint("uniq_fld"),
+                db.CheckConstraint("value > 10", name="chk_value"),
             )
 
         class RelatedModel(db.Model):
 
-            __tablename__ = 'related'
+            __tablename__ = "related"
             id = db.Column(db.Integer, primary_key=True)
 
         db.create_all()
@@ -282,24 +275,14 @@ class TestDBBaseClass(DBBaseTestCase):
                     {
                         "foreign_key_constraint": {
                             "foreign_key": "related.id",
-                            "column_keys": [
-                                "id"
-                            ]
+                            "column_keys": ["id"],
                         }
                     },
-                    {
-                        "unique_contraint": {
-                            "columns": [
-                                "uniq_fld"
-                            ]
-                        }
-                    },
-                    {
-                        "check_constraint": "value > 10"
-                    }
+                    {"unique_contraint": {"columns": ["uniq_fld"]}},
+                    {"check_constraint": "value > 10"},
                 ]
             },
-            db._process_table_args(NewModel)
+            db._process_table_args(NewModel),
         )
 
     def test_create_engine(self):

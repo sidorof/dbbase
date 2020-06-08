@@ -76,6 +76,7 @@ class TestModelClass(DBBaseTestCase):
         table1_rec = Table1(name="test")
 
         self.assertListEqual(
+            table1_rec._null_columns(),
             [
                 "id",
                 "start_date",
@@ -86,7 +87,6 @@ class TestModelClass(DBBaseTestCase):
                 "abc",
                 "index_value",
             ],
-            table1_rec._null_columns(),
         )
 
     def test_validate_record(self):
@@ -148,11 +148,11 @@ class TestModelClass(DBBaseTestCase):
         table3_rec = Table3(name="test").save()
 
         self.assertDictEqual(
+            table1_rec._extract_foreign_keys(),
             {
                 "fk_id": {"foreign_key": "table2.id"},
                 "fk_name": {"foreign_key": "table3.name"},
             },
-            table1_rec._extract_foreign_keys(),
         )
 
         # default
@@ -160,14 +160,14 @@ class TestModelClass(DBBaseTestCase):
 
         self.assertFalse(status)
         self.assertDictEqual(
-            {"missing_values": ["last_name", "fk_id"]}, errors
+            errors, {"missing_values": ["last_name", "fk_id"]}
         )
 
         # camel_case
         status, errors = table1_rec.validate_record(camel_case=True)
 
         self.assertFalse(status)
-        self.assertDictEqual({"missingValues": ["lastName", "fkId"]}, errors)
+        self.assertDictEqual(errors, {"missingValues": ["lastName", "fkId"]})
 
         table1_rec.last_name = "name is filled in"
         table1_rec.fk_id = 3  # not a valid fk
@@ -176,15 +176,15 @@ class TestModelClass(DBBaseTestCase):
 
         self.assertFalse(status)
         self.assertListEqual(
-            [{"fk_id": "3 is not a valid foreign key"}], errors
+            errors, [{"fk_id": "3 is not a valid foreign key"}]
         )
 
         status, errors = table1_rec.validate_record()
 
         self.assertFalse(status)
         self.assertDictEqual(
-            {"ForeignKeys": [{"fk_id": "3 is not a valid foreign key"}]},
             errors,
+            {"ForeignKeys": [{"fk_id": "3 is not a valid foreign key"}]},
         )
         table2_rec = Table2(id=3).save()
         status, errors = table1_rec.validate_record()
@@ -224,16 +224,17 @@ class TestModelClass(DBBaseTestCase):
         db.session.commit()
 
         self.assertDictEqual(
+            address1.to_dict(),
             {
                 "id": 1,
                 "emailAddress": "email1@example.com",
                 "userId": 1,
                 "user": {"id": user.id, "name": "Bob"},
             },
-            address1.to_dict(),
         )
 
         self.assertDictEqual(
+            user.to_dict(),
             {
                 "id": 1,
                 "name": "Bob",
@@ -250,7 +251,6 @@ class TestModelClass(DBBaseTestCase):
                     },
                 ],
             },
-            user.to_dict(),
         )
 
     def test_relationship_funcs_no_relations(self):
@@ -308,7 +308,7 @@ class TestModelClass(DBBaseTestCase):
         db.session.commit()
 
         self.assertSetEqual(
-            set(["id", "name", "addresses"]), set(user.get_serial_fields())
+            set(user.get_serial_fields()), set(["id", "name", "addresses"])
         )
 
         # specific to fields
@@ -319,13 +319,13 @@ class TestModelClass(DBBaseTestCase):
         )
 
         self.assertDictEqual(
+            user._relations_info("addresses"),
             {
                 "self-referential": False,
                 "uselist": True,
                 "join_depth": None,
-                "lazy": "immediate"
+                "lazy": "immediate",
             },
-            user._relations_info("addresses"),
         )
 
         self.assertFalse(user._has_self_ref())
@@ -356,8 +356,8 @@ class TestModelClass(DBBaseTestCase):
         db.session.commit()
 
         self.assertSetEqual(
-            set(["id", "parent_id", "data", "children"]),
             set(node2.get_serial_fields()),
+            set(["id", "parent_id", "data", "children"]),
         )
 
         # specific to fields
@@ -366,13 +366,13 @@ class TestModelClass(DBBaseTestCase):
         self.assertIsNone(node2._get_relationship("data"))
 
         self.assertDictEqual(
+            node2._relations_info("children"),
             {
                 "self-referential": True,
                 "uselist": True,
                 "join_depth": 10,
-                "lazy": "joined"
-                },
-            node2._relations_info("children"),
+                "lazy": "joined",
+            },
         )
 
         self.assertTrue(node2._has_self_ref())
@@ -518,7 +518,7 @@ class TestModelClass(DBBaseTestCase):
                 "self-referential": False,
                 "uselist": True,
                 "join_depth": None,
-                "lazy": "immediate"
+                "lazy": "immediate",
             },
             user._relations_info("addresses"),
         )
@@ -573,8 +573,8 @@ class TestModelClass(DBBaseTestCase):
         node1 = Node(id=1, data="this is node1").save()
         # since don't care about order, use set
         self.assertSetEqual(
-            set(["id", "parent_id", "data", "children"]),
             set(node1.get_serial_fields()),
+            set(["id", "parent_id", "data", "children"]),
         )
 
     def test_to_dict(self):
@@ -608,6 +608,7 @@ class TestModelClass(DBBaseTestCase):
         #   (not level_limits=None since that is really an internal process)
 
         self.assertDictEqual(
+            node1.to_dict(to_camel_case=True, sort=False),
             {
                 "data": "this is node1",
                 "children": [
@@ -628,7 +629,6 @@ class TestModelClass(DBBaseTestCase):
                 "parentId": None,
                 "id": 1,
             },
-            node1.to_dict(to_camel_case=True, sort=False),
         )
 
         # check defaults
@@ -638,6 +638,7 @@ class TestModelClass(DBBaseTestCase):
 
         # no camel case conversion
         self.assertDictEqual(
+            node1.to_dict(to_camel_case=False, sort=False),
             {
                 "parent_id": None,
                 "id": 1,
@@ -658,11 +659,11 @@ class TestModelClass(DBBaseTestCase):
                     }
                 ],
             },
-            node1.to_dict(to_camel_case=False, sort=False),
         )
 
         # sorted alphabetical order
         self.assertDictEqual(
+            node1.to_dict(to_camel_case=True, sort=True),
             {
                 "children": [
                     {
@@ -683,13 +684,13 @@ class TestModelClass(DBBaseTestCase):
                 "id": 1,
                 "parentId": None,
             },
-            node1.to_dict(to_camel_case=True, sort=True),
         )
 
         # sorted in the order of serial fields
         Node.SERIAL_FIELDS = ["id", "parent_id", "data", "children"]
 
         self.assertEqual(
+            str(OrderedDict(node1.to_dict(to_camel_case=True, sort=False))),
             str(
                 OrderedDict(
                     {
@@ -714,18 +715,18 @@ class TestModelClass(DBBaseTestCase):
                     }
                 )
             ),
-            str(OrderedDict(node1.to_dict(to_camel_case=True, sort=False))),
         )
 
         # test ad hoc serial list
         self.assertDictEqual(
-            {"parentId": None}, node1.to_dict(serial_fields=["parent_id"])
+            node1.to_dict(serial_fields=["parent_id"]), {"parentId": None},
         )
 
         # test ad hoc serial list with children
         # serial list should be only with parent not children
         #   since it is updating self rather than cls
         self.assertDictEqual(
+            node1.to_dict(serial_fields=["id", "children"]),
             {
                 "id": 1,
                 "children": [
@@ -744,12 +745,12 @@ class TestModelClass(DBBaseTestCase):
                     }
                 ],
             },
-            node1.to_dict(serial_fields=["id", "children"]),
         )
 
         # test serial list for relations not the parent
         # parent will be complete, children will be limited
         self.assertDictEqual(
+            node1.to_dict(serial_field_relations={"Node": ["id", "children"]}),
             {
                 "id": 1,
                 "parentId": None,
@@ -758,22 +759,21 @@ class TestModelClass(DBBaseTestCase):
                     {"id": 2, "children": [{"id": 3, "children": []}]}
                 ],
             },
-            node1.to_dict(serial_field_relations={"Node": ["id", "children"]}),
         )
         # test both serial list and serial_field_relations
         # this is equivalent to having set the class SERIAL_FIELDS
         #   in the first place.
         self.assertDictEqual(
+            node1.to_dict(
+                serial_fields=["id", "children"],
+                serial_field_relations={"Node": ["id", "children"]},
+            ),
             {
                 "id": 1,
                 "children": [
                     {"id": 2, "children": [{"id": 3, "children": []}]}
                 ],
             },
-            node1.to_dict(
-                serial_fields=["id", "children"],
-                serial_field_relations={"Node": ["id", "children"]},
-            ),
         )
 
     def test_to_dict_relationtype(self):
@@ -788,7 +788,7 @@ class TestModelClass(DBBaseTestCase):
 
         class Table(db.Model):
 
-            __tablename__ = 'table'
+            __tablename__ = "table"
 
             id = db.Column(db.Integer, primary_key=True)
             item_ones = db.relationship(
@@ -799,41 +799,37 @@ class TestModelClass(DBBaseTestCase):
                 "Table2", backref="table0", lazy="dynamic"
             )
 
-            item_threes = db.relationship(
-                "Table3", backref="table0"
-            )
+            item_threes = db.relationship("Table3", backref="table0")
 
-            item_fours = db.relationship(
-                "Table4", backref="table0"
-            )
+            item_fours = db.relationship("Table4", backref="table0")
 
         class Table1(db.Model):
 
-            __tablename__ = 'table1'
+            __tablename__ = "table1"
 
             id = db.Column(db.Integer, primary_key=True)
-            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+            table_id = db.Column(db.Integer, db.ForeignKey("table.id"))
 
         class Table2(db.Model):
 
-            __tablename__ = 'table2'
+            __tablename__ = "table2"
 
             id = db.Column(db.Integer, primary_key=True)
-            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+            table_id = db.Column(db.Integer, db.ForeignKey("table.id"))
 
         class Table3(db.Model):
 
-            __tablename__ = 'table3'
+            __tablename__ = "table3"
 
             id = db.Column(db.Integer, primary_key=True)
-            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+            table_id = db.Column(db.Integer, db.ForeignKey("table.id"))
 
         class Table4(db.Model):
 
-            __tablename__ = 'table4'
+            __tablename__ = "table4"
 
             id = db.Column(db.Integer, primary_key=True)
-            table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+            table_id = db.Column(db.Integer, db.ForeignKey("table.id"))
 
         db.create_all()
 
@@ -845,29 +841,14 @@ class TestModelClass(DBBaseTestCase):
         # table 4 is skipped, so empty
 
         self.assertDictEqual(
+            table.to_dict(),
             {
                 "id": 0,
-                "itemOnes": [
-                    {
-                        "tableId": 0,
-                        "id": 1
-                    }
-                ],
-                "itemTwos": [
-                    {
-                        "tableId": 0,
-                        "id": 2
-                    }
-                ],
-                "itemThrees": [
-                    {
-                        "tableId": 0,
-                        "id": 3
-                    }
-                ],
+                "itemOnes": [{"tableId": 0, "id": 1}],
+                "itemTwos": [{"tableId": 0, "id": 2}],
+                "itemThrees": [{"tableId": 0, "id": 3}],
                 "itemFours": [],
             },
-            table.to_dict()
         )
 
     def test_serialize(self):
@@ -886,21 +867,21 @@ class TestModelClass(DBBaseTestCase):
         table1 = Table1(long_name="this is a long name").save()
 
         self.assertEqual(
-            json.dumps(table1.to_dict(to_camel_case=True, sort=False)),
             table1.serialize(to_camel_case=True, sort=False),
+            json.dumps(table1.to_dict(to_camel_case=True, sort=False)),
         )
 
         self.assertEqual(
-            json.dumps(table1.to_dict(to_camel_case=False, sort=False)),
             table1.serialize(to_camel_case=False, sort=False),
+            json.dumps(table1.to_dict(to_camel_case=False, sort=False)),
         )
 
         # test both sort and indent
         self.assertEqual(
+            table1.serialize(to_camel_case=False, sort=True, indent=4),
             json.dumps(
                 table1.to_dict(to_camel_case=False, sort=True), indent=4
             ),
-            table1.serialize(to_camel_case=False, sort=True, indent=4),
         )
 
     def test_deserialize(self):
@@ -921,12 +902,12 @@ class TestModelClass(DBBaseTestCase):
         data = {"id": 1, "longName": "this is a long name"}
 
         self.assertDictEqual(
-            {"id": 1, "long_name": "this is a long name"},
             table1.deserialize(data, from_camel_case=True),
+            {"id": 1, "long_name": "this is a long name"},
         )
         self.assertDictEqual(
-            {"id": 1, "longName": "this is a long name"},
             table1.deserialize(data, from_camel_case=False),
+            {"id": 1, "longName": "this is a long name"},
         )
 
         data = json.dumps(
@@ -937,11 +918,11 @@ class TestModelClass(DBBaseTestCase):
         )
 
         self.assertListEqual(
+            table1.deserialize(data, from_camel_case=True),
             [
                 {"id": 3, "long_name": "this is a long name"},
                 {"id": 4, "long_name": "this is a long name"},
             ],
-            table1.deserialize(data, from_camel_case=True),
         )
 
         # test for byte conversion
@@ -957,11 +938,11 @@ class TestModelClass(DBBaseTestCase):
         self.assertIsInstance(data, bytes)
 
         self.assertListEqual(
+            table1.deserialize(data, from_camel_case=True),
             [
                 {"id": 3, "long_name": "this is a long name"},
                 {"id": 4, "long_name": "this is a long name"},
             ],
-            table1.deserialize(data, from_camel_case=True),
         )
 
     def test_save(self):
@@ -1038,4 +1019,119 @@ class TestModelClass(DBBaseTestCase):
 
         self.assertDictEqual({"id": None, "password": None}, table1.to_dict())
 
-        self.assertDictEqual({"id": None}, table2.to_dict())
+        self.assertDictEqual(table2.to_dict(), {"id": None})
+
+    def test_filter_columns(self):
+        """ test_filter_columns
+
+        This test should show selection by column prop
+        type, options for output of the attributes and
+        camel case.
+        """
+        db = self.db
+
+        class Author(db.Model):
+            __tablename__ = "authors"
+
+            id = db.Column(db.Integer, primary_key=True)
+            first_name = db.Column(db.String(50), nullable=False)
+            last_name = db.Column(db.String(50), nullable=False)
+            test_col = db.WriteOnlyColumn(db.String(50), nullable=True)
+
+            def full_name(self):
+                return f"{self.first_name} {self.last_name}"
+
+            books = db.relationship("Book", backref="author", lazy="dynamic")
+
+        class Book(db.Model):
+            __tablename__ = "books"
+
+            id = db.Column(db.Integer, primary_key=True, nullable=True)
+            isbn = db.Column(db.String(20), nullable=True)
+            title = db.Column(db.String(100))
+            pub_year = db.Column(db.Integer, nullable=False)
+            author_id = db.Column(
+                db.Integer, db.ForeignKey("authors.id"), nullable=False
+            )
+
+        db.create_all()
+
+        # select nullable
+        doc = Book.filter_columns(
+            column_props=["nullable"], to_camel_case=True, only_props=False
+        )
+
+        self.assertDictEqual(
+            doc,
+            {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "primary_key": True,
+                    "nullable": True,
+                    "info": {},
+                },
+                "isbn": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": True,
+                    "info": {},
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "nullable": True,
+                    "info": {},
+                },
+            },
+        )
+
+        # select foreign_keys
+        doc = Book.filter_columns(
+            column_props=["foreign_key"], to_camel_case=True, only_props=True
+        )
+
+        self.assertDictEqual(doc, {"authorId": {"foreign_key": "authors.id"}})
+
+        # select not read only
+        doc = Book.filter_columns(
+            column_props=["!readOnly"], to_camel_case=True, only_props=False
+        )
+
+        self.assertDictEqual(
+            doc,
+            {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "primary_key": True,
+                    "nullable": True,
+                    "info": {},
+                },
+                "isbn": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "nullable": True,
+                    "info": {},
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "nullable": True,
+                    "info": {},
+                },
+                "pubYear": {
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": False,
+                    "info": {},
+                },
+                "authorId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "nullable": False,
+                    "foreign_key": "authors.id",
+                    "info": {},
+                },
+            },
+        )
