@@ -792,9 +792,67 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="Model.filter_columns"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.filter_columns.html#dbbase.model.Model.filter_columns">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">filter_columns</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">column_props</span><span class="p">,</span> <span class="n">only_props</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">""" filter_columns</span>
+
+<span class="sd">        This function accepts a model class, a list of column properties to</span>
+<span class="sd">        of interest. Depending upon the needs, all of the properties for the</span>
+<span class="sd">        column can be returned once the desired column property is detected,</span>
+<span class="sd">        it can return columns with only those properties.</span>
+
+<span class="sd">        Usage:</span>
+<span class="sd">            filter_columns(</span>
+<span class="sd">                column_props,</span>
+<span class="sd">                only_props=False,</span>
+<span class="sd">                to_camel_case=False</span>
+<span class="sd">            )</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column_props: (list) : A list of column properties to search for.</span>
+<span class="sd">                Also, the negative can be found, such as `!readOnly`</span>
+<span class="sd">            only_props: (bool) : If True, each selected column will contain</span>
+<span class="sd">                only those column_props selected. If False, column_props act</span>
+<span class="sd">                as detection system and will return the entire column.</span>
+<span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
+
+<span class="sd">        """</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span><span class="s1">'properties'</span><span class="p">]</span>
+
+        <span class="n">new_doc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">col_properties</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">new_properties</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">col_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">column_props</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">prop</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"!"</span><span class="p">):</span>
+                    <span class="n">prop</span> <span class="o">=</span> <span class="n">prop</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">col_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">only_props</span><span class="p">:</span>
+                                <span class="n">new_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">col_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">new_properties</span> <span class="o">=</span> <span class="n">col_properties</span>
+                                <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_properties</span> <span class="o">=</span> <span class="n">col_properties</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">col_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">only_props</span><span class="p">:</span>
+                                <span class="n">new_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">col_properties</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">new_properties</span> <span class="o">=</span> <span class="n">col_properties</span>
+                                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">new_properties</span><span class="p">:</span>
+                <span class="n">new_doc</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_properties</span>
+
+        <span class="k">return</span> <span class="n">new_doc</span></div>
+
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_extract_foreign_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="sd">"""_extract_foreign_keys</span>
+        <span class="sd">""" _extract_foreign_keys</span>
 
 <span class="sd">        This function walks the document dictionary and returns the</span>
 <span class="sd">        foreign keys.</span>
@@ -804,9 +862,10 @@
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
-                    <span class="bp">cls</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">]</span>
-                <span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span><span class="s2">"properties"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">filter_columns</span><span class="p">(</span>
+                    <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">],</span>
+                    <span class="n">only_props</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">value</span>
             <span class="p">]</span>
         <span class="p">)</span>
@@ -850,7 +909,7 @@
               
           </div>
             Last updated on
-              Jun 07, 2020.
+              Jun 08, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

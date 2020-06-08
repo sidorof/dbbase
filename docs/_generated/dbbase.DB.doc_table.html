@@ -271,7 +271,7 @@
 <h1 id="generated-dbbase-db-doc-table--page-root">dbbase.DB.doc_table<a class="headerlink" href="#generated-dbbase-db-doc-table--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="dbbase.DB.doc_table">
-<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">doc_table</code><span class="sig-paren">(</span><em class="sig-param">cls</em>, <em class="sig-param">to_camel_case=False</em>, <em class="sig-param">serial_fields=None</em>, <em class="sig-param">column_props=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.doc_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.doc_table" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">doc_table</code><span class="sig-paren">(</span><em class="sig-param">cls</em>, <em class="sig-param">to_camel_case=False</em>, <em class="sig-param">serial_fields=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.doc_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.doc_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function creates a dictionary of a table configuraton to aid in
 documenting.</p>
 <p>The function can be used in several ways:</p>
@@ -284,8 +284,7 @@ documenting.</p>
 <dt>Usage:</dt><dd><dl class="simple">
 <dt>doc_table(</dt><dd><p>cls,
 to_camel_case=False,
-serial_fields=None,
-column_props=None</p>
+serial_fields=None</p>
 </dd>
 </dl>
 <p>)</p>
@@ -297,16 +296,12 @@ column_props=None</p>
 <li><p><strong>cls</strong> – (class) : the table to be documented</p></li>
 <li><p><strong>to_camel_case</strong> – (bool) : converts the column names to camel case</p></li>
 <li><p><strong>serial_fields</strong> – (None : list) : specify a limited list of columns</p></li>
-<li><p><strong>column_props</strong> – (None : list) : filter column details to specific
-items</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>doc (dict)</em> – a dict of the column values</p>
 </dd>
 </dl>
-<p>The column props included are name, type, required, default detail,
-foreign_keys, and unique.</p>
 </dd></dl>
 
 
@@ -334,7 +329,7 @@ foreign_keys, and unique.</p>
               
           </div>
             Last updated on
-              Jun 07, 2020.
+              Jun 08, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

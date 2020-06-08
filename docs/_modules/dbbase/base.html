@@ -486,8 +486,7 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="DB.doc_tables"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_tables.html#dbbase.DB.doc_tables">[docs]</a>    <span class="k">def</span> <span class="nf">doc_tables</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">class_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">class_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">""" doc_tables</span>
 
 <span class="sd">        This function creates a dictionary of all the table configuratons.</span>
@@ -501,16 +500,13 @@
 <span class="sd">        Usage:</span>
 <span class="sd">            doc_tables(</span>
 <span class="sd">                class_list=None</span>
-<span class="sd">                to_camel_case=False,</span>
-<span class="sd">                column_props=None</span>
+<span class="sd">                to_camel_case=False</span>
 <span class="sd">            )</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            #class_list: (None : list) : if left as None, returns all classes</span>
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
 <span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
-<span class="sd">            column_props: (None : list) : filter column details to specific</span>
-<span class="sd">                                          items</span>
 
 <span class="sd">        Return:</span>
 
@@ -533,8 +529,7 @@
 
         <span class="n">doc_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
-                <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="n">column_props</span>
-            <span class="p">)</span>
+                <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">)</span>
             <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
         <span class="p">]</span>
@@ -545,8 +540,7 @@
         <span class="k">return</span> <span class="n">doc</span></div>
 
 <div class="viewcode-block" id="DB.doc_table"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_table.html#dbbase.DB.doc_table">[docs]</a>    <span class="k">def</span> <span class="nf">doc_table</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_props</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">""" doc_table</span>
 
 <span class="sd">        This function creates a dictionary of a table configuraton to aid in</span>
@@ -562,23 +556,18 @@
 <span class="sd">            doc_table(</span>
 <span class="sd">                cls,</span>
 <span class="sd">                to_camel_case=False,</span>
-<span class="sd">                serial_fields=None,</span>
-<span class="sd">                column_props=None</span>
+<span class="sd">                serial_fields=None</span>
 <span class="sd">            )</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            cls: (class) : the table to be documented</span>
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
 <span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
-<span class="sd">            column_props: (None : list) : filter column details to specific</span>
-<span class="sd">                                          items</span>
 
 <span class="sd">        Return:</span>
 
 <span class="sd">            doc (dict) : a dict of the column values</span>
 
-<span class="sd">        The column props included are name, type, required, default detail,</span>
-<span class="sd">        foreign_keys, and unique.</span>
 <span class="sd">        """</span>
 
         <span class="k">def</span> <span class="nf">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">):</span>
@@ -621,20 +610,17 @@
                         <span class="s2">"readOnly"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                         <span class="s2">"unknown"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">expression</span><span class="p">),</span>
                     <span class="p">}</span>
-                <span class="n">_filter_column_props</span><span class="p">(</span><span class="n">column_props</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
                 <span class="n">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
 
                 <span class="n">item_dict</span> <span class="o">=</span> <span class="n">_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="n">_filter_column_props</span><span class="p">(</span><span class="n">column_props</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
                 <span class="n">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
 
                 <span class="n">item_dict</span> <span class="o">=</span> <span class="n">_function</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">item_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">_filter_column_props</span><span class="p">(</span><span class="n">column_props</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
                     <span class="n">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -694,24 +680,6 @@
 <span class="sd">            dict</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="n">process_expression</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span></div></div>
-
-
-<span class="k">def</span> <span class="nf">_filter_column_props</span><span class="p">(</span><span class="n">column_props</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">):</span>
-    <span class="sd">""" _filter_column_props</span>
-
-<span class="sd">    This function removes unneeded column properties.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        column_props: (dict) : Only props to return</span>
-<span class="sd">        item_dict: (dict) : the dict set to processes</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        dict</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">column_props</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">prop_key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="k">if</span> <span class="n">prop_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">column_props</span><span class="p">:</span>
-                <span class="k">del</span> <span class="n">item_dict</span><span class="p">[</span><span class="n">prop_key</span><span class="p">]</span>
 </pre></div>
 
           </article>
@@ -737,7 +705,7 @@
               
           </div>
             Last updated on
-              Jun 07, 2020.
+              Jun 08, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

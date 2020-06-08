@@ -16,6 +16,8 @@ Model
       
          ~Model.deserialize
       
+         ~Model.filter_columns
+      
          ~Model.get_serial_fields
       
          ~Model.save

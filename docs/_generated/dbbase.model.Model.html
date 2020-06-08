@@ -317,19 +317,22 @@ this class.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize" title="dbbase.model.Model.deserialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize</span></code></a>(data[, from_camel_case])</p></td>
 <td><p>Convert back to column names that are more pythonic.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_fields.html#dbbase.model.Model.get_serial_fields" title="dbbase.model.Model.get_serial_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_fields</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.filter_columns.html#dbbase.model.Model.filter_columns" title="dbbase.model.Model.filter_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_columns</span></code></a>(column_props[, only_props, …])</p></td>
+<td><p>This function accepts a model class, a list of column properties to of interest.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.get_serial_fields.html#dbbase.model.Model.get_serial_fields" title="dbbase.model.Model.get_serial_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serial_fields</span></code></a>()</p></td>
 <td><p>This function returns a list of table properties that will be used in serialization.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.save.html#dbbase.model.Model.save" title="dbbase.model.Model.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.save.html#dbbase.model.Model.save" title="dbbase.model.Model.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
 <td><p>This function saves adds and commits the object via session.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.serialize.html#dbbase.model.Model.serialize" title="dbbase.model.Model.serialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize</span></code></a>([to_camel_case, level_limits, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.serialize.html#dbbase.model.Model.serialize" title="dbbase.model.Model.serialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize</span></code></a>([to_camel_case, level_limits, …])</p></td>
 <td><p>Output JSON formatted model.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict" title="dbbase.model.Model.to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_dict</span></code></a>([to_camel_case, level_limits, sort, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.to_dict.html#dbbase.model.Model.to_dict" title="dbbase.model.Model.to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_dict</span></code></a>([to_camel_case, level_limits, sort, …])</p></td>
 <td><p>Returns columns in a dict.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="dbbase.model.Model.validate_record.html#dbbase.model.Model.validate_record" title="dbbase.model.Model.validate_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_record</span></code></a>([camel_case])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="dbbase.model.Model.validate_record.html#dbbase.model.Model.validate_record" title="dbbase.model.Model.validate_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_record</span></code></a>([camel_case])</p></td>
 <td><p>This function attempts to report any missing data from a record.</p></td>
 </tr>
 </tbody>
@@ -388,7 +391,7 @@ this class.</p>
               
           </div>
             Last updated on
-              Jun 07, 2020.
+              Jun 08, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -271,7 +271,7 @@
 <h1 id="generated-dbbase-db-doc-tables--page-root">dbbase.DB.doc_tables<a class="headerlink" href="#generated-dbbase-db-doc-tables--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="dbbase.DB.doc_tables">
-<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">doc_tables</code><span class="sig-paren">(</span><em class="sig-param">class_list=None</em>, <em class="sig-param">to_camel_case=False</em>, <em class="sig-param">column_props=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.doc_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.doc_tables" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">doc_tables</code><span class="sig-paren">(</span><em class="sig-param">class_list=None</em>, <em class="sig-param">to_camel_case=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.doc_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.doc_tables" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function creates a dictionary of all the table configuratons.</p>
 <p>The function can be used in several ways:</p>
 <ul class="simple">
@@ -282,8 +282,7 @@
 <dl>
 <dt>Usage:</dt><dd><dl class="simple">
 <dt>doc_tables(</dt><dd><p>class_list=None
-to_camel_case=False,
-column_props=None</p>
+to_camel_case=False</p>
 </dd>
 </dl>
 <p>)</p>
@@ -295,8 +294,6 @@ column_props=None</p>
 <li><p><strong>#class_list</strong> – (None : list) : if left as None, returns all classes</p></li>
 <li><p><strong>to_camel_case</strong> – (bool) : converts the column names to camel case</p></li>
 <li><p><strong>serial_fields</strong> – (None : list) : specify a limited list of columns</p></li>
-<li><p><strong>column_props</strong> – (None : list) : filter column details to specific
-items</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -337,7 +334,7 @@ foreign_keys, and unique.</p>
               
           </div>
             Last updated on
-              Jun 07, 2020.
+              Jun 08, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
