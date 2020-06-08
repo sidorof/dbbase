@@ -1,5 +1,5 @@
 # Changelog
-## (0.2.6) -
+## (0.2.7) -
 ### Add
 *   Added `Model.filter_columns` to better address filtering columns for various characteristics. This function ties in with the documentation functions found in `DB`. Also, the column property to be selected can also be a negative. ex: !nullable would return all the required fields.
 
