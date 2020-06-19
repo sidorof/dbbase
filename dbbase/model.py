@@ -234,6 +234,7 @@ class Model(object):
             # it has already been done
             if not self._has_self_ref():
                 return STOP_VALUE
+
         result = {}
 
         if serial_fields is None:

@@ -22,6 +22,7 @@ from sqlalchemy.sql.elements import BinaryExpression
 
 from . import model
 from .column_types import WriteOnlyColumn
+from .serializers import STOP_VALUE
 from .utils import xlate
 from .doc_utils import (
     process_expression,
@@ -270,7 +271,9 @@ class DB(object):
         return doc
 
     def doc_table(
-        self, cls, to_camel_case=False, serial_fields=None):
+        self, cls, to_camel_case=False, serial_fields=None,
+        serial_field_relations=None, level_limits=None
+    ):
         """ doc_table
 
         This function creates a dictionary of a table configuraton to aid in
@@ -286,13 +289,17 @@ class DB(object):
             doc_table(
                 cls,
                 to_camel_case=False,
-                serial_fields=None
+                serial_fields=None,
+                serial_field_relations=None,
+                level_limits=None
             )
 
         Args:
             cls: (class) : the table to be documented
             to_camel_case: (bool) : converts the column names to camel case
             serial_fields: (None : list) : specify a limited list of columns
+            serial_field_relations: (None: dict) : Can control what serial fields are included in relationships
+            level_limits: (None : set) : A technical variable related to preventing runaway recursion. Best to leave it alone.
 
         Return:
 
@@ -305,6 +312,14 @@ class DB(object):
             if to_camel_case:
                 key = xlate(key)
             properties[key] = item_dict
+
+        if level_limits is None:
+            level_limits = set()
+
+        if self._class() in level_limits:
+            # it has already been done
+            if not self._has_self_ref():
+                return STOP_VALUE
 
         properties = {}
         doc = {
@@ -334,13 +349,15 @@ class DB(object):
                     # done afterwards because keys in expression can change
 
                 elif isinstance(value.expression, BinaryExpression):
-                    item_dict = _binary_expression(value)
+                    # relationship or None
+                    item_dict = _binary_expression(value, serial_field_relations, level_limits)
                 else:
                     item_dict = {
                         "readOnly": True,
                         "unknown": str(value.expression),
                     }
-                _post_value(key, item_dict)
+                if item_dict is not None:
+                    _post_value(key, item_dict)
 
             elif isinstance(value, property):
 

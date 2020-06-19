@@ -8,6 +8,8 @@ from inspect import getattr_static, signature, _empty
 from sqlalchemy.sql import functions
 from sqlalchemy.sql import elements
 
+from .serializers import STOP_VALUE
+
 
 def _default(value):
     """_default in more readable form"""
@@ -105,7 +107,7 @@ def _foreign_keys(value):
     return None
 
 
-def _binary_expression(value):
+def _binary_expression(value, serial_field_relations, level_limits):
     """ _binary_expression
 
     it is probably a relationship
@@ -115,14 +117,20 @@ def _binary_expression(value):
     """
     if hasattr(value, "prop"):
         rel_cls = value.prop.entity.class_
-        return {
-            "readOnly": True,
-            "relationship": {
-                "type": "list" if value.prop.uselist else "single",
-                "entity": value.prop.entity.class_._class(),
-                "fields": rel_cls.db.doc_table(rel_cls)
-            },
-        }
+        serial_fields = serial_field_relations.get(value.__name__)
+        rel_fields = rel_cls.db.doc_table(
+                    level_limits=None, serial_fields=serial_fields, rel_cls)
+        if rel_fields != STOP_VALUE:
+            return {
+                "readOnly": True,
+                "relationship": {
+                    "type": "list" if value.prop.uselist else "single",
+                    "entity": rel_cls._class(),
+                    "fields": rel_fields
+                },
+            }
+        else:
+            return None
 
     # here for thoroughness for now
     return {"readOnly": True, "unknown": str(value.expression)}
