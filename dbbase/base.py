@@ -316,9 +316,9 @@ class DB(object):
         if level_limits is None:
             level_limits = set()
 
-        if self._class() in level_limits:
+        if cls._class() in level_limits:
             # it has already been done
-            if not self._has_self_ref():
+            if not cls._has_self_ref():
                 return STOP_VALUE
 
         properties = {}
@@ -350,7 +350,12 @@ class DB(object):
 
                 elif isinstance(value.expression, BinaryExpression):
                     # relationship or None
-                    item_dict = _binary_expression(value, serial_field_relations, level_limits)
+                    item_dict = _binary_expression(
+                        value,
+                        to_camel_case=to_camel_case,
+                        serial_field_relations=serial_field_relations,
+                        level_limits=level_limits
+                    )
                 else:
                     item_dict = {
                         "readOnly": True,

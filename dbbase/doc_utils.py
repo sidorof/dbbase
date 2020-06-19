@@ -107,7 +107,7 @@ def _foreign_keys(value):
     return None
 
 
-def _binary_expression(value, serial_field_relations, level_limits):
+def _binary_expression(value, to_camel_case, serial_field_relations, level_limits):
     """ _binary_expression
 
     it is probably a relationship
@@ -119,7 +119,8 @@ def _binary_expression(value, serial_field_relations, level_limits):
         rel_cls = value.prop.entity.class_
         serial_fields = serial_field_relations.get(value.__name__)
         rel_fields = rel_cls.db.doc_table(
-                    level_limits=None, serial_fields=serial_fields, rel_cls)
+            rel_cls, to_camel_case, serial_fields, level_limits=level_limits)
+
         if rel_fields != STOP_VALUE:
             return {
                 "readOnly": True,
