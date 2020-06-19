@@ -114,11 +114,13 @@ def _binary_expression(value):
             is access to related column
     """
     if hasattr(value, "prop"):
+        rel_cls = value.prop.entity.class_
         return {
             "readOnly": True,
             "relationship": {
                 "type": "list" if value.prop.uselist else "single",
                 "entity": value.prop.entity.class_._class(),
+                "fields": rel_cls.db.doc_table(rel_cls)
             },
         }
 
