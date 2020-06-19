@@ -18,7 +18,7 @@ import dbbase
 
 # -- Project information -----------------------------------------------------
 
-project = 'dbbase'
+project = 'DBBase'
 copyright = '2020, Don Smiley'
 author = 'Don Smiley'
 
