@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.base &#8212; dbbase 0.2.7 documentation</title>
+    <title>dbbase.base &#8212; DBBase 0.2.8 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="dbbase 0.2.7 documentation"
+        <a href="../../index.html" title="DBBase 0.2.8 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.7</span>
+          <span class="md-header-nav__topic">dbbase 0.2.8</span>
           <span class="md-header-nav__topic"> dbbase.base </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">dbbase 0.2.7 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.2.8 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="dbbase 0.2.7 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="DBBase 0.2.8 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="dbbase 0.2.7 documentation">dbbase 0.2.7</a>
+       title="DBBase 0.2.8 documentation">dbbase 0.2.8</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -292,6 +292,7 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">model</span>
 <span class="kn">from</span> <span class="nn">.column_types</span> <span class="kn">import</span> <span class="n">WriteOnlyColumn</span>
+<span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">STOP_VALUE</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">xlate</span>
 <span class="kn">from</span> <span class="nn">.doc_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">process_expression</span><span class="p">,</span>
@@ -540,7 +541,9 @@
         <span class="k">return</span> <span class="n">doc</span></div>
 
 <div class="viewcode-block" id="DB.doc_table"><a class="viewcode-back" href="../../_generated/dbbase.DB.doc_table.html#dbbase.DB.doc_table">[docs]</a>    <span class="k">def</span> <span class="nf">doc_table</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serial_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">serial_field_relations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level_limits</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="sd">""" doc_table</span>
 
 <span class="sd">        This function creates a dictionary of a table configuraton to aid in</span>
@@ -556,13 +559,17 @@
 <span class="sd">            doc_table(</span>
 <span class="sd">                cls,</span>
 <span class="sd">                to_camel_case=False,</span>
-<span class="sd">                serial_fields=None</span>
+<span class="sd">                serial_fields=None,</span>
+<span class="sd">                serial_field_relations=None,</span>
+<span class="sd">                level_limits=None</span>
 <span class="sd">            )</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            cls: (class) : the table to be documented</span>
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
 <span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
+<span class="sd">            serial_field_relations: (None: dict) : Can control what serial fields are included in relationships</span>
+<span class="sd">            level_limits: (None : set) : A technical variable related to preventing runaway recursion. Best to leave it alone.</span>
 
 <span class="sd">        Return:</span>
 
@@ -575,6 +582,14 @@
             <span class="k">if</span> <span class="n">to_camel_case</span><span class="p">:</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">xlate</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
             <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item_dict</span>
+
+        <span class="k">if</span> <span class="n">level_limits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">level_limits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span> <span class="ow">in</span> <span class="n">level_limits</span><span class="p">:</span>
+            <span class="c1"># it has already been done</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_self_ref</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">STOP_VALUE</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="p">{</span>
@@ -604,13 +619,20 @@
                     <span class="c1"># done afterwards because keys in expression can change</span>
 
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="n">BinaryExpression</span><span class="p">):</span>
-                    <span class="n">item_dict</span> <span class="o">=</span> <span class="n">_binary_expression</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="c1"># relationship or None</span>
+                    <span class="n">item_dict</span> <span class="o">=</span> <span class="n">_binary_expression</span><span class="p">(</span>
+                        <span class="n">value</span><span class="p">,</span>
+                        <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">,</span>
+                        <span class="n">serial_field_relations</span><span class="o">=</span><span class="n">serial_field_relations</span><span class="p">,</span>
+                        <span class="n">level_limits</span><span class="o">=</span><span class="n">level_limits</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">item_dict</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="s2">"readOnly"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                         <span class="s2">"unknown"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">expression</span><span class="p">),</span>
                     <span class="p">}</span>
-                <span class="n">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">_post_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
 
@@ -705,7 +727,7 @@
               
           </div>
             Last updated on
-              Jun 08, 2020.
+              Jun 19, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
