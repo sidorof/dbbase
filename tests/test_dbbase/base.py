@@ -69,6 +69,7 @@ class TestDBBaseClass(DBBaseTestCase):
 
         # Table1
         self.assertDictEqual(
+            db.doc_table(Table1),
             {
                 "Table1": {
                     "type": "object",
@@ -85,17 +86,33 @@ class TestDBBaseClass(DBBaseTestCase):
                             "relationship": {
                                 "type": "list",
                                 "entity": "Table2",
+                                "fields": {
+                                    "id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "primary_key": True,
+                                        "nullable": False,
+                                        "info": {},
+                                    },
+                                    "table1_id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "nullable": True,
+                                        "foreign_key": "table1.id",
+                                        "info": {},
+                                    },
+                                },
                             },
                         },
                     },
                     "xml": "Table1",
                 }
             },
-            db.doc_table(Table1),
         )
 
         # Table2
         self.assertDictEqual(
+            db.doc_table(Table2),
             {
                 "Table2": {
                     "type": "object",
@@ -119,35 +136,77 @@ class TestDBBaseClass(DBBaseTestCase):
                             "relationship": {
                                 "type": "single",
                                 "entity": "Table1",
+                                "fields": {
+                                    "id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "primary_key": True,
+                                        "nullable": False,
+                                        "info": {},
+                                    }
+                                },
                             },
                         },
                     },
                     "xml": "Table2",
                 }
             },
-            db.doc_table(Table2),
+        )
+
+        # test serial fields and serial field relations
+        self.assertDictEqual(
+            db.doc_table(
+                Table1,
+                serial_fields=["table2"],
+                serial_field_relations={"Table2": ["table1_id"]},
+            ),
+            {
+                "Table1": {
+                    "type": "object",
+                    "properties": {
+                        "table2": {
+                            "readOnly": True,
+                            "relationship": {
+                                "type": "list",
+                                "entity": "Table2",
+                                "fields": {
+                                    "table1_id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "nullable": True,
+                                        "foreign_key": "table1.id",
+                                        "info": {},
+                                    }
+                                },
+                            },
+                        }
+                    },
+                    "xml": "Table1",
+                }
+            },
         )
 
         # Test doc_tables
         doc = db.doc_tables()
         self.assertDictEqual(
+            doc,
             {
                 "definitions": {
                     "Table0": {
                         "type": "object",
                         "properties": {
-                            "table1_id": {
-                                "type": "integer",
-                                "format": "int32",
-                                "nullable": True,
-                                "foreign_key": "table1.id",
-                                "info": {},
-                            },
                             "id": {
                                 "type": "integer",
                                 "format": "int32",
                                 "primary_key": True,
                                 "nullable": False,
+                                "info": {},
+                            },
+                            "table1_id": {
+                                "type": "integer",
+                                "format": "int32",
+                                "nullable": True,
+                                "foreign_key": "table1.id",
                                 "info": {},
                             },
                         },
@@ -168,6 +227,22 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "relationship": {
                                     "type": "list",
                                     "entity": "Table2",
+                                    "fields": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "primary_key": True,
+                                            "nullable": False,
+                                            "info": {},
+                                        },
+                                        "table1_id": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "nullable": True,
+                                            "foreign_key": "table1.id",
+                                            "info": {},
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -176,13 +251,6 @@ class TestDBBaseClass(DBBaseTestCase):
                     "Table2": {
                         "type": "object",
                         "properties": {
-                            "table1_id": {
-                                "type": "integer",
-                                "format": "int32",
-                                "nullable": True,
-                                "foreign_key": "table1.id",
-                                "info": {},
-                            },
                             "id": {
                                 "type": "integer",
                                 "format": "int32",
@@ -190,11 +258,27 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "nullable": False,
                                 "info": {},
                             },
+                            "table1_id": {
+                                "type": "integer",
+                                "format": "int32",
+                                "nullable": True,
+                                "foreign_key": "table1.id",
+                                "info": {},
+                            },
                             "table1": {
                                 "readOnly": True,
                                 "relationship": {
                                     "type": "single",
                                     "entity": "Table1",
+                                    "fields": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "primary_key": True,
+                                            "nullable": False,
+                                            "info": {},
+                                        }
+                                    },
                                 },
                             },
                         },
@@ -202,7 +286,6 @@ class TestDBBaseClass(DBBaseTestCase):
                     },
                 }
             },
-            doc,
         )
 
         # correct number
@@ -210,8 +293,8 @@ class TestDBBaseClass(DBBaseTestCase):
 
         # does it sort
         self.assertListEqual(
-            ["Table0", "Table1", "Table2"],
             [key for key in doc["definitions"].keys()],
+            ["Table0", "Table1", "Table2"],
         )
 
         # does class list work
@@ -227,6 +310,7 @@ class TestDBBaseClass(DBBaseTestCase):
 
         # test doc_column - no need to create new tables for this.
         self.assertDictEqual(
+            db.doc_column(Table2, "table1_id"),
             {
                 "type": "integer",
                 "format": "int32",
@@ -234,7 +318,6 @@ class TestDBBaseClass(DBBaseTestCase):
                 "foreign_key": "table1.id",
                 "info": {},
             },
-            db.doc_column(Table2, "table1_id"),
         )
 
     def test__process_table_args(self):
@@ -270,6 +353,7 @@ class TestDBBaseClass(DBBaseTestCase):
         db.create_all()
 
         self.assertDictEqual(
+            db._process_table_args(NewModel),
             {
                 "constraints": [
                     {
@@ -282,7 +366,6 @@ class TestDBBaseClass(DBBaseTestCase):
                     {"check_constraint": "value > 10"},
                 ]
             },
-            db._process_table_args(NewModel),
         )
 
     def test_create_engine(self):

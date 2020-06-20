@@ -117,14 +117,18 @@ def _binary_expression(value, to_camel_case, serial_field_relations, level_limit
     """
     if hasattr(value, "prop"):
         rel_cls = value.prop.entity.class_
-        if serial_field_relations is None:
-            serial_fields = serial_field_relations.get(value.__name__)
+        if serial_field_relations is not None:
+            serial_fields = serial_field_relations.get(rel_cls._class())
         else:
             serial_fields = None
+        level_limits.add(value._parententity.class_._class())
         rel_fields = rel_cls.db.doc_table(
             rel_cls, to_camel_case, serial_fields, level_limits=level_limits)
 
         if rel_fields != STOP_VALUE:
+            # extract just the fields
+            rel_fields = rel_fields[rel_cls._class()]['properties']
+
             return {
                 "readOnly": True,
                 "relationship": {
