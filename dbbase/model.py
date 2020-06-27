@@ -140,6 +140,15 @@ class Model(object):
         }
 
     @classmethod
+    def  _is_bidirectional(self, field):
+        """ True if can update relation."""
+        rel_info = self._get_relationship(field)
+        if rel_info is not None:
+            if rel_info.back_populates or rel_info.backref:
+                return True
+        return False
+
+    @classmethod
     def _has_self_ref(cls):
         """_has_self_ref
 
