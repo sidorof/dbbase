@@ -94,9 +94,7 @@ class Model(object):
                 "SERIAL_STOPLIST must be a list of one or more fields that"
                 "would not be included in a serialization."
             )
-        return (
-            cls._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
-        )
+        return cls._DEFAULT_SERIAL_STOPLIST + SERIAL_STOPLIST + serial_stoplist
 
     @classmethod
     def _get_relationship(cls, field):
@@ -132,20 +130,27 @@ class Model(object):
         if relation is None:
             return None
 
+        if relation.back_populates or relation.backref:
+            bidirectional = True
+        else:
+            bidirectional = False
+
         return {
             "self-referential": relation.target.name == cls.__tablename__,
             "uselist": relation.uselist,
             "join_depth": relation.join_depth,
-            "lazy": relation.lazy
+            "lazy": relation.lazy,
+            "bidirectional": bidirectional,
         }
 
     @classmethod
-    def  _is_bidirectional(self, field):
+    def _is_bidirectional(self, field):
         """ True if can update relation."""
-        rel_info = self._get_relationship(field)
-        if rel_info is not None:
-            if rel_info.back_populates or rel_info.backref:
-                return True
+
+        rel_info = self._relations_info(field)
+        if rel_info:
+            return rel_info["bidirectional"]
+
         return False
 
     @classmethod
@@ -265,7 +270,7 @@ class Model(object):
 
             value = self.__getattribute__(key)
 
-            if rel_info and rel_info['lazy'] == 'dynamic':
+            if rel_info and rel_info["lazy"] == "dynamic":
                 value = [item for item in value.all()]
 
             status = True
@@ -534,7 +539,8 @@ class Model(object):
 
     @classmethod
     def filter_columns(
-            cls, column_props, only_props=False, to_camel_case=False):
+        cls, column_props, only_props=False, to_camel_case=False
+    ):
         """ filter_columns
 
         This function accepts a model class, a list of column properties to
@@ -558,8 +564,9 @@ class Model(object):
             to_camel_case: (bool) : converts the column names to camel case
 
         """
-        doc = cls.db.doc_table(
-            cls, to_camel_case=to_camel_case)[cls._class()]['properties']
+        doc = cls.db.doc_table(cls, to_camel_case=to_camel_case)[cls._class()][
+            "properties"
+        ]
 
         new_doc = {}
         for column, col_properties in doc.items():
@@ -603,8 +610,7 @@ class Model(object):
             [
                 (key, value)
                 for key, value in cls.filter_columns(
-                    column_props=["foreign_key"],
-                    only_props=True
+                    column_props=["foreign_key"], only_props=True
                 ).items()
                 if value
             ]

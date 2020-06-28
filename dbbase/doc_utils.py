@@ -107,7 +107,9 @@ def _foreign_keys(value):
     return None
 
 
-def _binary_expression(value, to_camel_case, serial_field_relations, level_limits):
+def _binary_expression(
+    value, to_camel_case, serial_field_relations, level_limits, bidirectional
+):
     """ _binary_expression
 
     it is probably a relationship
@@ -123,18 +125,21 @@ def _binary_expression(value, to_camel_case, serial_field_relations, level_limit
             serial_fields = None
         level_limits.add(value._parententity.class_._class())
         rel_fields = rel_cls.db.doc_table(
-            rel_cls, to_camel_case, serial_fields, level_limits=level_limits)
+            rel_cls, to_camel_case, serial_fields, level_limits=level_limits
+        )
 
         if rel_fields != STOP_VALUE:
             # extract just the fields
-            rel_fields = rel_fields[rel_cls._class()]['properties']
+            rel_fields = rel_fields[rel_cls._class()]["properties"]
+
+            read_only = not bidirectional
 
             return {
-                "readOnly": True,
+                "readOnly": read_only,
                 "relationship": {
                     "type": "list" if value.prop.uselist else "single",
                     "entity": rel_cls._class(),
-                    "fields": rel_fields
+                    "fields": rel_fields,
                 },
             }
         else:

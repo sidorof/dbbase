@@ -325,6 +325,7 @@ class TestModelClass(DBBaseTestCase):
                 "uselist": True,
                 "join_depth": None,
                 "lazy": "immediate",
+                "bidirectional": True
             },
         )
 
@@ -372,6 +373,7 @@ class TestModelClass(DBBaseTestCase):
                 "uselist": True,
                 "join_depth": 10,
                 "lazy": "joined",
+                "bidirectional": False
             },
         )
 
@@ -499,6 +501,10 @@ class TestModelClass(DBBaseTestCase):
             addresses = db.relationship(
                 "Address", backref="user", lazy="immediate"
             )
+            role_id = db.Column(
+                db.Integer, db.ForeignKey("roles.id"), nullable=False
+            )
+            role = db.relationship("Role")
 
         class Address(db.Model):
             """related table"""
@@ -508,19 +514,40 @@ class TestModelClass(DBBaseTestCase):
             email_address = db.Column(db.String, nullable=False)
             user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
+        class Role(db.Model):
+            """ related but not bidirectional
+
+            pretend there can only be one role
+            """
+
+            __tablename__ = "roles"
+            id = db.Column(db.Integer, primary_key=True)
+            role = db.Column(db.String, nullable=False)
+
         db.create_all()
+        role = Role(role="staff").save()
+        user = User(name="Bob", role_id=role.id).save()
 
-        user = User(name="Bob").save()
-
-        # really only care if 'self-referential' True or False
         self.assertDictEqual(
+            user._relations_info("addresses"),
             {
                 "self-referential": False,
                 "uselist": True,
                 "join_depth": None,
                 "lazy": "immediate",
+                "bidirectional": True,
             },
-            user._relations_info("addresses"),
+        )
+
+        self.assertDictEqual(
+            user._relations_info("role"),
+            {
+                "self-referential": False,
+                "uselist": False,
+                "join_depth": None,
+                "lazy": "select",
+                "bidirectional": False,
+            },
         )
 
     def test__has_self_ref(self):
@@ -1097,7 +1124,6 @@ class TestModelClass(DBBaseTestCase):
         doc = Book.filter_columns(
             column_props=["!readOnly"], to_camel_case=True, only_props=False
         )
-
         self.assertDictEqual(
             doc,
             {
@@ -1132,6 +1158,41 @@ class TestModelClass(DBBaseTestCase):
                     "nullable": False,
                     "foreign_key": "authors.id",
                     "info": {},
+                },
+                "author": {
+                    "readOnly": False,
+                    "relationship": {
+                        "type": "single",
+                        "entity": "Author",
+                        "fields": {
+                            "id": {
+                                "type": "integer",
+                                "format": "int32",
+                                "primary_key": True,
+                                "nullable": False,
+                                "info": {},
+                            },
+                            "firstName": {
+                                "type": "string",
+                                "maxLength": 50,
+                                "nullable": False,
+                                "info": {},
+                            },
+                            "lastName": {
+                                "type": "string",
+                                "maxLength": 50,
+                                "nullable": False,
+                                "info": {},
+                            },
+                            "testCol": {
+                                "type": "string",
+                                "maxLength": 50,
+                                "nullable": True,
+                                "info": {"writeOnly": True},
+                            },
+                            "fullName": {"readOnly": True},
+                        },
+                    },
                 },
             },
         )

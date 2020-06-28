@@ -82,7 +82,7 @@ class TestDBBaseClass(DBBaseTestCase):
                             "info": {},
                         },
                         "table2": {
-                            "readOnly": True,
+                            "readOnly": False,
                             "relationship": {
                                 "type": "list",
                                 "entity": "Table2",
@@ -132,7 +132,7 @@ class TestDBBaseClass(DBBaseTestCase):
                             "info": {},
                         },
                         "table1": {
-                            "readOnly": True,
+                            "readOnly": False,
                             "relationship": {
                                 "type": "single",
                                 "entity": "Table1",
@@ -165,7 +165,7 @@ class TestDBBaseClass(DBBaseTestCase):
                     "type": "object",
                     "properties": {
                         "table2": {
-                            "readOnly": True,
+                            "readOnly": False,
                             "relationship": {
                                 "type": "list",
                                 "entity": "Table2",
@@ -223,7 +223,7 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "info": {},
                             },
                             "table2": {
-                                "readOnly": True,
+                                "readOnly": False,
                                 "relationship": {
                                     "type": "list",
                                     "entity": "Table2",
@@ -266,7 +266,7 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "info": {},
                             },
                             "table1": {
-                                "readOnly": True,
+                                "readOnly": False,
                                 "relationship": {
                                     "type": "single",
                                     "entity": "Table1",

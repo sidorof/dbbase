@@ -29,7 +29,7 @@ from .doc_utils import (
     _property,
     _function,
     _binary_expression,
-    _foreign_keys
+    _foreign_keys,
 )
 
 
@@ -55,8 +55,14 @@ class DB(object):
     """
 
     def __init__(
-            self, config, model_class=None, checkfirst=True, echo=False,
-            *args, **kwargs):
+        self,
+        config,
+        model_class=None,
+        checkfirst=True,
+        echo=False,
+        *args,
+        **kwargs
+    ):
 
         # not a fan of this
         if config != ":memory:":
@@ -68,7 +74,7 @@ class DB(object):
             self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
 
         # column types
-        self.__setattr__('WriteOnlyColumn', WriteOnlyColumn)
+        self.__setattr__("WriteOnlyColumn", WriteOnlyColumn)
 
         # these are being added on an as-needed basis
         orm_functions = ["relationship", "aliased", "lazyload"]
@@ -83,7 +89,8 @@ class DB(object):
 
         # now create_session is done after importing models
         self.session = self.create_session(
-            checkfirst=checkfirst, echo=echo, *args, **kwargs)
+            checkfirst=checkfirst, echo=echo, *args, **kwargs
+        )
 
     @staticmethod
     def load_model_class(model_class=None):
@@ -216,8 +223,7 @@ class DB(object):
         cls.query = self.session.query(cls)
         cls.db = self
 
-    def doc_tables(
-        self, class_list=None, to_camel_case=False):
+    def doc_tables(self, class_list=None, to_camel_case=False):
         """ doc_tables
 
         This function creates a dictionary of all the table configuratons.
@@ -259,8 +265,7 @@ class DB(object):
         ]
 
         doc_list = [
-            self.doc_table(
-                cls, to_camel_case=to_camel_case)
+            self.doc_table(cls, to_camel_case=to_camel_case)
             for cls in classes
             if isinstance(cls, type) and issubclass(cls, self.Model)
         ]
@@ -271,8 +276,12 @@ class DB(object):
         return doc
 
     def doc_table(
-        self, cls, to_camel_case=False, serial_fields=None,
-        serial_field_relations=None, level_limits=None
+        self,
+        cls,
+        to_camel_case=False,
+        serial_fields=None,
+        serial_field_relations=None,
+        level_limits=None,
     ):
         """ doc_table
 
@@ -298,8 +307,10 @@ class DB(object):
             cls: (class) : the table to be documented
             to_camel_case: (bool) : converts the column names to camel case
             serial_fields: (None : list) : specify a limited list of columns
-            serial_field_relations: (None: dict) : Can control what serial fields are included in relationships
-            level_limits: (None : set) : A technical variable related to preventing runaway recursion. Best to leave it alone.
+            serial_field_relations: (None: dict) : Can control what serial
+            fields are included in relationships
+            level_limits: (None : set) : A technical variable related to
+            preventing runaway recursion. Best to leave it alone.
 
         Return:
 
@@ -354,7 +365,8 @@ class DB(object):
                         value,
                         to_camel_case=to_camel_case,
                         serial_field_relations=serial_field_relations,
-                        level_limits=level_limits
+                        level_limits=level_limits,
+                        bidirectional=cls._is_bidirectional(key),
                     )
                 else:
                     item_dict = {
@@ -387,7 +399,7 @@ class DB(object):
 
     def _process_table_args(self, cls):
 
-        table_args = cls.__dict__.get('__table_args__')
+        table_args = cls.__dict__.get("__table_args__")
         key = "constraints"
         constraints = []
 
@@ -397,22 +409,23 @@ class DB(object):
             if isinstance(table_args, tuple):
                 for item in table_args:
                     if isinstance(item, self.CheckConstraint):
-                        ddict = {'check_constraint': item.sqltext.text}
+                        ddict = {"check_constraint": item.sqltext.text}
                         constraints.append(ddict)
 
                     elif isinstance(item, self.ForeignKeyConstraint):
-                        fk_key = 'foreign_key_constraint'
+                        fk_key = "foreign_key_constraint"
                         ddict = {fk_key: {}}
                         ddict[fk_key].update(_foreign_keys(item.elements))
-                        ddict[fk_key].update({'column_keys': item.column_keys})
+                        ddict[fk_key].update({"column_keys": item.column_keys})
 
                         constraints.append(ddict)
 
                     elif isinstance(item, self.UniqueConstraint):
-                        ddict = {'unique_contraint': {'columns': []}}
+                        ddict = {"unique_contraint": {"columns": []}}
                         for uniq_col in item.columns:
-                            ddict['unique_contraint']['columns'].append(
-                                uniq_col.expression.name)
+                            ddict["unique_contraint"]["columns"].append(
+                                uniq_col.expression.name
+                            )
                         constraints.append(ddict)
         if constraints:
             return {key: constraints}

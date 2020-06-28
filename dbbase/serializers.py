@@ -33,13 +33,13 @@ SERIAL_STOPLIST = [
     "validate_record",
     "SERIAL_STOPLIST",
     "SERIAL_FIELDS",
-    "SERIAL_FIELD_RELATIONS"
+    "SERIAL_FIELD_RELATIONS",
 ]
 
 
 def _eval_value(
-        value, to_camel_case, level_limits, source_class,
-        serial_field_relations):
+    value, to_camel_case, level_limits, source_class, serial_field_relations
+):
     """ _eval_value
 
     This function converts some of the standard values as needed based
@@ -68,7 +68,7 @@ def _eval_value(
     elif isinstance(value, Decimal):
         result = str(value)
     elif isinstance(value, uuid.UUID):
-        result = str(value).replace('-', '')
+        result = str(value).replace("-", "")
     elif isinstance(value, list):
         if value:
             result, level_limits = _eval_value_list(
@@ -95,8 +95,8 @@ def _eval_value(
 
 
 def _eval_value_model(
-        value, to_camel_case, level_limits, source_class,
-        serial_field_relations):
+    value, to_camel_case, level_limits, source_class, serial_field_relations
+):
     """_eval_value_model
 
     if any class within level_limits i self-referential it gets
@@ -120,7 +120,8 @@ def _eval_value_model(
         to_camel_case,
         level_limits=level_limits,
         serial_fields=serial_fields,
-        serial_field_relations=serial_field_relations)
+        serial_field_relations=serial_field_relations,
+    )
 
     level_limits.add(class_name)
 
@@ -128,8 +129,8 @@ def _eval_value_model(
 
 
 def _eval_value_list(
-        value, to_camel_case, level_limits, source_class,
-        serial_field_relations):
+    value, to_camel_case, level_limits, source_class, serial_field_relations
+):
     """_eval_value_list
 
     This function handles values that are lists. While a list that is not
