@@ -92,3 +92,7 @@ print(
 )
 
 input("ready")
+
+# ------------------------------------------------
+print('Print table documentation')
+print(json.dumps(db.doc_tables(), indent=4))

@@ -45,7 +45,7 @@
   
   
   
-    <title>sqlalchemy.ext.declarative.api &#8212; DBBase 0.2.8 documentation</title>
+    <title>sqlalchemy.ext.declarative.api &#8212; DBBase 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="DBBase 0.2.8 documentation"
+        <a href="../../../../index.html" title="DBBase 0.3.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.8</span>
+          <span class="md-header-nav__topic">DBBase 0.3.0</span>
           <span class="md-header-nav__topic"> sqlalchemy.ext.declarative.api </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">DBBase 0.2.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">DBBase 0.3.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="DBBase 0.2.8 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="DBBase 0.3.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="DBBase 0.2.8 documentation">dbbase 0.2.8</a>
+       title="DBBase 0.3.0 documentation">DBBase 0.3.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -353,11 +353,10 @@
 
 
 <span class="k">def</span> <span class="nf">synonym_for</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">map_column</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">"""Decorator that produces an :func:`_orm.synonym`</span>
-<span class="sd">    attribute in conjunction</span>
+    <span class="sd">"""Decorator that produces an :func:`.orm.synonym` attribute in conjunction</span>
 <span class="sd">    with a Python descriptor.</span>
 
-<span class="sd">    The function being decorated is passed to :func:`_orm.synonym` as the</span>
+<span class="sd">    The function being decorated is passed to :func:`.orm.synonym` as the</span>
 <span class="sd">    :paramref:`.orm.synonym.descriptor` parameter::</span>
 
 <span class="sd">        class MyClass(Base):</span>
@@ -379,7 +378,7 @@
 
 <span class="sd">        :ref:`synonyms` - Overview of synonyms</span>
 
-<span class="sd">        :func:`_orm.synonym` - the mapper-level function</span>
+<span class="sd">        :func:`.orm.synonym` - the mapper-level function</span>
 
 <span class="sd">        :ref:`mapper_hybrids` - The Hybrid Attribute extension provides an</span>
 <span class="sd">        updated approach to augmenting attribute behavior more flexibly than</span>
@@ -620,7 +619,7 @@
 
 <span class="sd">    :param class_registry: optional dictionary that will serve as the</span>
 <span class="sd">      registry of class names-&gt; mapped classes when string names</span>
-<span class="sd">      are used to identify classes inside of :func:`_orm.relationship`</span>
+<span class="sd">      are used to identify classes inside of :func:`.relationship`</span>
 <span class="sd">      and others.  Allows two or more declarative base classes</span>
 <span class="sd">      to share the same registry of class names for simplified</span>
 <span class="sd">      inter-base relationships.</span>
@@ -739,6 +738,8 @@
 
 <span class="sd">        :ref:`concrete_inheritance`</span>
 
+<span class="sd">        :ref:`inheritance_concrete_helpers`</span>
+
 
 <span class="sd">    """</span>
 
@@ -802,7 +803,7 @@
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            :func:`_orm.configure_mappers`</span>
+<span class="sd">            :func:`.orm.configure_mappers`</span>
 
 
 <span class="sd">    Example::</span>
@@ -876,6 +877,8 @@
 <span class="sd">        :class:`.ConcreteBase`</span>
 
 <span class="sd">        :ref:`concrete_inheritance`</span>
+
+<span class="sd">        :ref:`inheritance_concrete_helpers`</span>
 
 <span class="sd">    """</span>
 
@@ -953,17 +956,17 @@
 <span class="sd">    a deferred reflection step.</span>
 
 <span class="sd">    Normally, declarative can be used with reflection by</span>
-<span class="sd">    setting a :class:`_schema.Table` object using autoload=True</span>
+<span class="sd">    setting a :class:`.Table` object using autoload=True</span>
 <span class="sd">    as the ``__table__`` attribute on a declarative class.</span>
-<span class="sd">    The caveat is that the :class:`_schema.Table` must be fully</span>
+<span class="sd">    The caveat is that the :class:`.Table` must be fully</span>
 <span class="sd">    reflected, or at the very least have a primary key column,</span>
 <span class="sd">    at the point at which a normal declarative mapping is</span>
-<span class="sd">    constructed, meaning the :class:`_engine.Engine` must be available</span>
+<span class="sd">    constructed, meaning the :class:`.Engine` must be available</span>
 <span class="sd">    at class declaration time.</span>
 
 <span class="sd">    The :class:`.DeferredReflection` mixin moves the construction</span>
 <span class="sd">    of mappers to be at a later point, after a specific</span>
-<span class="sd">    method is called which first reflects all :class:`_schema.Table`</span>
+<span class="sd">    method is called which first reflects all :class:`.Table`</span>
 <span class="sd">    objects created so far.   Classes can define it as such::</span>
 
 <span class="sd">        from sqlalchemy.ext.declarative import declarative_base</span>
@@ -1017,7 +1020,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
-        <span class="sd">"""Reflect all :class:`_schema.Table` objects for all current</span>
+        <span class="sd">"""Reflect all :class:`.Table` objects for all current</span>
 <span class="sd">        :class:`.DeferredReflection` subclasses"""</span>
 
         <span class="n">to_map</span> <span class="o">=</span> <span class="n">_DeferredMapperConfig</span><span class="o">.</span><span class="n">classes_for_base</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
@@ -1116,7 +1119,7 @@
               
           </div>
             Last updated on
-              Jun 19, 2020.
+              Jun 28, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

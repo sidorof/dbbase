@@ -2,9 +2,9 @@
 User Guide
 ==========
 
-**dbbase** is a base implementation for creating SQLAlchemy models in a similar fashion to Flask-SQLAlchemy, but for use outside of the Flask environment. By using this it provides continuity to the code base, and maintains some the design advantages that Flask-SQLAlchemy implements.
+**DBBase** is a base implementation for creating SQLAlchemy models in a similar fashion to Flask-SQLAlchemy, but for use outside of the Flask environment. By using this it provides continuity to the code base, and maintains some the design advantages that Flask-SQLAlchemy implements.
 
-**dbbase** also embodies default serialization / deserialization services as part of the Model class to cut down on total coding. Since much of the purpose of serialization is the creation of JSON objects that are to be used by JavaScript, it also can automatically convert the keys to camelCase (and back) as well.
+**DBBase** also embodies default serialization / deserialization services as part of the Model class to cut down on total coding. Since much of the purpose of serialization is the creation of JSON objects that are to be used by JavaScript, it also can automatically convert the keys to camelCase (and back) as well.
 
 ------------
 Introduction
@@ -14,7 +14,7 @@ SQLAlchemy's design implements a clear separation between the session object, co
 
 Flask-SQLAlchemy uses SQLAlchemy, but provides an alternate approach to the design by embodying the session object into a primary database object (usually **db**), and suffusing the query into the table models as well. By doing so, many of the tools for interacting with the database are present and available within a table class.
 
-**dbbase** maintains some continuity with the Flask-SQLAlchemy coding style.
+**DBBase** maintains some continuity with the Flask-SQLAlchemy coding style.
 
 --------------------
 Database Connections
@@ -96,7 +96,7 @@ The following code compares typical table definition styles:
         addresses = db.relationship(
             "Address", backref="user", lazy='immediate')
 
-    # dbbase
+    # DBBase
     class User(db.Model):
         __tablename__ = 'users'
         id = db.Column(db.Integer, primary_key=True)
@@ -117,7 +117,7 @@ The differences can be seen when interacting with the database. There is a ready
   # Flask-SQLAlchemy
   qry = User.query.filter_by(name='Bob').all()
 
-  # dbbase
+  # DBBase
   qry = User.query.filter_by(name='Bob').all()
 
 ..
@@ -128,17 +128,17 @@ First, we will create a user:
 
 .. code-block:: python
 
-  # both Flask-SQLAlchemy and dbbase
+  # both Flask-SQLAlchemy and DBBase
   user = User(name='Bob')
   db.session.add(user)
   db.session.commit()
 ..
 
-**dbbase** also has a reference for convenience to the **db** variable within the Model class and the object instance.
+**DBBase** also has a reference for convenience to the **db** variable within the Model class and the object instance.
 
 .. code-block:: python
 
-  # or dbbase via Model class
+  # or DBBase via Model class
   user = User(name='Bob')
   User.db.session.add(user)
   User.db.session.commit()
@@ -153,7 +153,7 @@ Or, saving can be done via:
 
 .. code-block:: python
 
-  # dbbase
+  # DBBase
   user = User(name='Bob')
   User.save()
 
@@ -165,7 +165,7 @@ Deletion can also be done via the instance.
 
 .. code-block:: python
 
-  # dbbase
+  # DBBase
   user = User(name='Bob')
   User.save()
 
@@ -211,7 +211,7 @@ For consistency when communicating from an API to a front end application, a con
 
 Caveat
 
-**dbbase** objects provide access to the SQLAlchemy **query** object, not the Flask-SQLAlchemy **query** object. Therefore you would not expect `User.query.get_or_404` to be available.
+**DBBase** objects provide access to the SQLAlchemy **query** object, not the Flask-SQLAlchemy **query** object. Therefore you would not expect `User.query.get_or_404` to be available.
 
 -------------
 Serialization
@@ -680,29 +680,45 @@ In the example shown, the column names have been converted to camel case. Front 
             "Address": {
                 "type": "object",
                 "properties": {
-                    "emailAddress": {
-                        "name": "email_address",
-                        "type": "string",
-                        "nullable": false,
-                        "info": {}
-                    },
                     "id": {
-                        "name": "id",
                         "type": "integer",
                         "format": "int32",
                         "primary_key": true,
                         "nullable": false,
                         "info": {}
                     },
-                    "userId": {
-                        "name": "user_id",
+                    "email_address": {
+                        "type": "string",
+                        "nullable": false,
+                        "info": {}
+                    },
+                    "user_id": {
                         "type": "integer",
                         "format": "int32",
                         "nullable": true,
                         "foreign_key": "users.id",
                         "info": {}
+                    },
+                    "user": {
+                        "readOnly": false,
+                        "relationship": {
+                            "type": "single",
+                            "entity": "User",
+                            "fields": {
+                                "id": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "primary_key": true,
+                                    "nullable": false,
+                                    "info": {}
+                                },
+                                "full_name": {
+                                    "readOnly": true
+                                }
+                            }
+                        }
                     }
-                }
+                },
                 "xml": "Address"
             },
             "User": {
@@ -715,23 +731,43 @@ In the example shown, the column names have been converted to camel case. Front 
                         "nullable": false,
                         "info": {}
                     },
-                    "firstName": {
-                        "type": "string",
-                        "maxLength": 50,
-                        "nullable": false,
-                        "info": {}
+                    "addresses": {
+                        "readOnly": false,
+                        "relationship": {
+                            "type": "list",
+                            "entity": "Address",
+                            "fields": {
+                                "id": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "primary_key": true,
+                                    "nullable": false,
+                                    "info": {}
+                                },
+                                "email_address": {
+                                    "type": "string",
+                                    "nullable": false,
+                                    "info": {}
+                                },
+                                "user_id": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "nullable": true,
+                                    "foreign_key": "users.id",
+                                    "info": {}
+                                }
+                            }
+                        }
                     },
-                    "lastName": {
-                        "type": "string",
-                        "maxLength": 50,
-                        "nullable": false,
-                        "info": {}
+                    "full_name": {
+                        "readOnly": true
                     }
                 },
                 "xml": "User"
             }
         }
     }
+..
 
 Filtering for Form Data and Query Strings
 =========================================
@@ -1306,5 +1342,5 @@ This output illustrates a range of some of what is available and how the paramet
 ..
 
 
-**dbbase** is compatible with Python >=3.6 and is distributed under the
+**DBBase** is compatible with Python >=3.6 and is distributed under the
 MIT license.

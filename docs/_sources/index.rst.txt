@@ -1,4 +1,4 @@
-dbbase documentation
+DBBase documentation
 ====================
 
 .. mdinclude:: ../../README.md

@@ -1,4 +1,7 @@
 # Changelog
+## (0.3.0) -
+*   Changed the documentation function for tables. Relationships had been treated as read-only for documentation purposes in the sense that an update process would naturally be focused on the explicit column variables for any given table. However, this neglects the possibility for bidirectional updates when the `back_populates` and `backref` feature is used. `doc_tables` now show readOnly True or False for related tables depending on how the relations are set. Since this breaks the previous `doc_table` function, the version has been bumped to 0.3.0.
+
 ## (0.2.8) -
 *   Added greater depth to documentation functions for relationships.
 

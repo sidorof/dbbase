@@ -56,11 +56,6 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'alabaster'
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -87,14 +82,15 @@ html_theme = "sphinx_material"
 # Material theme options (see theme.conf for more information)
 html_theme_options = {
     # Set the name of the project to appear in the navigation.
-    "nav_title": "dbbase {}".format(release),
+    "nav_title": "DBBase {}".format(release),
     # Set you GA account ID to enable tracking
     # "google_analytics_account": 'here',
     # Specify a base_url used to generate sitemap.xml. If not
     # specified, then no sitemap will be built.
-    "base_url": "https://dbbase.github.io",
+    "base_url": "https://sidorof.github.io/dbbase/",
     # Set the color and the accent color
     "color_primary": "blue",
+
     # Set the repo location to get a badge with stats
     "repo_url": "https://github.com/sidorof/dbbase/",
     "repo_name": "dbbase",

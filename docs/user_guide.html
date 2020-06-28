@@ -45,7 +45,7 @@
   
   
   
-    <title>User Guide &#8212; DBBase 0.2.8 documentation</title>
+    <title>User Guide &#8212; DBBase 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/material.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="DBBase 0.2.8 documentation"
+        <a href="index.html" title="DBBase 0.3.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -102,7 +102,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.8</span>
+          <span class="md-header-nav__topic">DBBase 0.3.0</span>
           <span class="md-header-nav__topic"> User Guide </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">DBBase 0.2.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">DBBase 0.3.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -177,13 +177,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="DBBase 0.2.8 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="DBBase 0.3.0 documentation" class="md-nav__button md-logo">
       
         <img src="_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="DBBase 0.2.8 documentation">dbbase 0.2.8</a>
+       title="DBBase 0.3.0 documentation">DBBase 0.3.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -348,13 +348,13 @@
             
   
 <h1 id="user-guide--page-root">User Guide<a class="headerlink" href="#user-guide--page-root" title="Permalink to this headline">¶</a></h1>
-<p><strong>dbbase</strong> is a base implementation for creating SQLAlchemy models in a similar fashion to Flask-SQLAlchemy, but for use outside of the Flask environment. By using this it provides continuity to the code base, and maintains some the design advantages that Flask-SQLAlchemy implements.</p>
-<p><strong>dbbase</strong> also embodies default serialization / deserialization services as part of the Model class to cut down on total coding. Since much of the purpose of serialization is the creation of JSON objects that are to be used by JavaScript, it also can automatically convert the keys to camelCase (and back) as well.</p>
+<p><strong>DBBase</strong> is a base implementation for creating SQLAlchemy models in a similar fashion to Flask-SQLAlchemy, but for use outside of the Flask environment. By using this it provides continuity to the code base, and maintains some the design advantages that Flask-SQLAlchemy implements.</p>
+<p><strong>DBBase</strong> also embodies default serialization / deserialization services as part of the Model class to cut down on total coding. Since much of the purpose of serialization is the creation of JSON objects that are to be used by JavaScript, it also can automatically convert the keys to camelCase (and back) as well.</p>
 
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>SQLAlchemy’s design implements a clear separation between the session object, connections to a database, and the table definitions, the model. With such a separation, normal database usage involves carrying the session object into each program or function and combining it with the table class model for the appropriate actions.</p>
 <p>Flask-SQLAlchemy uses SQLAlchemy, but provides an alternate approach to the design by embodying the session object into a primary database object (usually <strong>db</strong>), and suffusing the query into the table models as well. By doing so, many of the tools for interacting with the database are present and available within a table class.</p>
-<p><strong>dbbase</strong> maintains some continuity with the Flask-SQLAlchemy coding style.</p>
+<p><strong>DBBase</strong> maintains some continuity with the Flask-SQLAlchemy coding style.</p>
 
 
 <h2 id="database-connections">Database Connections<a class="headerlink" href="#database-connections" title="Permalink to this headline">¶</a></h2>
@@ -418,7 +418,7 @@ it by extracting it from the environment and feeding it into DB.</p>
     <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
         <span class="s2">"Address"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'immediate'</span><span class="p">)</span>
 
-<span class="c1"># dbbase</span>
+<span class="c1"># DBBase</span>
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'users'</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -435,20 +435,20 @@ it by extracting it from the environment and feeding it into DB.</p>
 <span class="c1"># Flask-SQLAlchemy</span>
 <span class="n">qry</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
-<span class="c1"># dbbase</span>
+<span class="c1"># DBBase</span>
 <span class="n">qry</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The query object is conveniently available for use in the Model class.</p>
 <p>First, we will create a user:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># both Flask-SQLAlchemy and dbbase</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># both Flask-SQLAlchemy and DBBase</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
 <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>dbbase</strong> also has a reference for convenience to the <strong>db</strong> variable within the Model class and the object instance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># or dbbase via Model class</span>
+<p><strong>DBBase</strong> also has a reference for convenience to the <strong>db</strong> variable within the Model class and the object instance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># or DBBase via Model class</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
 <span class="n">User</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 <span class="n">User</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -460,7 +460,7 @@ it by extracting it from the environment and feeding it into DB.</p>
 </pre></div>
 </div>
 <p>Or, saving can be done via:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># dbbase</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># DBBase</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
 <span class="n">User</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
@@ -469,7 +469,7 @@ it by extracting it from the environment and feeding it into DB.</p>
 </pre></div>
 </div>
 <p>Deletion can also be done via the instance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># dbbase</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># DBBase</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Bob'</span><span class="p">)</span>
 <span class="n">User</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
@@ -501,7 +501,7 @@ it by extracting it from the environment and feeding it into DB.</p>
 </pre></div>
 </div>
 <p>Caveat</p>
-<p><strong>dbbase</strong> objects provide access to the SQLAlchemy <strong>query</strong> object, not the Flask-SQLAlchemy <strong>query</strong> object. Therefore you would not expect <cite>User.query.get_or_404</cite> to be available.</p>
+<p><strong>DBBase</strong> objects provide access to the SQLAlchemy <strong>query</strong> object, not the Flask-SQLAlchemy <strong>query</strong> object. Therefore you would not expect <cite>User.query.get_or_404</cite> to be available.</p>
 
 
 <h2 id="serialization">Serialization<a class="headerlink" href="#serialization" title="Permalink to this headline">¶</a></h2>
@@ -891,30 +891,46 @@ used. However, with these variables, you can generate custom serializations on t
         <span class="nt">"Address"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
             <span class="nt">"properties"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">"emailAddress"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"email_address"</span><span class="p">,</span>
-                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
-                <span class="p">},</span>
                 <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"id"</span><span class="p">,</span>
                     <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                     <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                     <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                     <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
-                <span class="nt">"userId"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"user_id"</span><span class="p">,</span>
+                <span class="nt">"email_address"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"user_id"</span><span class="p">:</span> <span class="p">{</span>
                     <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
                     <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
                     <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                     <span class="nt">"foreign_key"</span><span class="p">:</span> <span class="s2">"users.id"</span><span class="p">,</span>
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="nt">"user"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"readOnly"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"relationship"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"single"</span><span class="p">,</span>
+                        <span class="nt">"entity"</span><span class="p">:</span> <span class="s2">"User"</span><span class="p">,</span>
+                        <span class="nt">"fields"</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                                <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                            <span class="p">},</span>
+                            <span class="nt">"full_name"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">"readOnly"</span><span class="p">:</span> <span class="kc">true</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="s2">"xml"</span><span class="p">:</span> <span class="s2">"Address"</span>
+            <span class="p">},</span>
+            <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"Address"</span>
         <span class="p">},</span>
         <span class="nt">"User"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
@@ -926,17 +942,36 @@ used. However, with these variables, you can generate custom serializations on t
                     <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
                     <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
-                <span class="nt">"firstName"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-                    <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="nt">"addresses"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"readOnly"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nt">"relationship"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+                        <span class="nt">"entity"</span><span class="p">:</span> <span class="s2">"Address"</span><span class="p">,</span>
+                        <span class="nt">"fields"</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="nt">"id"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                                <span class="nt">"primary_key"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                            <span class="p">},</span>
+                            <span class="nt">"email_address"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                            <span class="p">},</span>
+                            <span class="nt">"user_id"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+                                <span class="nt">"format"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span>
+                                <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                                <span class="nt">"foreign_key"</span><span class="p">:</span> <span class="s2">"users.id"</span><span class="p">,</span>
+                                <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
                 <span class="p">},</span>
-                <span class="nt">"lastName"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-                    <span class="nt">"maxLength"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-                    <span class="nt">"nullable"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-                    <span class="nt">"info"</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="nt">"full_name"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">"readOnly"</span><span class="p">:</span> <span class="kc">true</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="nt">"xml"</span><span class="p">:</span> <span class="s2">"User"</span>
@@ -1501,7 +1536,7 @@ used. However, with these variables, you can generate custom serializations on t
   <span class="nt">xml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BigTable</span>
 </pre></div>
 </div>
-<p><strong>dbbase</strong> is compatible with Python &gt;=3.6 and is distributed under the
+<p><strong>DBBase</strong> is compatible with Python &gt;=3.6 and is distributed under the
 MIT license.</p>
 
 
@@ -1555,7 +1590,7 @@ MIT license.</p>
               
           </div>
             Last updated on
-              Jun 19, 2020.
+              Jun 28, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

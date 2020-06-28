@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; DBBase 0.2.8 documentation</title>
+    <title>dbbase.model &#8212; DBBase 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="DBBase 0.2.8 documentation"
+        <a href="../../index.html" title="DBBase 0.3.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.8</span>
+          <span class="md-header-nav__topic">DBBase 0.3.0</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.2.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="DBBase 0.2.8 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="DBBase 0.3.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="DBBase 0.2.8 documentation">dbbase 0.2.8</a>
+       title="DBBase 0.3.0 documentation">DBBase 0.3.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -364,9 +364,7 @@
                 <span class="s2">"SERIAL_STOPLIST must be a list of one or more fields that"</span>
                 <span class="s2">"would not be included in a serialization."</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_DEFAULT_SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">SERIAL_STOPLIST</span> <span class="o">+</span> <span class="n">serial_stoplist</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_get_relationship</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
@@ -402,12 +400,28 @@
         <span class="k">if</span> <span class="n">relation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">back_populates</span> <span class="ow">or</span> <span class="n">relation</span><span class="o">.</span><span class="n">backref</span><span class="p">:</span>
+            <span class="n">bidirectional</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bidirectional</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"self-referential"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__tablename__</span><span class="p">,</span>
             <span class="s2">"uselist"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">uselist</span><span class="p">,</span>
             <span class="s2">"join_depth"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">join_depth</span><span class="p">,</span>
-            <span class="s2">"lazy"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">lazy</span>
+            <span class="s2">"lazy"</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">lazy</span><span class="p">,</span>
+            <span class="s2">"bidirectional"</span><span class="p">:</span> <span class="n">bidirectional</span><span class="p">,</span>
         <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_is_bidirectional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">""" True if can update relation."""</span>
+
+        <span class="n">rel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relations_info</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rel_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rel_info</span><span class="p">[</span><span class="s2">"bidirectional"</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_has_self_ref</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -526,7 +540,7 @@
 
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">rel_info</span> <span class="ow">and</span> <span class="n">rel_info</span><span class="p">[</span><span class="s1">'lazy'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'dynamic'</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rel_info</span> <span class="ow">and</span> <span class="n">rel_info</span><span class="p">[</span><span class="s2">"lazy"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"dynamic"</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
 
             <span class="n">status</span> <span class="o">=</span> <span class="kc">True</span>
@@ -795,7 +809,8 @@
 
 <div class="viewcode-block" id="Model.filter_columns"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.filter_columns.html#dbbase.model.Model.filter_columns">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">filter_columns</span><span class="p">(</span>
-            <span class="bp">cls</span><span class="p">,</span> <span class="n">column_props</span><span class="p">,</span> <span class="n">only_props</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">column_props</span><span class="p">,</span> <span class="n">only_props</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
         <span class="sd">""" filter_columns</span>
 
 <span class="sd">        This function accepts a model class, a list of column properties to</span>
@@ -819,8 +834,9 @@
 <span class="sd">            to_camel_case: (bool) : converts the column names to camel case</span>
 
 <span class="sd">        """</span>
-        <span class="n">doc</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span>
-            <span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span><span class="s1">'properties'</span><span class="p">]</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">doc_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">to_camel_case</span><span class="o">=</span><span class="n">to_camel_case</span><span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()][</span>
+            <span class="s2">"properties"</span>
+        <span class="p">]</span>
 
         <span class="n">new_doc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">col_properties</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -864,8 +880,7 @@
             <span class="p">[</span>
                 <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">filter_columns</span><span class="p">(</span>
-                    <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">],</span>
-                    <span class="n">only_props</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="n">column_props</span><span class="o">=</span><span class="p">[</span><span class="s2">"foreign_key"</span><span class="p">],</span> <span class="n">only_props</span><span class="o">=</span><span class="kc">True</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">value</span>
             <span class="p">]</span>
@@ -910,7 +925,7 @@
               
           </div>
             Last updated on
-              Jun 19, 2020.
+              Jun 28, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -45,7 +45,7 @@
   
   
   
-    <title>sqlalchemy.sql.operators &#8212; DBBase 0.2.8 documentation</title>
+    <title>sqlalchemy.sql.operators &#8212; DBBase 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../index.html" title="DBBase 0.2.8 documentation"
+        <a href="../../../index.html" title="DBBase 0.3.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">dbbase 0.2.8</span>
+          <span class="md-header-nav__topic">DBBase 0.3.0</span>
           <span class="md-header-nav__topic"> sqlalchemy.sql.operators </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">DBBase 0.2.8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">DBBase 0.3.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../index.html" title="DBBase 0.2.8 documentation" class="md-nav__button md-logo">
+    <a href="../../../index.html" title="DBBase 0.3.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../index.html"
-       title="DBBase 0.2.8 documentation">dbbase 0.2.8</a>
+       title="DBBase 0.3.0 documentation">DBBase 0.3.0</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -331,7 +331,7 @@
 
 <span class="sd">        When used with SQL expressions, results in an</span>
 <span class="sd">        AND operation, equivalent to</span>
-<span class="sd">        :func:`_expression.and_`, that is::</span>
+<span class="sd">        :func:`~.expression.and_`, that is::</span>
 
 <span class="sd">            a &amp; b</span>
 
@@ -355,7 +355,7 @@
 
 <span class="sd">        When used with SQL expressions, results in an</span>
 <span class="sd">        OR operation, equivalent to</span>
-<span class="sd">        :func:`_expression.or_`, that is::</span>
+<span class="sd">        :func:`~.expression.or_`, that is::</span>
 
 <span class="sd">            a | b</span>
 
@@ -379,7 +379,7 @@
 
 <span class="sd">        When used with SQL expressions, results in a</span>
 <span class="sd">        NOT operation, equivalent to</span>
-<span class="sd">        :func:`_expression.not_`, that is::</span>
+<span class="sd">        :func:`~.expression.not_`, that is::</span>
 
 <span class="sd">            ~a</span>
 
@@ -566,7 +566,7 @@
 
 <span class="k">class</span> <span class="nc">ColumnOperators</span><span class="p">(</span><span class="n">Operators</span><span class="p">):</span>
     <span class="sd">"""Defines boolean, comparison, and other operators for</span>
-<span class="sd">    :class:`_expression.ColumnElement` expressions.</span>
+<span class="sd">    :class:`.ColumnElement` expressions.</span>
 
 <span class="sd">    By default, all methods call down to</span>
 <span class="sd">    :meth:`.operate` or :meth:`.reverse_operate`,</span>
@@ -584,9 +584,9 @@
 <span class="sd">        def eq(a, b):</span>
 <span class="sd">            return a == b</span>
 
-<span class="sd">    The core column expression unit :class:`_expression.ColumnElement`</span>
+<span class="sd">    The core column expression unit :class:`.ColumnElement`</span>
 <span class="sd">    overrides :meth:`.Operators.operate` and others</span>
-<span class="sd">    to return further :class:`_expression.ColumnElement` constructs,</span>
+<span class="sd">    to return further :class:`.ColumnElement` constructs,</span>
 <span class="sd">    so that the ``==`` operation above is replaced by a clause</span>
 <span class="sd">    construct.</span>
 
@@ -815,8 +815,7 @@
 
 <span class="sd">          This "false" expression has historically had different behaviors</span>
 <span class="sd">          in older SQLAlchemy versions, see</span>
-<span class="sd">          :paramref:`_sa.create_engine.empty_in_strategy`</span>
-<span class="sd">          for behavioral options.</span>
+<span class="sd">          :paramref:`.create_engine.empty_in_strategy` for behavioral options.</span>
 
 <span class="sd">          .. versionchanged:: 1.2 simplified the behavior of "empty in"</span>
 <span class="sd">             expressions</span>
@@ -852,8 +851,7 @@
 <span class="sd">          .. versionadded:: 1.3 "expanding" bound parameters now support</span>
 <span class="sd">             empty lists</span>
 
-<span class="sd">        * a :func:`_expression.select` construct,</span>
-<span class="sd">          which is usually a correlated</span>
+<span class="sd">        * a :func:`.select` construct, which is usually a correlated</span>
 <span class="sd">          scalar select::</span>
 
 <span class="sd">            stmt.where(</span>
@@ -868,8 +866,7 @@
 <span class="sd">            WHERE COL IN (SELECT othertable.y</span>
 <span class="sd">            FROM othertable WHERE othertable.x = table.x)</span>
 
-<span class="sd">        :param other: a list of literals, a :func:`_expression.select`</span>
-<span class="sd">         construct,</span>
+<span class="sd">        :param other: a list of literals, a :func:`.select` construct,</span>
 <span class="sd">         or a :func:`.bindparam` construct that includes the</span>
 <span class="sd">         :paramref:`.bindparam.expanding` flag set to True.</span>
 
@@ -885,7 +882,7 @@
 <span class="sd">        In the case that ``other`` is an empty sequence, the compiler</span>
 <span class="sd">        produces an "empty not in" expression.   This defaults to the</span>
 <span class="sd">        expression "1 = 1" to produce true in all cases.  The</span>
-<span class="sd">        :paramref:`_sa.create_engine.empty_in_strategy` may be used to</span>
+<span class="sd">        :paramref:`.create_engine.empty_in_strategy` may be used to</span>
 <span class="sd">        alter this behavior.</span>
 
 <span class="sd">        .. versionchanged:: 1.2  The :meth:`.ColumnOperators.in_` and</span>
@@ -1236,32 +1233,32 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">match_op</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">desc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.desc` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.desc` clause against the</span>
 <span class="sd">        parent object."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">desc_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">asc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.asc` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.asc` clause against the</span>
 <span class="sd">        parent object."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">asc_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">nullsfirst</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.nullsfirst` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.nullsfirst` clause against the</span>
 <span class="sd">        parent object."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">nullsfirst_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">nullslast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.nullslast` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.nullslast` clause against the</span>
 <span class="sd">        parent object."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">nullslast_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">collate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collation</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.collate` clause against</span>
+        <span class="sd">"""Produce a :func:`~.expression.collate` clause against</span>
 <span class="sd">        the parent object, given the collation string.</span>
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            :func:`_expression.collate`</span>
+<span class="sd">            :func:`~.expression.collate`</span>
 
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">collate</span><span class="p">,</span> <span class="n">collation</span><span class="p">)</span>
@@ -1307,21 +1304,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_operate</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">between</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cleft</span><span class="p">,</span> <span class="n">cright</span><span class="p">,</span> <span class="n">symmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.between` clause against</span>
+        <span class="sd">"""Produce a :func:`~.expression.between` clause against</span>
 <span class="sd">        the parent object, given the lower and upper range.</span>
 
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">between_op</span><span class="p">,</span> <span class="n">cleft</span><span class="p">,</span> <span class="n">cright</span><span class="p">,</span> <span class="n">symmetric</span><span class="o">=</span><span class="n">symmetric</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.distinct` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.distinct` clause against the</span>
 <span class="sd">        parent object.</span>
 
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">distinct_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">any_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.any_` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.any_` clause against the</span>
 <span class="sd">        parent object.</span>
 
 <span class="sd">        This operator is only appropriate against a scalar subquery</span>
@@ -1336,9 +1333,9 @@
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            :func:`_expression.any_` - standalone version</span>
+<span class="sd">            :func:`~.expression.any_` - standalone version</span>
 
-<span class="sd">            :func:`_expression.all_` - ALL operator</span>
+<span class="sd">            :func:`~.expression.all_` - ALL operator</span>
 
 <span class="sd">        .. versionadded:: 1.1</span>
 
@@ -1346,7 +1343,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operate</span><span class="p">(</span><span class="n">any_op</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">all_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Produce a :func:`_expression.all_` clause against the</span>
+        <span class="sd">"""Produce a :func:`~.expression.all_` clause against the</span>
 <span class="sd">        parent object.</span>
 
 <span class="sd">        This operator is only appropriate against a scalar subquery</span>
@@ -1361,9 +1358,9 @@
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            :func:`_expression.all_` - standalone version</span>
+<span class="sd">            :func:`~.expression.all_` - standalone version</span>
 
-<span class="sd">            :func:`_expression.any_` - ANY operator</span>
+<span class="sd">            :func:`~.expression.any_` - ANY operator</span>
 
 <span class="sd">        .. versionadded:: 1.1</span>
 
@@ -1799,7 +1796,7 @@
               
           </div>
             Last updated on
-              Jun 19, 2020.
+              Jun 28, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
