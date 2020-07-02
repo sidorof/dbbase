@@ -1,5 +1,14 @@
 # Changelog
+## (0.3.1) -
+### Change
+*   Changed the documentation function for tables. Relationships settings. In the case of a relationship that is a single, not a list, the readOnly setting has been changed back to True.
+
+In the case of a Parent model having a list of children, marking a related Child as not readOnly makes sense because a child object can be appended to a children. Upon saving such as model, both parent and children that have been appended will be commited.
+
+In the case of a child relationship that is 'single', the append method is not possible, nor would the assigned id of a child make its way to the child_id of the parent. Therefore, for practical purposes it is marked readOnly: True.
+
 ## (0.3.0) -
+### Change
 *   Changed the documentation function for tables. Relationships had been treated as read-only for documentation purposes in the sense that an update process would naturally be focused on the explicit column variables for any given table. However, this neglects the possibility for bidirectional updates when the `back_populates` and `backref` feature is used. `doc_tables` now show readOnly True or False for related tables depending on how the relations are set. Since this breaks the previous `doc_table` function, the version has been bumped to 0.3.0.
 
 ## (0.2.8) -

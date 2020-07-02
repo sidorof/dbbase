@@ -1159,40 +1159,5 @@ class TestModelClass(DBBaseTestCase):
                     "foreign_key": "authors.id",
                     "info": {},
                 },
-                "author": {
-                    "readOnly": False,
-                    "relationship": {
-                        "type": "single",
-                        "entity": "Author",
-                        "fields": {
-                            "id": {
-                                "type": "integer",
-                                "format": "int32",
-                                "primary_key": True,
-                                "nullable": False,
-                                "info": {},
-                            },
-                            "firstName": {
-                                "type": "string",
-                                "maxLength": 50,
-                                "nullable": False,
-                                "info": {},
-                            },
-                            "lastName": {
-                                "type": "string",
-                                "maxLength": 50,
-                                "nullable": False,
-                                "info": {},
-                            },
-                            "testCol": {
-                                "type": "string",
-                                "maxLength": 50,
-                                "nullable": True,
-                                "info": {"writeOnly": True},
-                            },
-                            "fullName": {"readOnly": True},
-                        },
-                    },
-                },
             },
         )

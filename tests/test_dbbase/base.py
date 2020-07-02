@@ -132,7 +132,7 @@ class TestDBBaseClass(DBBaseTestCase):
                             "info": {},
                         },
                         "table1": {
-                            "readOnly": False,
+                            "readOnly": True,
                             "relationship": {
                                 "type": "single",
                                 "entity": "Table1",
@@ -266,7 +266,7 @@ class TestDBBaseClass(DBBaseTestCase):
                                 "info": {},
                             },
                             "table1": {
-                                "readOnly": False,
+                                "readOnly": True,
                                 "relationship": {
                                     "type": "single",
                                     "entity": "Table1",

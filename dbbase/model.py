@@ -130,7 +130,7 @@ class Model(object):
         if relation is None:
             return None
 
-        if relation.back_populates or relation.backref:
+        if (relation.back_populates or relation.backref) and relation.uselist:
             bidirectional = True
         else:
             bidirectional = False
