@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.2) -
+### Change
+*   Corrected an issue when recursively documenting relationship variables that occasionally resulted in skipped variables.
+
 ## (0.3.1) -
 ### Change
 *   Changed the documentation function for tables. Relationships settings. In the case of a relationship that is a single, not a list, the readOnly setting has been changed back to True.
