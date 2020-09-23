@@ -282,6 +282,7 @@ class DB(object):
         serial_fields=None,
         serial_field_relations=None,
         level_limits=None,
+        orig_cls=None,
     ):
         """ doc_table
 
@@ -300,7 +301,8 @@ class DB(object):
                 to_camel_case=False,
                 serial_fields=None,
                 serial_field_relations=None,
-                level_limits=None
+                level_limits=None,
+                orig_cls=None
             )
 
         Args:
@@ -311,6 +313,8 @@ class DB(object):
             fields are included in relationships
             level_limits: (None : set) : A technical variable related to
             preventing runaway recursion. Best to leave it alone.
+            orig_cls: (None: str) : A technical variable related to recursion,
+            leave this variable alone as well.
 
         Return:
 
@@ -326,6 +330,7 @@ class DB(object):
 
         if level_limits is None:
             level_limits = set()
+            orig_cls = cls._class()
 
         if cls._class() in level_limits:
             # it has already been done
@@ -360,6 +365,11 @@ class DB(object):
                     # done afterwards because keys in expression can change
 
                 elif isinstance(value.expression, BinaryExpression):
+                    var_cls = value.prop.entity.class_._class()
+                    if orig_cls is not None and var_cls in level_limits:
+                        # avoids erroneous exclusion
+                        level_limits.remove(var_cls)
+
                     # relationship or None
                     item_dict = _binary_expression(
                         value,
