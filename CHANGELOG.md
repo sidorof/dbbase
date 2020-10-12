@@ -1,4 +1,58 @@
 # Changelog
+## (0.3.3) -
+### Add
+*   Added a utility function `get_model_defaults`. With this function a dictionary of keys and instanced default variables can be created. The intent of this function derives from wanting some portability and avoidance of interacting with a remote database until it is absolutely necessary, yet avoid rewriting class functions that are already written.
+
+The idea is that use of the model instances would have all the methods, functionality, and comforts of home except for anything that connects to the database. One way to do this:
+
+... python
+
+    from datetime import datetime
+    import requests
+
+    from dbbase import DB
+    from dbbase.utils import get_model_defaults
+
+    # we use db only for creating the model
+    # this results are sent to an API.
+    db = DB(':memory:')
+
+    class Table1(db.Model):
+        __tablename__ = "table1"
+
+        id = db.Column(db.Integer, primary_key=True)
+        start_time = db.Column(
+            db.DateTime,
+            default=datetime.now
+            nullable=False
+        )
+
+        def myMethod(self):
+            # does something useful
+            returns answer
+
+    db.create_all()
+
+    defaults = get_model_defaults(Table1)
+    # results in {"start_time": datetime obj here}
+
+    table = Table1(**defaults)
+
+    # so there is a scaffolding in the form of the
+    # table in which to use the object.
+
+    # now it is time to send to the API.
+    post_res = requests.post(
+        url=TABLE_URL,
+        json=table.to_dict(),
+        headers={"Content-type": "application/json"}
+    )
+
+...
+
+Once the object is posted, the object will become part of the database with such things as the `id` assigned, any server defaults, etc will be created.
+
+
 ## (0.3.2) -
 ### Change
 *   Corrected an issue when recursively documenting relationship variables that occasionally resulted in skipped variables.
