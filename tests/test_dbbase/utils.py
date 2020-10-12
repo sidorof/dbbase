@@ -1,5 +1,6 @@
 # tests/test_dbbase/utils.py
 """This module tests utility functions."""
+from datetime import date, datetime
 import json
 
 from . import BaseTestCase
@@ -102,3 +103,49 @@ class TestUtilities(BaseTestCase):
         # shoehorned in
         key = "StartDate"
         self.assertEqual(_xlate_from_camel_case(key), "start_date")
+
+
+    def test_get_model_defaults(self):
+        """
+        This test creates a model with defaults
+        and tests whether the defaults are
+        identified correctly.
+        """
+        import uuid
+        db = self.dbbase.DB(':memory:')
+        get_model_defaults = self.dbbase.utils.get_model_defaults
+
+        class TestDefaults(db.Model):
+            __tablename__ = "test_default"
+
+            id = db.Column(db.Integer, primary_key=True)
+
+            # model defaults - explicit values
+            name = db.Column(db.String, default="string default", nullable=False)
+            another_id = db.Column(db.SmallInteger, default=100)
+
+            # model default - a function
+            created_at1 = db.Column(db.DateTime, default=datetime.now)
+
+            # server default
+            created_at2 = db.Column(db.DateTime, server_default=db.func.now())
+
+            # model default - but only updates - should not be included
+            update_time1 = db.Column(db.DateTime, onupdate=datetime.now())
+
+            # server default - but only updates - should not be included
+            update_time2 = db.Column(
+                db.DateTime, server_onupdate=db.func.now()
+            )
+
+        db.create_all()
+
+        defaults = get_model_defaults(TestDefaults)
+
+        self.assertSetEqual(
+            set(['name', 'another_id', 'created_at1']),
+            set(defaults.keys())
+        )
+
+        self.assertEqual(defaults['another_id'], 100)
+        self.assertIsInstance(defaults['created_at1'], datetime)

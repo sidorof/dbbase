@@ -116,3 +116,29 @@ def _xlate_from_camel_case(key):
     if new_key.startswith("_"):
         new_key = new_key[1:]
     return new_key
+
+
+def get_model_defaults(cls):
+    """
+    This function receives a model class and returns the default values
+    for the class in the form of a dict.
+
+    If the default value is a function, the function will be executed. This is meant for simple functions such as datetime and uuid.
+
+    Args:
+        cls: (obj) : A Model class.
+
+    Returns:
+        defaults: (dict) : A dictionary of the default values.
+    """
+    tmp = {}
+    for key in cls.__dict__.keys():
+         col = cls.__dict__[key]
+         if hasattr(col, 'expression'):
+             if col.expression.default is not None:
+                arg = col.expression.default.arg
+                if callable(arg):
+                    tmp[key] = arg(cls.db)
+                else:
+                    tmp[key] = arg
+    return tmp
