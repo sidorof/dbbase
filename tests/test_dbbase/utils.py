@@ -104,7 +104,6 @@ class TestUtilities(BaseTestCase):
         key = "StartDate"
         self.assertEqual(_xlate_from_camel_case(key), "start_date")
 
-
     def test_get_model_defaults(self):
         """
         This test creates a model with defaults
@@ -112,7 +111,8 @@ class TestUtilities(BaseTestCase):
         identified correctly.
         """
         import uuid
-        db = self.dbbase.DB(':memory:')
+
+        db = self.dbbase.DB(":memory:")
         get_model_defaults = self.dbbase.utils.get_model_defaults
 
         class TestDefaults(db.Model):
@@ -121,7 +121,9 @@ class TestUtilities(BaseTestCase):
             id = db.Column(db.Integer, primary_key=True)
 
             # model defaults - explicit values
-            name = db.Column(db.String, default="string default", nullable=False)
+            name = db.Column(
+                db.String, default="string default", nullable=False
+            )
             another_id = db.Column(db.SmallInteger, default=100)
 
             # model default - a function
@@ -143,9 +145,8 @@ class TestUtilities(BaseTestCase):
         defaults = get_model_defaults(TestDefaults)
 
         self.assertSetEqual(
-            set(['name', 'another_id', 'created_at1']),
-            set(defaults.keys())
+            set(["name", "another_id", "created_at1"]), set(defaults.keys())
         )
 
-        self.assertEqual(defaults['another_id'], 100)
-        self.assertIsInstance(defaults['created_at1'], datetime)
+        self.assertEqual(defaults["another_id"], 100)
+        self.assertIsInstance(defaults["created_at1"], datetime)
