@@ -350,8 +350,8 @@ class Model(object):
             indent=indent,
         )
 
-    @staticmethod
-    def deserialize(data, from_camel_case=True):
+    @classmethod
+    def deserialize(cls, data, from_camel_case=True, only_columns=False):
         """deserialize
 
         Convert back to column names that are more pythonic.
@@ -361,7 +361,7 @@ class Model(object):
         posting.
 
         Default:
-            deserialize(data, from_camel_case=True)
+            deserialize(data, from_camel_case=True, only_columns=False)
 
         Args:
             data: (bytes : str : dict) : JSON string that is to be converted
@@ -369,6 +369,8 @@ class Model(object):
                 needs to have the keys converted to snake_case.
             from_camel_case: (bool) : True will cause the keys to be converted
                 back to snake_case.
+            only_columns: (bool) : True will cause the keys that are not columns
+                to be stripped out.
         Returns:
             data (obj) : the converted data
         """
@@ -383,7 +385,14 @@ class Model(object):
             result = {}
             for key, value in data.items():
                 key = xlate(key, camel_case=False)
-                result[key] = value
+                if only_columns:
+                    if key in cls.__dict__:
+                        if isinstance(
+                            cls.__dict__[key].expression, cls.db.Column
+                        ):
+                            result[key] = value
+                else:
+                    result[key] = value
 
         else:
             # it must be a list
@@ -392,7 +401,14 @@ class Model(object):
                 res = {}
                 for key, value in line.items():
                     key = xlate(key, camel_case=False)
-                    res[key] = value
+                    if only_columns:
+                        if key in cls.__dict__:
+                            if isinstance(
+                                cls.__dict__[key].expression, cls.db.Column
+                            ):
+                                res[key] = value
+                    else:
+                        res[key] = value
                 result.append(res)
 
         return result

@@ -325,7 +325,7 @@ class TestModelClass(DBBaseTestCase):
                 "uselist": True,
                 "join_depth": None,
                 "lazy": "immediate",
-                "bidirectional": True
+                "bidirectional": True,
             },
         )
 
@@ -373,7 +373,7 @@ class TestModelClass(DBBaseTestCase):
                 "uselist": True,
                 "join_depth": 10,
                 "lazy": "joined",
-                "bidirectional": False
+                "bidirectional": False,
             },
         )
 
@@ -926,26 +926,68 @@ class TestModelClass(DBBaseTestCase):
 
         table1 = Table1(long_name="this is a long name").save()
 
-        data = {"id": 1, "longName": "this is a long name"}
+        data = {
+            "id": 1,
+            "longName": "this is a long name",
+            "other": "This is a test",
+        }
 
         self.assertDictEqual(
             table1.deserialize(data, from_camel_case=True),
+            {
+                "id": 1,
+                "long_name": "this is a long name",
+                "other": "This is a test",
+            },
+        )
+
+        self.assertDictEqual(
+            table1.deserialize(data, from_camel_case=True, only_columns=True),
             {"id": 1, "long_name": "this is a long name"},
         )
+
         self.assertDictEqual(
             table1.deserialize(data, from_camel_case=False),
-            {"id": 1, "longName": "this is a long name"},
+            {
+                "id": 1,
+                "longName": "this is a long name",
+                "other": "This is a test",
+            },
         )
 
         data = json.dumps(
             [
-                {"id": 3, "longName": "this is a long name"},
-                {"id": 4, "longName": "this is a long name"},
+                {
+                    "id": 3,
+                    "longName": "this is a long name",
+                    "other": "This is a test3",
+                },
+                {
+                    "id": 4,
+                    "longName": "this is a long name",
+                    "other": "This is a test4",
+                },
             ]
         )
 
         self.assertListEqual(
             table1.deserialize(data, from_camel_case=True),
+            [
+                {
+                    "id": 3,
+                    "long_name": "this is a long name",
+                    "other": "This is a test3",
+                },
+                {
+                    "id": 4,
+                    "long_name": "this is a long name",
+                    "other": "This is a test4",
+                },
+            ],
+        )
+
+        self.assertListEqual(
+            table1.deserialize(data, from_camel_case=True, only_columns=True),
             [
                 {"id": 3, "long_name": "this is a long name"},
                 {"id": 4, "long_name": "this is a long name"},
