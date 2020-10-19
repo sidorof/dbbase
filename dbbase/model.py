@@ -374,6 +374,13 @@ class Model(object):
         Returns:
             data (obj) : the converted data
         """
+        def only_column_check(key):
+            if key in cls.__dict__:
+                if hasattr(cls.__dict__[key], "expression"):
+                    return isinstance(
+                        cls.__dict__[key].expression, cls.db.Column)
+            return False
+
         if isinstance(data, str) or isinstance(data, bytes):
             # assume json
             data = json.loads(data)
@@ -386,11 +393,8 @@ class Model(object):
             for key, value in data.items():
                 key = xlate(key, camel_case=False)
                 if only_columns:
-                    if key in cls.__dict__:
-                        if isinstance(
-                            cls.__dict__[key].expression, cls.db.Column
-                        ):
-                            result[key] = value
+                    if only_column_check(key):
+                        result[key] = value
                 else:
                     result[key] = value
 
@@ -402,11 +406,8 @@ class Model(object):
                 for key, value in line.items():
                     key = xlate(key, camel_case=False)
                     if only_columns:
-                        if key in cls.__dict__:
-                            if isinstance(
-                                cls.__dict__[key].expression, cls.db.Column
-                            ):
-                                res[key] = value
+                        if only_column_check(key):
+                            res[key] = value
                     else:
                         res[key] = value
                 result.append(res)

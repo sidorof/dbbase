@@ -922,6 +922,12 @@ class TestModelClass(DBBaseTestCase):
             id = db.Column(db.Integer, primary_key=True)
             long_name = db.Column(db.String, nullable=False)
 
+            def another_method(self):
+                if self.long_name is not None:
+                    return self.long_name.capitalize()
+                else:
+                    return None
+
         db.create_all()
 
         table1 = Table1(long_name="this is a long name").save()
@@ -929,7 +935,12 @@ class TestModelClass(DBBaseTestCase):
         data = {
             "id": 1,
             "longName": "this is a long name",
+
+            # extraneous garbage
             "other": "This is a test",
+
+            # data included in a serialization
+            "anotherMethod": "This Is A Long Name"
         }
 
         self.assertDictEqual(
@@ -938,6 +949,7 @@ class TestModelClass(DBBaseTestCase):
                 "id": 1,
                 "long_name": "this is a long name",
                 "other": "This is a test",
+                "another_method": "This Is A Long Name"
             },
         )
 
@@ -952,6 +964,7 @@ class TestModelClass(DBBaseTestCase):
                 "id": 1,
                 "longName": "this is a long name",
                 "other": "This is a test",
+                "anotherMethod": "This Is A Long Name"
             },
         )
 
@@ -961,11 +974,13 @@ class TestModelClass(DBBaseTestCase):
                     "id": 3,
                     "longName": "this is a long name",
                     "other": "This is a test3",
+                    "another_method": "This Is A Long Name"
                 },
                 {
                     "id": 4,
                     "longName": "this is a long name",
                     "other": "This is a test4",
+                    "another_method": "This Is A Long Name"
                 },
             ]
         )
@@ -977,11 +992,13 @@ class TestModelClass(DBBaseTestCase):
                     "id": 3,
                     "long_name": "this is a long name",
                     "other": "This is a test3",
+                    "another_method": "This Is A Long Name"
                 },
                 {
                     "id": 4,
                     "long_name": "this is a long name",
                     "other": "This is a test4",
+                    "another_method": "This Is A Long Name"
                 },
             ],
         )

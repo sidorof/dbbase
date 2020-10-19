@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.5) -
+### Change
+*   Changed `Model.deserialize` for `only_columns=True`. Added an additional check when iterating model properties, correcting an error.
+
 ## (0.3.4) -
 ### Change
 *   Added a paramater, `only_columns=True`,  to `Model.deserialize` for filtering data to only data that pertains to columns. Up to now, `deserialize` for any class provided a generic means to convert JSON data into dictionaries with the option of converting the data from camel case to snake case. With this added parameter, `only_columns=True`, it is slightly easier to add dictionary data to create a model.
