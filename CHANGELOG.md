@@ -1,5 +1,32 @@
 # Changelog
+## (0.3.4) -
+### Change
+*   Added a paramater, `only_columns=True`,  to `Model.deserialize` for filtering data to only data that pertains to columns. Up to now, `deserialize` for any class provided a generic means to convert JSON data into dictionaries with the option of converting the data from camel case to snake case. With this added parameter, `only_columns=True`, it is slightly easier to add dictionary data to create a model.
+
+... python
+
+    # example: id, and long_name are columns, other is something else
+    data = {
+        "id": 1,
+        "longName": "this is a name",
+        "other": "This is a test",
+    }
+
+    # this would fail because 'other' is not a column
+    my_object = MyModel(
+        **MyModel.deserialize(data)
+    )
+
+    # this would work due to the only_columns=True
+    my_object = MyModel(
+        **MyModel.deserialize(data, only_columns=True)
+    )
+
+...
+
+
 ## (0.3.3) -
+
 ### Add
 *   Added a utility function `get_model_defaults`. With this function a dictionary of keys and instanced default variables can be created. The intent of this function derives from wanting some portability and avoidance of interacting with a remote database until it is absolutely necessary, yet avoid rewriting class functions that are already written.
 
