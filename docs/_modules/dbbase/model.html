@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model &#8212; DBBase 0.3.3 documentation</title>
+    <title>dbbase.model &#8212; DBBase 0.3.4 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="DBBase 0.3.3 documentation"
+        <a href="../../index.html" title="DBBase 0.3.4 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">DBBase 0.3.3</span>
+          <span class="md-header-nav__topic">DBBase 0.3.4</span>
           <span class="md-header-nav__topic"> dbbase.model </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.3 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.4 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="DBBase 0.3.3 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="DBBase 0.3.4 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="DBBase 0.3.3 documentation">DBBase 0.3.3</a>
+       title="DBBase 0.3.4 documentation">DBBase 0.3.4</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -620,8 +620,8 @@
             <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.deserialize"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">from_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.deserialize"><a class="viewcode-back" href="../../_generated/dbbase.model.Model.deserialize.html#dbbase.model.Model.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">from_camel_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">only_columns</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">"""deserialize</span>
 
 <span class="sd">        Convert back to column names that are more pythonic.</span>
@@ -631,7 +631,7 @@
 <span class="sd">        posting.</span>
 
 <span class="sd">        Default:</span>
-<span class="sd">            deserialize(data, from_camel_case=True)</span>
+<span class="sd">            deserialize(data, from_camel_case=True, only_columns=False)</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data: (bytes : str : dict) : JSON string that is to be converted</span>
@@ -639,6 +639,8 @@
 <span class="sd">                needs to have the keys converted to snake_case.</span>
 <span class="sd">            from_camel_case: (bool) : True will cause the keys to be converted</span>
 <span class="sd">                back to snake_case.</span>
+<span class="sd">            only_columns: (bool) : True will cause the keys that are not columns</span>
+<span class="sd">                to be stripped out.</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            data (obj) : the converted data</span>
 <span class="sd">        """</span>
@@ -653,7 +655,14 @@
             <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">xlate</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">if</span> <span class="n">only_columns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                            <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">Column</span>
+                        <span class="p">):</span>
+                            <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># it must be a list</span>
@@ -662,7 +671,14 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">key</span> <span class="o">=</span> <span class="n">xlate</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">camel_case</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                    <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">if</span> <span class="n">only_columns</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                                <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">Column</span>
+                            <span class="p">):</span>
+                                <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
@@ -925,7 +941,7 @@
               
           </div>
             Last updated on
-              Oct 12, 2020.
+              Oct 18, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

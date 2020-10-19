@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.model.Model.deserialize &#8212; DBBase 0.3.3 documentation</title>
+    <title>dbbase.model.Model.deserialize &#8212; DBBase 0.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="DBBase 0.3.3 documentation"
+        <a href="../index.html" title="DBBase 0.3.4 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">DBBase 0.3.3</span>
+          <span class="md-header-nav__topic">DBBase 0.3.4</span>
           <span class="md-header-nav__topic"> dbbase.model.Model.deserialize </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">DBBase 0.3.3 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">DBBase 0.3.4 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="DBBase 0.3.3 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="DBBase 0.3.4 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="DBBase 0.3.3 documentation">DBBase 0.3.3</a>
+       title="DBBase 0.3.4 documentation">DBBase 0.3.4</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -271,13 +271,13 @@
 <h1 id="generated-dbbase-model-model-deserialize--page-root">dbbase.model.Model.deserialize<a class="headerlink" href="#generated-dbbase-model-model-deserialize--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="dbbase.model.Model.deserialize">
-<em class="property">static </em><code class="sig-prename descclassname">Model.</code><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">from_camel_case=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/model.html#Model.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.model.Model.deserialize" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-prename descclassname">Model.</code><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">from_camel_case=True</em>, <em class="sig-param">only_columns=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/model.html#Model.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.model.Model.deserialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert back to column names that are more pythonic.</p>
 <p>Note that this function does not update the model object. That is
 left to another function that can validate the data prior to
 posting.</p>
 <dl class="simple">
-<dt>Default:</dt><dd><p>deserialize(data, from_camel_case=True)</p>
+<dt>Default:</dt><dd><p>deserialize(data, from_camel_case=True, only_columns=False)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -288,6 +288,8 @@ back to a dict. <cite>data</cite> can also be a dict or list that simply
 needs to have the keys converted to snake_case.</p></li>
 <li><p><strong>from_camel_case</strong> – (bool) : True will cause the keys to be converted
 back to snake_case.</p></li>
+<li><p><strong>only_columns</strong> – (bool) : True will cause the keys that are not columns
+to be stripped out.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -321,7 +323,7 @@ back to snake_case.</p></li>
               
           </div>
             Last updated on
-              Oct 12, 2020.
+              Oct 18, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
