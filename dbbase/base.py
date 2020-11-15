@@ -33,7 +33,7 @@ from .doc_utils import (
 )
 
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class DB(object):
@@ -311,7 +311,7 @@ class DB(object):
             serial_fields: (None : list) : specify a limited list of columns
             serial_field_relations: (None: dict) : Can control what serial
             fields are included in relationships
-            level_limits: (None : set) : A technical variable related to
+            level_limits: (None : dict) : A technical variable related to
             preventing runaway recursion. Best to leave it alone.
             orig_cls: (None: str) : A technical variable related to recursion,
             leave this variable alone as well.
@@ -329,12 +329,14 @@ class DB(object):
             properties[key] = item_dict
 
         if level_limits is None:
-            level_limits = set()
+            level_limits = {}
             orig_cls = cls._class()
 
         if cls._class() in level_limits:
             # it has already been done
             if not cls._has_self_ref():
+                return STOP_VALUE
+            elif level_limits[cls._class()] > 1:
                 return STOP_VALUE
 
         properties = {}
@@ -368,7 +370,7 @@ class DB(object):
                     var_cls = value.prop.entity.class_._class()
                     if orig_cls is not None and var_cls in level_limits:
                         # avoids erroneous exclusion
-                        level_limits.remove(var_cls)
+                        level_limits.pop(var_cls)
 
                     # relationship or None
                     item_dict = _binary_expression(

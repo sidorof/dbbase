@@ -226,8 +226,18 @@ class TestDocUtilities(DBBaseTestCase):
 
             self.PostgresTable = PostgresTable
 
+        # for test of recursion issue
+        class Node(db.Model):
+            __tablename__ = 'node'
+            id = db.Column(db.Integer, primary_key=True)
+            parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
+            children = db.relationship(
+                "Node", lazy="joined", order_by="Node.id", join_depth=1
+            )
+
         self.BigTable = BigTable
         self.OtherTable = OtherTable
+        self.Node = Node
         self.db.create_all()
 
     def test_doc_util_types(self):
@@ -719,3 +729,54 @@ class TestDocUtilities(DBBaseTestCase):
         test_cols = list(test_doc[self.BigTable.__name__]["properties"].keys())
 
         self.assertListEqual(camel_case_cols, test_cols)
+
+    def test_node_recursion(self):
+
+        self.assertDictEqual(
+            {
+                "Node": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "format": "int32",
+                            "primary_key": True,
+                            "nullable": False,
+                            "info": {}
+                        },
+                        "parent_id": {
+                            "type": "integer",
+                            "format": "int32",
+                            "nullable": True,
+                            "foreign_key": "node.id",
+                            "info": {}
+                        },
+                        "children": {
+                            "readOnly": True,
+                            "relationship": {
+                                "type": "list",
+                                "entity": "Node",
+                                "fields": {
+                                    "id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "primary_key": True,
+                                        "nullable": False,
+                                        "info": {}
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "nullable": True,
+                                        "foreign_key": "node.id",
+                                        "info": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "xml": "Node"
+                }
+            },
+            self.db.doc_table(self.Node)
+        )

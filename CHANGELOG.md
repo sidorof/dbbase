@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.6) -
+### Change
+*   Corrected an error that occurred in `Base.doc_table` where self-referencing tables descended into recursive hole.
+
 ## (0.3.5) -
 ### Change
 *   Changed `Model.deserialize` for `only_columns=True`. Added an additional check when iterating model properties, correcting an error.

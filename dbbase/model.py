@@ -221,9 +221,9 @@ class Model(object):
         Args:
             to_camel_case (boolean) : dict keys will be converted to camel
                 case.
-            level_limits: (set : None) : This is more of a technical parameter
+            level_limits: (dict : None) : This is more of a technical parameter
                 that is used to limit recursion, but if a class name is
-                listed in the set, `to_dict` will not process that class.
+                listed in the dict, `to_dict` will not process that class.
             sort: (bool) : This flag determines whether the keys will be
                 sorted.
             serial_fields (list) : a list of fields to be substituted for
@@ -237,7 +237,7 @@ class Model(object):
             (dict) | a dictionary of fields and values
         """
         if level_limits is None:
-            level_limits = set()
+            level_limits = {}
 
         if serial_field_relations is None:
             serial_field_relations = {}
@@ -297,7 +297,7 @@ class Model(object):
                     result[key] = res
 
         if self._class() not in level_limits:
-            level_limits.add(self._class())
+            level_limits[self._class()] = 1
 
         return result
 
@@ -322,9 +322,9 @@ class Model(object):
 
         Args:
             to_camel_case (boolean) True converts to camel case.
-            level_limits: (set : None) : This is more of a technical parameter
+            level_limits: (dict : None) : This is more of a technical parameter
                 that is used to limit recursion, but if a class name is
-                listed in the set, `to_dict` will not process that class.
+                listed in the dict, `to_dict` will not process that class.
             sort: (bool) : This flag determines whether the keys will be
                 sorted.
             indent: (integer : None) The number of spaces to indent to improve

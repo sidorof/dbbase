@@ -54,7 +54,7 @@ def _eval_value(
             Boolean for converting keys to camel case
 
         level_limits
-            set of classes that have been visited already
+            dict of classes that have been visited already
             it is to prevent infinite recursion situations
         source_class
 
@@ -114,7 +114,8 @@ def _eval_value_model(
         serial_fields = serial_field_relations[class_name]
 
     if source_class is not None:
-        level_limits.add(source_class)
+        level_limits.setdefault(source_class, 0)
+        level_limits[source_class] += 1
 
     result = value.to_dict(
         to_camel_case,
@@ -123,7 +124,8 @@ def _eval_value_model(
         serial_field_relations=serial_field_relations,
     )
 
-    level_limits.add(class_name)
+    level_limits.setdefault(class_name, 0)
+    level_limits[class_name] += 1
 
     return result, level_limits
 

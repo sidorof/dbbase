@@ -123,7 +123,12 @@ def _binary_expression(
             serial_fields = serial_field_relations.get(rel_cls._class())
         else:
             serial_fields = None
-        level_limits.add(value._parententity.class_._class())
+
+        parent_class = value._parententity.class_._class()
+
+        level_limits.setdefault(parent_class, 0)
+        level_limits[parent_class] += 1
+
         rel_fields = rel_cls.db.doc_table(
             rel_cls, to_camel_case, serial_fields, level_limits=level_limits
         )

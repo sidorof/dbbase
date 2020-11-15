@@ -13,7 +13,7 @@ from . import DBBaseTestCase
 def init_variables(obj):
     """common variables"""
     obj.to_camel_case = True
-    obj.level_limits = set()
+    obj.level_limits = {}
 
 
 def reset_serial_variables(cls, objs):
@@ -153,7 +153,7 @@ class TestSerializers(DBBaseTestCase):
             _eval_value(
                 value,
                 to_camel_case=True,
-                level_limits=set(),
+                level_limits={},
                 source_class=None,
                 serial_field_relations={},
             ),
@@ -165,7 +165,7 @@ class TestSerializers(DBBaseTestCase):
             _eval_value(
                 value,
                 to_camel_case=False,
-                level_limits=set(),
+                level_limits={},
                 source_class=None,
                 serial_field_relations={},
             ),
@@ -173,8 +173,7 @@ class TestSerializers(DBBaseTestCase):
         )
 
         # model has been already processed, so level_limits has class
-        level_limits = set()
-        level_limits.add(user._class())
+        level_limits = {user._class(): 1}
         self.assertEqual(
             _eval_value(
                 value,
@@ -238,7 +237,7 @@ class TestSerializers(DBBaseTestCase):
         db.session.refresh(address2)
 
         value = address1
-        level_limits = set()
+        level_limits = {}
         # starts from no source_class, so does address => user, then stops
         self.assertDictEqual(
             _eval_value(
@@ -257,7 +256,7 @@ class TestSerializers(DBBaseTestCase):
         )
 
         value = user
-        level_limits = set()
+        level_limits = {}
         self.assertDictEqual(
             _eval_value(
                 value,
@@ -313,12 +312,12 @@ class TestSerializers(DBBaseTestCase):
         db.session.refresh(user2)
 
         value = ["something", "trivial"]
-        level_limits = set()
+        level_limits = {}
         self.assertTupleEqual(
             _eval_value_list(
                 value,
                 to_camel_case=True,
-                level_limits=set(),
+                level_limits={},
                 source_class=None,
                 serial_field_relations={},
             ),
@@ -326,13 +325,13 @@ class TestSerializers(DBBaseTestCase):
         )
 
         value = [user1, user2]
-        level_limits = set()
+        level_limits = {}
 
         self.assertTupleEqual(
             _eval_value_list(
                 value,
                 to_camel_case=True,
-                level_limits=set(),
+                level_limits={},
                 source_class=None,
                 serial_field_relations={},
             ),
@@ -341,7 +340,7 @@ class TestSerializers(DBBaseTestCase):
                     {"id": user1.id, "name": "Bob"},
                     {"id": user2.id, "name": "JimBob"},
                 ],
-                set([user1._class()]),
+                {user1._class(): 2},
             ),
         )
 
@@ -396,7 +395,7 @@ class TestSerializers(DBBaseTestCase):
         # recursion. Because it starts with _eval_value_model, the assumption
         # is that it stems from another model to start.
         value = user
-        level_limits = set()
+        level_limits = {}
         self.assertTupleEqual(
             _eval_value_model(
                 value,
@@ -422,14 +421,14 @@ class TestSerializers(DBBaseTestCase):
                         },
                     ],
                 },
-                set([user._class()]),
+                {user._class(): 2},
             ),
         )
 
         # starting with address
         # should find and include the user data as well
         value = address1
-        level_limits = set()
+        level_limits = {}
         self.assertTupleEqual(
             _eval_value_model(
                 value,
@@ -445,7 +444,9 @@ class TestSerializers(DBBaseTestCase):
                     "userId": user.id,
                     "user": {"id": user.id, "name": "Bob"},
                 },
-                set([address1._class(), user._class()]),
+                {
+                    address1._class(): 2, user._class(): 2
+                },
             ),
         )
 
@@ -479,7 +480,7 @@ class TestSerializers(DBBaseTestCase):
 
         # prove it works with _eval_value_model
         value = address1
-        level_limits = set()
+        level_limits = {}
         self.assertTupleEqual(
             _eval_value_model(
                 value,
@@ -490,13 +491,13 @@ class TestSerializers(DBBaseTestCase):
             ),
             (
                 {"emailAddress": "email1@example.com"},
-                set([address1._class()]),
+                {address1._class(): 2},
             ),
         )
 
         # Combine user and addresses
         value = user
-        level_limits = set()
+        level_limits = {}
         reset_serial_variables(User, user)
         self.assertTupleEqual(
             _eval_value_model(
@@ -519,7 +520,7 @@ class TestSerializers(DBBaseTestCase):
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class()]),
+                {user._class(): 2},
             ),
         )
 
@@ -529,7 +530,7 @@ class TestSerializers(DBBaseTestCase):
         reset_serial_variables(Address, [address1, address2])
 
         value = user
-        level_limits = set()
+        level_limits = {}
         self.assertTupleEqual(
             _eval_value_model(
                 value,
@@ -559,12 +560,12 @@ class TestSerializers(DBBaseTestCase):
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class()]),
+                {user._class(): 2},
             ),
         )
 
         # modify address via serial_field_relations
-        level_limits = set()
+        level_limits = {}
         value = user
         self.assertTupleEqual(
             _eval_value_model(
@@ -587,7 +588,7 @@ class TestSerializers(DBBaseTestCase):
                 # NOTE: not quite sure if address should be included here
                 #       it certainly processed an address enough to get the
                 #       address.
-                set([user._class()]),
+                {user._class(): 2},
             ),
         )
 
@@ -653,7 +654,7 @@ class TestSerializers(DBBaseTestCase):
             _eval_value_model(
                 value,
                 to_camel_case=True,
-                level_limits=set(),
+                level_limits={},
                 source_class=None,
                 serial_field_relations={},
             ),
@@ -697,6 +698,6 @@ class TestSerializers(DBBaseTestCase):
                     "data": "this is node1",
                     "parentId": None,
                 },
-                set([node1._class()]),
+                {node1._class(): 2},
             ),
         )
