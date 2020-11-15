@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.base &#8212; DBBase 0.3.5 documentation</title>
+    <title>dbbase.base &#8212; DBBase 0.3.6 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="DBBase 0.3.5 documentation"
+        <a href="../../index.html" title="DBBase 0.3.6 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">DBBase 0.3.5</span>
+          <span class="md-header-nav__topic">DBBase 0.3.6</span>
           <span class="md-header-nav__topic"> dbbase.base </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.5 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.6 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="DBBase 0.3.5 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="DBBase 0.3.6 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="DBBase 0.3.5 documentation">DBBase 0.3.5</a>
+       title="DBBase 0.3.6 documentation">DBBase 0.3.6</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -303,7 +303,7 @@
 <span class="p">)</span>
 
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DB"><a class="viewcode-back" href="../../_generated/dbbase.DB.html#dbbase.DB">[docs]</a><span class="k">class</span> <span class="nc">DB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -581,7 +581,7 @@
 <span class="sd">            serial_fields: (None : list) : specify a limited list of columns</span>
 <span class="sd">            serial_field_relations: (None: dict) : Can control what serial</span>
 <span class="sd">            fields are included in relationships</span>
-<span class="sd">            level_limits: (None : set) : A technical variable related to</span>
+<span class="sd">            level_limits: (None : dict) : A technical variable related to</span>
 <span class="sd">            preventing runaway recursion. Best to leave it alone.</span>
 <span class="sd">            orig_cls: (None: str) : A technical variable related to recursion,</span>
 <span class="sd">            leave this variable alone as well.</span>
@@ -599,12 +599,14 @@
             <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item_dict</span>
 
         <span class="k">if</span> <span class="n">level_limits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">level_limits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">level_limits</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">orig_cls</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span> <span class="ow">in</span> <span class="n">level_limits</span><span class="p">:</span>
             <span class="c1"># it has already been done</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_self_ref</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">STOP_VALUE</span>
+            <span class="k">elif</span> <span class="n">level_limits</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_class</span><span class="p">()]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">STOP_VALUE</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
@@ -638,7 +640,7 @@
                     <span class="n">var_cls</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">prop</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">class_</span><span class="o">.</span><span class="n">_class</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">orig_cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">var_cls</span> <span class="ow">in</span> <span class="n">level_limits</span><span class="p">:</span>
                         <span class="c1"># avoids erroneous exclusion</span>
-                        <span class="n">level_limits</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">var_cls</span><span class="p">)</span>
+                        <span class="n">level_limits</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var_cls</span><span class="p">)</span>
 
                     <span class="c1"># relationship or None</span>
                     <span class="n">item_dict</span> <span class="o">=</span> <span class="n">_binary_expression</span><span class="p">(</span>
@@ -750,7 +752,7 @@
               
           </div>
             Last updated on
-              Oct 19, 2020.
+              Nov 14, 2020.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
