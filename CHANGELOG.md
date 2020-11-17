@@ -1,4 +1,65 @@
 # Changelog
+## (0.3.7) -
+### Change
+*   Corrected an error that occurred using properties on fields in Model. Also, added a more complete account to `Base.doc_table` of properties. A check is made on a property to determine if a setter is available. An example illustrates the issue:
+
+... python
+
+    class Table1(db.Model):
+        __tablename__ = "table1"
+
+        id = db.Column(db.Integer, primary_key=True)
+
+        def __init__(self, id=None, writable=None):
+            self.id = id
+            self._writable = writable
+
+        @property
+        def writable(self) -> str:
+            return self._writable
+
+        @writable.setter
+        def writable(self, text) -> str:
+            self._writable(text)
+
+        @property
+        def not_writable(self) -> str:
+            return "this is not writable"
+...
+
+Two properties have been created, one writable and one not. So you would want a `doc_table` decription to reflect that detail.
+
+... python
+
+    {
+        "Table1": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "primary_key": True,
+                    "nullable": False,
+                    "info": {},
+                },
+                "writable": {
+                    "property": True,
+                    "readOnly": False,
+                    "type": "str",
+                },
+                "not_writable": {
+                    "property": True,
+                    "readOnly": True,
+                    "type": "str",
+                },
+            },
+            "xml": "Table1",
+        }
+    }
+
+...
+
+
 ## (0.3.6) -
 ### Change
 *   Corrected an error that occurred in `Base.doc_table` where self-referencing tables descended into recursive hole.
