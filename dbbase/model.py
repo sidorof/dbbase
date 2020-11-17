@@ -375,11 +375,13 @@ class Model(object):
         Returns:
             data (obj) : the converted data
         """
+
         def only_column_check(key):
             if key in cls.__dict__:
                 if hasattr(cls.__dict__[key], "expression"):
                     return isinstance(
-                        cls.__dict__[key].expression, cls.db.Column)
+                        cls.__dict__[key].expression, cls.db.Column
+                    )
             return False
 
         if isinstance(data, str) or isinstance(data, bytes):
@@ -649,10 +651,3 @@ class Model(object):
                         value = tmp.expression.info["writeOnly"]
                         return value
         return False
-
-        # tmp_col = setattr(cls, column_name)
-        # if hasattr(tmp_col, 'setter'):
-        #     return False
-        #
-        # return False
-
