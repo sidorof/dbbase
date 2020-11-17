@@ -444,9 +444,7 @@ class TestSerializers(DBBaseTestCase):
                     "userId": user.id,
                     "user": {"id": user.id, "name": "Bob"},
                 },
-                {
-                    address1._class(): 2, user._class(): 2
-                },
+                {address1._class(): 2, user._class(): 2},
             ),
         )
 
@@ -489,10 +487,7 @@ class TestSerializers(DBBaseTestCase):
                 source_class=None,
                 serial_field_relations={},
             ),
-            (
-                {"emailAddress": "email1@example.com"},
-                {address1._class(): 2},
-            ),
+            ({"emailAddress": "email1@example.com"}, {address1._class(): 2},),
         )
 
         # Combine user and addresses
