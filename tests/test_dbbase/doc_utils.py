@@ -228,7 +228,7 @@ class TestDocUtilities(DBBaseTestCase):
 
         # for test of recursion issue
         class Node(db.Model):
-            __tablename__ = 'node'
+            __tablename__ = "node"
             id = db.Column(db.Integer, primary_key=True)
             parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
             children = db.relationship(
@@ -742,14 +742,14 @@ class TestDocUtilities(DBBaseTestCase):
                             "format": "int32",
                             "primary_key": True,
                             "nullable": False,
-                            "info": {}
+                            "info": {},
                         },
                         "parent_id": {
                             "type": "integer",
                             "format": "int32",
                             "nullable": True,
                             "foreign_key": "node.id",
-                            "info": {}
+                            "info": {},
                         },
                         "children": {
                             "readOnly": True,
@@ -762,21 +762,21 @@ class TestDocUtilities(DBBaseTestCase):
                                         "format": "int32",
                                         "primary_key": True,
                                         "nullable": False,
-                                        "info": {}
+                                        "info": {},
                                     },
                                     "parent_id": {
                                         "type": "integer",
                                         "format": "int32",
                                         "nullable": True,
                                         "foreign_key": "node.id",
-                                        "info": {}
-                                    }
-                                }
-                            }
-                        }
+                                        "info": {},
+                                    },
+                                },
+                            },
+                        },
                     },
-                    "xml": "Node"
+                    "xml": "Node",
                 }
             },
-            self.db.doc_table(self.Node)
+            self.db.doc_table(self.Node),
         )

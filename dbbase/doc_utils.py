@@ -159,9 +159,15 @@ def _property(cls, key, value):
 
     This function returns prop
     """
-    item_dict = {"readOnly": True, "property": True}
+    tmp_item = getattr(cls, key)
+    item_dict = {"property": True}
 
-    # does it have return return_annotation
+    if tmp_item.fset is None:
+        item_dict["readOnly"] = True
+    else:
+        item_dict["readOnly"] = False
+
+    # does it have return_annotation
     ret_ann = signature(getattr_static(cls, key).fget).return_annotation
 
     if str(ret_ann).startswith("typing"):

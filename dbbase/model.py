@@ -274,6 +274,7 @@ class Model(object):
                 value = [item for item in value.all()]
 
             status = True
+
             if self._is_write_only(key):
                 if value is not None:
                     status = False
@@ -640,10 +641,18 @@ class Model(object):
         This function returns True if the column has 'writeOnly' True
         in the info field.
         """
-        tmp = cls.__dict__[column_name]
-        if isinstance(tmp, InstrumentedAttribute):
-            if isinstance(tmp.expression, cls.db.Column):
-                if "writeOnly" in tmp.expression.info:
-                    value = tmp.expression.info["writeOnly"]
-                    return value
+        if column_name in cls.__dict__:
+            tmp = cls.__dict__[column_name]
+            if isinstance(tmp, InstrumentedAttribute):
+                if isinstance(tmp.expression, cls.db.Column):
+                    if "writeOnly" in tmp.expression.info:
+                        value = tmp.expression.info["writeOnly"]
+                        return value
         return False
+
+        # tmp_col = setattr(cls, column_name)
+        # if hasattr(tmp_col, 'setter'):
+        #     return False
+        #
+        # return False
+

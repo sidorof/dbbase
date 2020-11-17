@@ -935,12 +935,10 @@ class TestModelClass(DBBaseTestCase):
         data = {
             "id": 1,
             "longName": "this is a long name",
-
             # extraneous garbage
             "other": "This is a test",
-
             # data included in a serialization
-            "anotherMethod": "This Is A Long Name"
+            "anotherMethod": "This Is A Long Name",
         }
 
         self.assertDictEqual(
@@ -949,7 +947,7 @@ class TestModelClass(DBBaseTestCase):
                 "id": 1,
                 "long_name": "this is a long name",
                 "other": "This is a test",
-                "another_method": "This Is A Long Name"
+                "another_method": "This Is A Long Name",
             },
         )
 
@@ -964,7 +962,7 @@ class TestModelClass(DBBaseTestCase):
                 "id": 1,
                 "longName": "this is a long name",
                 "other": "This is a test",
-                "anotherMethod": "This Is A Long Name"
+                "anotherMethod": "This Is A Long Name",
             },
         )
 
@@ -974,13 +972,13 @@ class TestModelClass(DBBaseTestCase):
                     "id": 3,
                     "longName": "this is a long name",
                     "other": "This is a test3",
-                    "another_method": "This Is A Long Name"
+                    "another_method": "This Is A Long Name",
                 },
                 {
                     "id": 4,
                     "longName": "this is a long name",
                     "other": "This is a test4",
-                    "another_method": "This Is A Long Name"
+                    "another_method": "This Is A Long Name",
                 },
             ]
         )
@@ -992,13 +990,13 @@ class TestModelClass(DBBaseTestCase):
                     "id": 3,
                     "long_name": "this is a long name",
                     "other": "This is a test3",
-                    "another_method": "This Is A Long Name"
+                    "another_method": "This Is A Long Name",
                 },
                 {
                     "id": 4,
                     "long_name": "this is a long name",
                     "other": "This is a test4",
-                    "another_method": "This Is A Long Name"
+                    "another_method": "This Is A Long Name",
                 },
             ],
         )
@@ -1089,6 +1087,8 @@ class TestModelClass(DBBaseTestCase):
         has any information filled in, but be available if a password
         is needed.
 
+        Also, tests for writable properties.
+
         """
         db = self.db
 
@@ -1098,14 +1098,82 @@ class TestModelClass(DBBaseTestCase):
             id = db.Column(db.Integer, primary_key=True)
             password = db.WriteOnlyColumn(db.String, nullable=False)
 
+            def __init__(self, id=None, password=None, writable=None):
+                self.id = id
+                self.password = password
+                self._writable = writable
+
+            @property
+            def writable(self) -> str:
+                return self._writable
+
+            @writable.setter
+            def writable(self, text) -> str:
+                self._writable(text)
+
+            @property
+            def not_writable(self) -> str:
+                return "this is not writable"
+
         db.create_all()
 
         table1 = Table1()
-        table2 = Table1(password="some encrypted value")
+        table2 = Table1(
+            password="some encrypted value", writable="this is writable"
+        )
 
-        self.assertDictEqual({"id": None, "password": None}, table1.to_dict())
+        # test doc_table too
+        self.assertDictEqual(
+            db.doc_table(Table1),
+            {
+                "Table1": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "format": "int32",
+                            "primary_key": True,
+                            "nullable": False,
+                            "info": {},
+                        },
+                        "password": {
+                            "type": "string",
+                            "nullable": False,
+                            "info": {"writeOnly": True},
+                        },
+                        "writable": {
+                            "property": True,
+                            "readOnly": False,
+                            "type": "str",
+                        },
+                        "not_writable": {
+                            "property": True,
+                            "readOnly": True,
+                            "type": "str",
+                        },
+                    },
+                    "xml": "Table1",
+                }
+            },
+        )
 
-        self.assertDictEqual(table2.to_dict(), {"id": None})
+        self.assertDictEqual(
+            {
+                "id": None,
+                "password": None,
+                "writable": None,
+                "notWritable": "this is not writable",
+             },
+            table1.to_dict())
+
+        self.assertDictEqual(
+            {
+                "id": None,
+                "writable": "this is writable",
+                "notWritable": "this is not writable",
+             },
+            table2.to_dict(),
+        )
 
     def test_filter_columns(self):
         """ test_filter_columns
