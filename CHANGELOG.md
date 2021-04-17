@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.8) -
+### Change
+* Changed requirements.txt to require the version of SQLAlchemy to be less than 1.4.
+
 ## (0.3.7) -
 ### Change
 *   Corrected an error that occurred using properties on fields in Model. Also, added a more complete account to `Base.doc_table` of properties. A check is made on a property to determine if a setter is available. An example illustrates the issue:
