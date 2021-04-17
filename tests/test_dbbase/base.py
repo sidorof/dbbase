@@ -385,7 +385,23 @@ class TestDBBaseClass(DBBaseTestCase):
         # test return
 
     def test_drop_all(self):
-        pass
+
+        DB = self.dbbase.DB
+        db = DB(self.config)
+
+        # Create a model via db.Model
+        class NewModel(db.Model):
+
+            __tablename__ = "new_model"
+            id = db.Column(db.Integer, primary_key=True)
+
+        # create a table via SQL
+
+        sql = "create table testtable (id int not null) ;"
+        db.create_all()
+        a = db.session.execute(sql)
+        engine = db.create_engine(self.db.config)
+        engine.connect()
         # test defaults
 
         # test self.attributes
