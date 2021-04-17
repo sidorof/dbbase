@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.DB.drop_all &#8212; DBBase 0.3.7 documentation</title>
+    <title>dbbase.DB.drop_all &#8212; DBBase 0.3.8 documentation</title>
     <link rel="stylesheet" href="../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="DBBase 0.3.7 documentation"
+        <a href="../index.html" title="DBBase 0.3.8 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">DBBase 0.3.7</span>
+          <span class="md-header-nav__topic">DBBase 0.3.8</span>
           <span class="md-header-nav__topic"> dbbase.DB.drop_all </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">DBBase 0.3.7 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">DBBase 0.3.8 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -175,13 +175,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="DBBase 0.3.7 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="DBBase 0.3.8 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="DBBase 0.3.7 documentation">DBBase 0.3.7</a>
+       title="DBBase 0.3.8 documentation">DBBase 0.3.8</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -271,19 +271,23 @@
 <h1 id="generated-dbbase-db-drop-all--page-root">dbbase.DB.drop_all<a class="headerlink" href="#generated-dbbase-db-drop-all--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="dbbase.DB.drop_all">
-<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">drop_all</code><span class="sig-paren">(</span><em class="sig-param">echo=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.drop_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.drop_all" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">DB.</code><code class="sig-name descname">drop_all</code><span class="sig-paren">(</span><em class="sig-param">tables=None</em>, <em class="sig-param">checkfirst=True</em>, <em class="sig-param">echo=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dbbase/base.html#DB.drop_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbbase.DB.drop_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drop all tables and sequences.</p>
-<p>Leaves the database empty, bereft, alone, a pale shadow of its
-former self.</p>
+<p>This function drops tables.</p>
 <dl class="simple">
-<dt>Default:</dt><dd><p>drop_all(echo=False)</p>
+<dt>Default:</dt><dd><p>drop_all(self, tables=None, checkfirst=True, echo=False)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>echo</strong> – (bool : str) : logs interactions with engine
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tables</strong> – (None | list) : An optional list of tables, rather than all</p></li>
+<li><p><strong>checkfirst</strong> – (bool) : Can verify the existence prior to attempting
+the drop</p></li>
+<li><p><strong>echo</strong> – (bool : str) : logs interactions with engine
 to INFO. defaults to False. echo can also be “debug” for more
-detail.</p>
+detail.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -313,7 +317,7 @@ detail.</p>
               
           </div>
             Last updated on
-              Nov 17, 2020.
+              Apr 17, 2021.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.

@@ -28,6 +28,8 @@ DB
       
          ~DB.drop_all
       
+         ~DB.get_table_list
+      
          ~DB.load_model_class
       
    

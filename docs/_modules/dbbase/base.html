@@ -45,7 +45,7 @@
   
   
   
-    <title>dbbase.base &#8212; DBBase 0.3.7 documentation</title>
+    <title>dbbase.base &#8212; DBBase 0.3.8 documentation</title>
     <link rel="stylesheet" href="../../_static/material.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="DBBase 0.3.7 documentation"
+        <a href="../../index.html" title="DBBase 0.3.8 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -100,7 +100,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">DBBase 0.3.7</span>
+          <span class="md-header-nav__topic">DBBase 0.3.8</span>
           <span class="md-header-nav__topic"> dbbase.base </span>
         </div>
       </div>
@@ -163,7 +163,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.7 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">DBBase 0.3.8 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -176,13 +176,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="DBBase 0.3.7 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="DBBase 0.3.8 documentation" class="md-nav__button md-logo">
       
         <img src="../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="DBBase 0.3.7 documentation">DBBase 0.3.7</a>
+       title="DBBase 0.3.8 documentation">DBBase 0.3.8</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/sidorof/dbbase/" title="Go to repository" class="md-source" data-md-source="github">
@@ -335,10 +335,13 @@
     <span class="p">):</span>
 
         <span class="c1"># not a fan of this</span>
-        <span class="k">if</span> <span class="n">config</span> <span class="o">!=</span> <span class="s2">":memory:"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="o">!=</span> <span class="s2">"sqlite///:memory:"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="s2">"sqlite://"</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">__all__</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
@@ -400,6 +403,7 @@
 <span class="sd">            engine (obj) : newly created engine</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span></div>
 
 <div class="viewcode-block" id="DB.create_session"><a class="viewcode-back" href="../../_generated/dbbase.DB.create_session.html#dbbase.DB.create_session">[docs]</a>    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -421,9 +425,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            session (obj)</span>
 <span class="sd">        """</span>
-        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-
         <span class="n">session</span> <span class="o">=</span> <span class="n">orm</span><span class="o">.</span><span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="n">checkfirst</span><span class="p">)</span>
@@ -431,17 +434,28 @@
 
         <span class="k">return</span> <span class="n">session</span></div>
 
-<div class="viewcode-block" id="DB.drop_all"><a class="viewcode-back" href="../../_generated/dbbase.DB.drop_all.html#dbbase.DB.drop_all">[docs]</a>    <span class="k">def</span> <span class="nf">drop_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DB.get_table_list"><a class="viewcode-back" href="../../_generated/dbbase.DB.get_table_list.html#dbbase.DB.get_table_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_table_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        This function returns a list of tables as found in the database.</span>
+<span class="sd">        Note that this list can be different from a list of model objects in</span>
+<span class="sd">        the case where the tables were created outside of the models.</span>
+<span class="sd">        """</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">table_names</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DB.drop_all"><a class="viewcode-back" href="../../_generated/dbbase.DB.drop_all.html#dbbase.DB.drop_all">[docs]</a>    <span class="k">def</span> <span class="nf">drop_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">""" drop_all</span>
 <span class="sd">        Drop all tables and sequences.</span>
 
-<span class="sd">        Leaves the database empty, bereft, alone, a pale shadow of its</span>
-<span class="sd">        former self.</span>
+<span class="sd">        This function drops tables.</span>
 
 <span class="sd">        Default:</span>
-<span class="sd">            drop_all(echo=False)</span>
+<span class="sd">            drop_all(self, tables=None, checkfirst=True, echo=False)</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">            tables: (None | list) : An optional list of tables, rather than all</span>
+<span class="sd">            checkfirst: (bool) : Can verify the existence prior to attempting</span>
+<span class="sd">                the drop</span>
 <span class="sd">            echo: (bool : str) : logs interactions with engine</span>
 <span class="sd">                to INFO. defaults to False. echo can also be "debug" for more</span>
 <span class="sd">                detail.</span>
@@ -449,7 +463,7 @@
         <span class="c1"># see how this session is not the 'session' object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">orm</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close_all_sessions</span><span class="p">()</span>
         <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">drop_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">drop_all</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="n">tables</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="n">checkfirst</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DB.create_all"><a class="viewcode-back" href="../../_generated/dbbase.DB.create_all.html#dbbase.DB.create_all">[docs]</a>    <span class="k">def</span> <span class="nf">create_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">"""create_all</span>
@@ -752,7 +766,7 @@
               
           </div>
             Last updated on
-              Nov 17, 2020.
+              Apr 17, 2021.
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 2.4.4.
