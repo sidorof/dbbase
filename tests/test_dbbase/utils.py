@@ -61,7 +61,7 @@ class TestUtilities(BaseTestCase):
         config = "sqlite:///{test_db}.db"
         self.assertTrue(self.dbbase.utils._is_sqlite(config))
 
-        config = ":memory:"
+        config = "sqlite///:memory:"
         self.assertTrue(self.dbbase.utils._is_sqlite(config))
 
         config = "postgresql://blah, blah"
@@ -112,7 +112,7 @@ class TestUtilities(BaseTestCase):
         """
         import uuid
 
-        db = self.dbbase.DB(":memory:")
+        db = self.dbbase.DB("sqlite///:memory:")
         get_model_defaults = self.dbbase.utils.get_model_defaults
 
         class TestDefaults(db.Model):
