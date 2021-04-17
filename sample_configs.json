@@ -2,7 +2,7 @@
 
     {
         "name": "sqlite_memory",
-        "testdb_uri": ":memory:",
+        "testdb_uri": "sqlite///:memory:",
         "testdb_vars": {}
     },
     {
