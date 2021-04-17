@@ -65,10 +65,13 @@ class DB(object):
     ):
 
         # not a fan of this
-        if config != ":memory:":
+        if config != "sqlite///:memory:":
             self.config = config
         else:
             self.config = "sqlite://"
+
+        self.engine = None
+        self.session = None
 
         for key in sqlalchemy.__all__:
             self.__setattr__(key, sqlalchemy.__dict__.__getitem__(key))
@@ -130,6 +133,7 @@ class DB(object):
             engine (obj) : newly created engine
         """
         self.engine = create_engine(self.config, echo=echo)
+        self.engine.connect()
         return self.engine
 
     def create_session(self, checkfirst=True, echo=False, *args, **kwargs):
@@ -151,9 +155,8 @@ class DB(object):
         Returns:
             session (obj)
         """
-        engine = create_engine(self.config, echo=echo, *args, **kwargs)
+        engine = self.create_engine(self.config, echo=echo, *args, **kwargs)
         engine.connect()
-
         session = orm.sessionmaker(bind=engine)()
 
         self.Model().metadata.create_all(engine, checkfirst=checkfirst)
@@ -161,17 +164,28 @@ class DB(object):
 
         return session
 
-    def drop_all(self, echo=False):
+    def get_table_list(self):
+        """
+        This function returns a list of tables as found in the database.
+        Note that this list can be different from a list of model objects in
+        the case where the tables were created outside of the models.
+        """
+        engine = create_engine(self.config)
+        return engine.table_names()
+
+    def drop_all(self, tables=None, checkfirst=True, echo=False):
         """ drop_all
         Drop all tables and sequences.
 
-        Leaves the database empty, bereft, alone, a pale shadow of its
-        former self.
+        This function drops tables.
 
         Default:
-            drop_all(echo=False)
+            drop_all(self, tables=None, checkfirst=True, echo=False)
 
         Args:
+            tables: (None | list) : An optional list of tables, rather than all
+            checkfirst: (bool) : Can verify the existence prior to attempting
+                the drop
             echo: (bool : str) : logs interactions with engine
                 to INFO. defaults to False. echo can also be "debug" for more
                 detail.
@@ -179,7 +193,7 @@ class DB(object):
         # see how this session is not the 'session' object
         self.orm.session.close_all_sessions()
         engine = create_engine(self.config, echo=echo)
-        self.Model().metadata.drop_all(engine)
+        self.Model().metadata.drop_all(engine, tables=tables, checkfirst=checkfirst)
 
     def create_all(self, bind=None, checkfirst=True):
         """create_all
