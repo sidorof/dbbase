@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.9) -
+### Change
+* Updated setup file to indicate the range of Python versions to 3.9.
+
 ## (0.3.8) -
 ### Change
 * Changed requirements.txt to require the version of SQLAlchemy to be less than 1.4.
