@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.10) -
+### Change
+* Corrected the `to_dict` function in the Model class to correctly exclude functions that require parameters.
+
 ## (0.3.9) -
 ### Change
 * Updated setup file to indicate the range of Python versions to 3.9.
