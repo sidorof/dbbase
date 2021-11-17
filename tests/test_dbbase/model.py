@@ -618,6 +618,16 @@ class TestModelClass(DBBaseTestCase):
                 "Node", lazy="joined", order_by="Node.id", join_depth=10
             )
 
+            def test_func(self):
+                """would be included in to_dict"""
+                return "test_func"
+            def test_func1(self, var1):
+                """would not be included in to_dict"""
+                return f"test_func:{var1}"
+            def test_func2(self, var1, var2):
+                """would not be included in to_dict"""
+                return f"test_func: {var1}, {var2}"
+
         db.create_all()
 
         node1 = Node(id=1, data="this is node1")
@@ -633,7 +643,6 @@ class TestModelClass(DBBaseTestCase):
 
         # to be tested
         #   (not level_limits=None since that is really an internal process)
-
         self.assertDictEqual(
             node1.to_dict(to_camel_case=True, sort=False),
             {
@@ -647,14 +656,17 @@ class TestModelClass(DBBaseTestCase):
                                 "children": [],
                                 "parentId": 2,
                                 "id": 3,
+                                "testFunc": "test_func",
                             }
                         ],
                         "parentId": 1,
                         "id": 2,
+                        "testFunc": "test_func",
                     }
                 ],
                 "parentId": None,
                 "id": 1,
+                "testFunc": "test_func",
             },
         )
 
@@ -670,6 +682,7 @@ class TestModelClass(DBBaseTestCase):
                 "parent_id": None,
                 "id": 1,
                 "data": "this is node1",
+                "test_func": "test_func",
                 "children": [
                     {
                         "parent_id": 1,
@@ -681,8 +694,10 @@ class TestModelClass(DBBaseTestCase):
                                 "id": 3,
                                 "data": "this is node3",
                                 "children": [],
+                                "test_func": "test_func"
                             }
                         ],
+                        "test_func": "test_func",
                     }
                 ],
             },
@@ -700,16 +715,21 @@ class TestModelClass(DBBaseTestCase):
                                 "id": 3,
                                 "data": "this is node3",
                                 "parentId": 2,
+                                "testFunc": "test_func",
+
                             }
                         ],
                         "id": 2,
                         "data": "this is node2",
                         "parentId": 1,
+                        "testFunc": "test_func",
+
                     }
                 ],
                 "data": "this is node1",
                 "id": 1,
                 "parentId": None,
+                "testFunc": "test_func"
             },
         )
 

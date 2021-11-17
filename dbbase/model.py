@@ -4,6 +4,7 @@ This module implements a base model to be used for table creation.
 
 """
 import json
+from inspect import signature
 from sqlalchemy import inspect
 from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -281,8 +282,11 @@ class Model(object):
 
             if status:
                 if callable(value):
-                    value = value()
-
+                    if len(signature(value).parameters) == 0:
+                        value = value()
+                    else:
+                        status = False
+            if status:
                 res = _eval_value(
                     value,
                     to_camel_case,
