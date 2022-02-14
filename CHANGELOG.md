@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.11) -
+### Change
+* Added the exclusion of SQLAlchemy for versions 1.4 and above. This package uses a feature that disappeared in a later version of SQLAlchemy. At some point this will be addressed.
+
 ## (0.3.10) -
 ### Change
 * Corrected the `to_dict` function in the Model class to correctly exclude functions that require parameters.
