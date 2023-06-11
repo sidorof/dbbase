@@ -17,7 +17,7 @@ LICENSE = "MIT"
 AUTHOR = "Donald Smiley"
 AUTHOR_EMAIL = "dsmiley@sidorof.com"
 PYTHON_REQUIRES = ">=3.6"
-INSTALL_REQUIRES = ["sqlalchemy"]
+INSTALL_REQUIRES = ["sqlalchemy<1.4"]
 EXTRAS_REQUIRE = {
     "dev": "unittest"
 }

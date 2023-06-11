@@ -1,4 +1,12 @@
 # Changelog
+## (0.3.12) -
+### Change
+* Disabled ColumnDefaults in doc_utils due to a puzzling error resulting from use of UUID with Postgresql. A recent install resulted in a recursion error due to this problem. To get through it, that feature is temporarily disabled. The failure of the unit test for this feature is left intact to reflect the temporary nature of this workaround.
+
+## (0.3.11) -
+### Change
+* Added the exclusion of SQLAlchemy for versions 1.4 and above. This package uses a feature that disappeared in a later version of SQLAlchemy. At some point this will be addressed.
+
 ## (0.3.10) -
 ### Change
 * Corrected the `to_dict` function in the Model class to correctly exclude functions that require parameters.
