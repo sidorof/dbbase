@@ -5,6 +5,7 @@ This module supports documenting tables with helper functions.
 from copy import deepcopy
 from inspect import getattr_static, signature, _empty
 
+import sqlalchemy
 from sqlalchemy.sql import functions
 from sqlalchemy.sql import elements
 
@@ -336,7 +337,13 @@ def process_expression(expression):
         expr_value = getattr(expression, key)
         if expr_value is not None:
             if func is not None:
-                item = func(expr_value)
+                # this is solely to deal with an issue
+                # with UUIDs and postgres. Somehow isclass
+                # did not identify properly
+                if str(type(expr_value)) != "<class 'sqlalchemy.sql.schema.ColumnDefault'>":
+                    item = func(expr_value)
+                else:
+                    item = None
                 if isinstance(item, tuple):
                     if item[1] is not None:
                         if item[0] is None:
