@@ -10,6 +10,7 @@ everything works as expected.
 """
 import json
 import unittest
+from .test_dbbase import column_types
 from .test_dbbase.column_types import TestColumnTypes
 from .test_dbbase.doc_utils import TestDocUtilities
 from .test_dbbase.utils import TestUtilities
@@ -25,6 +26,14 @@ SAMPLE_CONFIGS = "sample_configs.json"
 # temporary created for the current test, deleted after
 CONFIG_FILE = "config.json"
 
+test_classes = (
+    TestColumnTypes,
+    TestDocUtilities,
+    TestUtilities,
+    TestDBBaseClass,
+    TestModelClass,
+    TestSerializers
+)
 
 with open(SAMPLE_CONFIGS) as fobj:
     configs = json.loads(fobj.read())
@@ -33,27 +42,24 @@ for config in configs:
     print("testing config: {}".format(config["name"]))
     with open(CONFIG_FILE, "w") as fobj:
         json.dump(config, fobj)
+
     suite = unittest.TestSuite()
+    loader = unittest.TestLoader().loadTestsFromTestCase
 
-    suite.addTests(unittest.makeSuite(TestDocUtilities))
-    suite.addTests(unittest.makeSuite(TestSerializers))
-    suite.addTests(unittest.makeSuite(TestUtilities))
-    suite.addTests(unittest.makeSuite(TestModelClass))
-    suite.addTests(unittest.makeSuite(TestDBBaseClass))
+    for test_class in test_classes:
+        suite.addTests(loader(test_class))
 
-    test_result = unittest.TextTestRunner(failfast=True, verbosity=1).run(
-        suite
-    )
+    runner = unittest.TextTestRunner(failfast=True, verbosity=1)
+    test_result = runner.run(suite)
 
-    print("result", test_result)
     print()
     for line in test_result.errors:
-        print("location: {}".format(line[0]))
-        print("traceback: {}".format(line[1]))
+        print(f"location: {line[0]}")
+        print(f"traceback: {line[1]}")
 
     for line in test_result.failures:
-        print("location: {}".format(line[0]))
-        print("traceback: {}".format(line[1]))
+        print(f"location: {line[0]}")
+        print(f"traceback: {line[1]}")
 
     print()
     print("success", test_result.wasSuccessful())
