@@ -133,12 +133,13 @@ def get_model_defaults(cls):
     """
     tmp = {}
     for key in cls.__dict__.keys():
-        col = cls.__dict__[key]
-        if hasattr(col, "expression"):
-            if col.expression.default is not None:
-                arg = col.expression.default.arg
-                if callable(arg):
-                    tmp[key] = arg(cls.db)
-                else:
-                    tmp[key] = arg
+        if key not in ["query", "db"]:
+            col = cls.__dict__[key]
+            if hasattr(col, "expression"):
+                if col.expression.default is not None:
+                    arg = col.expression.default.arg
+                    if callable(arg):
+                        tmp[key] = arg(cls.db)
+                    else:
+                        tmp[key] = arg
     return tmp

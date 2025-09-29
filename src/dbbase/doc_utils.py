@@ -340,10 +340,12 @@ def process_expression(expression):
                 # this is solely to deal with an issue
                 # with UUIDs and postgres. Somehow isclass
                 # did not identify properly
-                if str(type(expr_value)) != "<class 'sqlalchemy.sql.schema.ColumnDefault'>":
-                    item = func(expr_value)
-                else:
-                    item = None
+                # if str(type(expr_value)) != "<class 'sqlalchemy.sql.schema.ColumnDefault'>":
+                #     item = func(expr_value)
+                #     print("found default ..............")
+                # else:
+                #     item = None
+                item = func(expr_value)
                 if isinstance(item, tuple):
                     if item[1] is not None:
                         if item[0] is None:
