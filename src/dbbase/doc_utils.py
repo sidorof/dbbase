@@ -51,7 +51,7 @@ def _default(value):
 
 
 def _onupdate(value):
-    """_onupdate
+    """ _onupdate
 
     This function marks the default as on update.
     """
@@ -63,7 +63,7 @@ def _onupdate(value):
 
 
 def _server_default(value):
-    """_server_default
+    """ _server_default
 
     This function marks the default as server_default
 
@@ -76,7 +76,7 @@ def _server_default(value):
 
 
 def _server_onupdate(value):
-    """_server_onupdate
+    """ _server_onupdate
 
     This function marks the default as _server_onupdate
 
@@ -111,7 +111,7 @@ def _foreign_keys(value):
 def _binary_expression(
     value, to_camel_case, serial_field_relations, level_limits, bidirectional
 ):
-    """_binary_expression
+    """ _binary_expression
 
     it is probably a relationship
     NOTE: Not used here,
@@ -209,7 +209,7 @@ def _function(value):
 
 
 def _only_if_true(value):
-    """_only_if_true
+    """ _only_if_true
 
     Returns either (None, True) or (None, None)
     """
@@ -219,7 +219,7 @@ def _only_if_true(value):
 
 
 def _parse_type_name(value):
-    """_parse_type_name
+    """ _parse_type_name
 
     This is to handle something like 'typing.List'
 
@@ -248,7 +248,7 @@ def _parse_class_name(value):
 
 
 def _type(value):
-    """_type
+    """ _type
 
     Depending on the type, might send back a dict
     rather than the standard tuple. This is to account for situations like:
@@ -337,14 +337,16 @@ def process_expression(expression):
         expr_value = getattr(expression, key)
         if expr_value is not None:
             if func is not None:
-                # this is solely to deal with an issue
+                # this is to deal with an issue
                 # with UUIDs and postgres. Somehow isclass
                 # did not identify properly
-                # if str(type(expr_value)) != "<class 'sqlalchemy.sql.schema.ColumnDefault'>":
-                #     item = func(expr_value)
-                #     print("found default ..............")
-                # else:
-                #     item = None
+                # Also, other column defaults
+                # The issue appears when using
+                #   Flask-restful-dbbase
+                if str(type(expr_value)) != "<class 'sqlalchemy.sql.schema.ColumnDefault'>":
+                    item = func(expr_value)
+                else:
+                    item = None
                 item = func(expr_value)
                 if isinstance(item, tuple):
                     if item[1] is not None:
