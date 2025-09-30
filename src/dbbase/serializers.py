@@ -40,7 +40,7 @@ SERIAL_STOPLIST = [
 def _eval_value(
     value, to_camel_case, level_limits, source_class, serial_field_relations
 ):
-    """ _eval_value
+    """_eval_value
 
     This function converts some of the standard values as needed based
     upon type. The more complex values are farmed out, such as for lists

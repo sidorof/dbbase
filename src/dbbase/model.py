@@ -146,7 +146,7 @@ class Model(object):
 
     @classmethod
     def _is_bidirectional(self, field):
-        """ True if can update relation."""
+        """True if can update relation."""
 
         rel_info = self._relations_info(field)
         if rel_info:
@@ -565,7 +565,7 @@ class Model(object):
     def filter_columns(
         cls, column_props, only_props=False, to_camel_case=False
     ):
-        """ filter_columns
+        """filter_columns
 
         This function accepts a model class, a list of column properties to
         of interest. Depending upon the needs, all of the properties for the
@@ -623,7 +623,7 @@ class Model(object):
 
     @classmethod
     def _extract_foreign_keys(cls):
-        """ _extract_foreign_keys
+        """_extract_foreign_keys
 
         This function walks the document dictionary and returns the
         foreign keys.
@@ -642,7 +642,7 @@ class Model(object):
 
     @classmethod
     def _is_write_only(cls, column_name):
-        """ _is_write_only
+        """_is_write_only
 
         This function returns True if the column has 'writeOnly' True
         in the info field.
