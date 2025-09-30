@@ -97,7 +97,7 @@ class DB(object):
 
     @staticmethod
     def load_model_class(model_class=None):
-        """ load_model_class
+        """load_model_class
 
         This function creates a fresh copy of the declarative base.
         This causes a reset of the metaclass.
@@ -118,7 +118,7 @@ class DB(object):
             return model.Model
 
     def create_engine(self, echo=False, *args, **kwargs):
-        """ create_engine
+        """create_engine
 
         Basically a pass through to sqlalchemy.
 
@@ -174,7 +174,7 @@ class DB(object):
         return engine.table_names()
 
     def drop_all(self, tables=None, checkfirst=True, echo=False):
-        """ drop_all
+        """drop_all
         Drop all tables and sequences.
 
         This function drops tables.
@@ -193,7 +193,9 @@ class DB(object):
         # see how this session is not the 'session' object
         self.orm.session.close_all_sessions()
         engine = create_engine(self.config, echo=echo)
-        self.Model().metadata.drop_all(engine, tables=tables, checkfirst=checkfirst)
+        self.Model().metadata.drop_all(
+            engine, tables=tables, checkfirst=checkfirst
+        )
 
     def create_all(self, bind=None, checkfirst=True):
         """create_all
@@ -214,7 +216,7 @@ class DB(object):
         self._apply_db()
 
     def _apply_db(self):
-        """ _apply_db
+        """_apply_db
 
         This function walks the Model classes and inserts the query
         and db objects. Applying db helps in situations where the
@@ -226,7 +228,7 @@ class DB(object):
                     self.apply_db(cls)
 
     def apply_db(self, cls):
-        """ apply_db
+        """apply_db
         This function receives a Model class and applies db and session
         to the class. This enables model classes to be added if not in
         the original initialization.
@@ -238,7 +240,7 @@ class DB(object):
         cls.db = self
 
     def doc_tables(self, class_list=None, to_camel_case=False):
-        """ doc_tables
+        """doc_tables
 
         This function creates a dictionary of all the table configuratons.
 
@@ -298,7 +300,7 @@ class DB(object):
         level_limits=None,
         orig_cls=None,
     ):
-        """ doc_table
+        """doc_table
 
         This function creates a dictionary of a table configuraton to aid in
         documenting.
@@ -459,7 +461,7 @@ class DB(object):
         return None
 
     def doc_column(self, cls, column_name):
-        """ doc_column
+        """doc_column
 
         This function extracts the documentation dictionary for a column.
 

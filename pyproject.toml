@@ -1,4 +1,35 @@
-[tool.black]
-line-length = 79
-target-version = ['py35', 'py36', 'py37', 'py38']
+[project]
+name="dbbase"
+description="A base implementation of SQLAlchemy models that incorporates the query and session variables within the model objects."
 
+version="0.3.13"
+authors=[{name="Don Smiley", email="dsmiley@sidorof.com"}]
+
+dependencies=["SQLAlchemy < 1.4"]
+
+[build-system]
+requires=["setuptools", "wheel", "setuptools-scm"]
+build-backend="setuptools.build_meta"
+
+[tool.black]
+line-length=79
+
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/dbbase tests/main.py "
+
+[tool.coverage.run]
+source=["src/dbbase/"]
+
+[tool.pylint]
+max-line-length=79
+disable=[
+    # "C0103", # (invalid-name)
+    # "C0114", # (missing-module-docstring)
+    # "C0115", # (missing-class-docstring)
+    # "C0116", # (missing-function-docstring)
+    # "R0903", # (too-few-public-methods)
+    # "R0913", # (too-many-arguments)
+    # "W0105", # (pointless-string-statement)
+    "E1101",
+]
