@@ -347,7 +347,7 @@ def process_expression(expression):
                     item = func(expr_value)
                 else:
                     item = None
-                item = func(expr_value)
+                # item = func(expr_value)
                 if isinstance(item, tuple):
                     if item[1] is not None:
                         if item[0] is None:
