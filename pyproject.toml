@@ -2,7 +2,7 @@
 name="dbbase"
 description="A base implementation of SQLAlchemy models that incorporates the query and session variables within the model objects."
 
-version="0.3.13"
+version="0.3.14"
 authors=[{name="Don Smiley", email="dsmiley@sidorof.com"}]
 
 dependencies=["SQLAlchemy < 1.4"]
